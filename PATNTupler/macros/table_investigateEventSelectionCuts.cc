@@ -28,7 +28,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/cutFlowTables/NEW_VERSION_v2/mH70_mSusyAll/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/2017_94X/cutFlowTables/mH70_mSusyALL/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
@@ -42,7 +42,7 @@ int main(int argc, char** argv){
 
 
     // THREE: lumi settings
-    double luminosity = 35.867; // 2016 DATASET
+    double luminosity = 41.529; // 2016 DATASET
 
 
 
@@ -108,7 +108,7 @@ int main(int argc, char** argv){
         cutToApplyVec.push_back(Form("weight_isr * (fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d)", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab]));
         cutToApplyVec.push_back(Form("weight_isr * (fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
         cutToApplyVec.push_back(Form("weight_isr * (fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
-        cutToApplyVec.push_back(Form("weight_combined * (%s && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", dbtCut.c_str(), cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
+        cutToApplyVec.push_back(Form("weight_isr * weight_dbtTag * (%s && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", dbtCut.c_str(), cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
         // get the required count info for the table
         std::vector<std::vector<PlotEntry>> cutFlowObject; // all cut stages, for all samples
         for (int iC = 0; iC != 5; ++iC){
@@ -118,115 +118,58 @@ int main(int argc, char** argv){
 
 
             // FOUR: SAMPLE INFO
-            // givenCutObject.push_back( PlotEntry("mH30_mSusy800", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH30p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 6.4720000*0.85*0.85);
-        
-            // givenCutObject.push_back( PlotEntry("mH50_mSusy800", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH50p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 6.4720000*0.85*0.85);
 
             givenCutObject.push_back( PlotEntry("mH70_mSusy800", hTemplate, varToPlot.c_str(), luminosity) );
-            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 6.4720000*0.85*0.85);
+            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 6.4720000*0.840*0.840);
         
-            // givenCutObject.push_back( PlotEntry("mH90_mSusy800", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH90p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 6.4720000*0.85*0.85);
-
-            // givenCutObject.push_back( PlotEntry("mH125_mSusy800", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH125p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 6.4720000*0.58*0.58);
-
-
-            // givenCutObject.push_back( PlotEntry("mH30_mSusy1200", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH30p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.4951000*0.85*0.85);
-        
-            // givenCutObject.push_back( PlotEntry("mH50_mSusy1200", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH50p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.4951000*0.85*0.85);
-
             givenCutObject.push_back( PlotEntry("mH70_mSusy1200", hTemplate, varToPlot.c_str(), luminosity) );
-            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.4951000*0.85*0.85);
+            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.4951000*0.840*0.840);
         
-            // givenCutObject.push_back( PlotEntry("mH90_mSusy1200", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH90p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.4951000*0.85*0.85);
-
-            // givenCutObject.push_back( PlotEntry("mH125_mSusy1200", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH125p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.4951000*0.58*0.58);
-
-
-            // givenCutObject.push_back( PlotEntry("mH30_mSusy1600", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH30p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0603900*0.85*0.85);
-        
-            // givenCutObject.push_back( PlotEntry("mH50_mSusy1600", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH50p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0603900*0.85*0.85);
-
             givenCutObject.push_back( PlotEntry("mH70_mSusy1600", hTemplate, varToPlot.c_str(), luminosity) );
-            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0603900*0.85*0.85);
+            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0603900*0.840*0.840);
         
-            // givenCutObject.push_back( PlotEntry("mH90_mSusy1600", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH90p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0603900*0.85*0.85);
-
-            // givenCutObject.push_back( PlotEntry("mH125_mSusy1600", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH125p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0603900*0.58*0.58);
-
-
+            // ********************
             // givenCutObject.push_back( PlotEntry("mH30_mSusy2000", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH30p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.85*0.85);
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH30p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.868*0.868);
         
             // givenCutObject.push_back( PlotEntry("mH50_mSusy2000", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH50p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.85*0.85);
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH50p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.858*0.858);
 
             givenCutObject.push_back( PlotEntry("mH70_mSusy2000", hTemplate, varToPlot.c_str(), luminosity) );
-            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.85*0.85);
+            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.840*0.840);
         
             // givenCutObject.push_back( PlotEntry("mH90_mSusy2000", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH90p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.85*0.85);
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH90p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.816*0.816);
+
+            // givenCutObject.push_back( PlotEntry("mH110_mSusy2000", hTemplate, varToPlot.c_str(), luminosity) );
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH110p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.749*0.749);
 
             // givenCutObject.push_back( PlotEntry("mH125_mSusy2000", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH125p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.58*0.58);
-
-
-            // givenCutObject.push_back( PlotEntry("mH30_mSusy2400", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH30p0_mSusy2400p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0015050*0.85*0.85);
-        
-            // givenCutObject.push_back( PlotEntry("mH50_mSusy2400", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH50p0_mSusy2400p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0015050*0.85*0.85);
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH125p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.581*0.581);
+            // ********************
 
             givenCutObject.push_back( PlotEntry("mH70_mSusy2400", hTemplate, varToPlot.c_str(), luminosity) );
-            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy2400p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0015050*0.85*0.85);
-        
-            // givenCutObject.push_back( PlotEntry("mH90_mSusy2400", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH90p0_mSusy2400p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0015050*0.85*0.85);
+            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy2400p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0015050*0.840*0.840);
 
-            // givenCutObject.push_back( PlotEntry("mH125_mSusy2400", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH125p0_mSusy2400p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0015050*0.58*0.58);
-
-
-            // givenCutObject.push_back( PlotEntry("mH30_mSusy2800", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH30p0_mSusy2800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0002753*0.85*0.85);
-        
-            // givenCutObject.push_back( PlotEntry("mH50_mSusy2800", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH50p0_mSusy2800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0002753*0.85*0.85);
-
-            // givenCutObject.push_back( PlotEntry("mH70_mSusy2800", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy2800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0002753*0.85*0.85);
-        
-            // givenCutObject.push_back( PlotEntry("mH90_mSusy2800", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH90p0_mSusy2800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0002753*0.85*0.85);
-
-            // givenCutObject.push_back( PlotEntry("mH125_mSusy2800", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH125p0_mSusy2800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0002753*0.58*0.58);
-
+            // ********************
+            // ********************
+            // ********************
 
             // givenCutObject.push_back( PlotEntry("QCD HT>1000", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT1000to1500/flatTree.root", cutToApplyVec[iC].c_str(), 1206);
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT1500to2000/flatTree.root", cutToApplyVec[iC].c_str(), 120.4);
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT2000toInf/flatTree.root", cutToApplyVec[iC].c_str(), 25.25);
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017_forTablesOnly/QCD_HT1000to1500/flatTree.root", cutToApplyVec[iC].c_str(), 1005);
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017_forTablesOnly/QCD_HT1500to2000/flatTree.root", cutToApplyVec[iC].c_str(), 101.8);
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017_forTablesOnly/QCD_HT2000toInf/flatTree.root", cutToApplyVec[iC].c_str(), 20.54);
 
             // givenCutObject.push_back( PlotEntry("TT+Jets", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/TTJets/flatTree.root", cutToApplyVec[iC].c_str(), 831.76);
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017_forTablesOnly/TTToHadronic/flatTree.root", cutToApplyVec[iC].c_str(), 377.96);
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017_forTablesOnly/TTToSemiLeptonic/flatTree.root", cutToApplyVec[iC].c_str(), 365.34);
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017_forTablesOnly/TTTo2L2Nu/flatTree.root", cutToApplyVec[iC].c_str(), 88.29);
 
-            // givenCutObject.push_back( PlotEntry("Z+Jets HT>600", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/ZJets/flatTree.root", cutToApplyVec[iC].c_str(), 52.79);
+            // givenCutObject.push_back( PlotEntry("Z+Jets HT>800", hTemplate, varToPlot.c_str(), luminosity) );
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017_forTablesOnly/ZJets/flatTree.root", cutToApplyVec[iC].c_str(), 18.69);
 
-            // givenCutObject.push_back( PlotEntry("W+Jets HT>600", hTemplate, varToPlot.c_str(), luminosity) );
-            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/WJets/flatTree.root", cutToApplyVec[iC].c_str(), 95.14);
+            // givenCutObject.push_back( PlotEntry("W+Jets HT>800", hTemplate, varToPlot.c_str(), luminosity) );
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017_forTablesOnly/WJets/flatTree.root", cutToApplyVec[iC].c_str(), 34.00);
 
 
 
