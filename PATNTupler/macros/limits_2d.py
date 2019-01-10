@@ -40,7 +40,7 @@ plotObserved = False
 plotTitle = '77.5 fb$^{-1}$ (13 TeV)'
 # maximally squeeze the z-axis
 minMu = -2.10
-maxMu = 1.30
+maxMu = 1.35
 
 #############################
 #############################
