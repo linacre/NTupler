@@ -31,17 +31,17 @@ int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // ONE: input directory (where the combined root files are)
-    const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_10_24/2016_and_2017_wrong2017MassSystematics/TESTING_allSys/";
+    const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
 
     // TWO: plot output directory
-    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/brazilplots/mSusy2800/";
+    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/brazilplots/mSusy2400/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)
-    const std::vector<int> higgsMasses = {30, 35, 40, 50, 70, 90, 125};
-    const std::vector<int> susyMasses = {2800};
+    const std::vector<int> higgsMasses = {30, 35, 40, 50, 70, 90, 110, 125};
+    const std::vector<int> susyMasses = {2400};
 
     // FOUR: luminosity label
-    const double luminosity = 77.24;
+    const double luminosity = 77.5;
 
     // FIVE: plot observed line ?
     // const bool plotObserved = true;
