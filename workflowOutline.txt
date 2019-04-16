@@ -1,0 +1,133 @@
+1: miniAOD ---> ntuples
+=======================
+CURRENT EXAMPLE NTUPLES
+/pnfs/pp.rl.ac.uk/data/cms/store/user/taylor/ntuples_*
+
+source code: plugins/RALMiniAnalyzer.cc
+
+CMSSW config 2016 MC: plugins/nTupleProduction.py
+CMSSW config 2016 Data: plugins/nTupleProduction_Data.py
+CMSSW config 2017 MC: plugins/nTupleProduction2017.py
+CMSSW config 2017 Data: plugins/nTupleProduction_Data2017.py
+
+crab config 2016 MC: plugins/crabConfig_nTupleProd_VJ.py
+crab config 2016 Data: plugins/crabConfig_nTupleProd_data_VJ.py
+crab config 2017 MC: plugins/crabConfig_nTupleProd2017_VJ.py
+crab config 2017 Data: plugins/crabConfig_nTupleProd_data2017_VJ.py
+
+2016 golden JSON: plugins/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt
+2017 golden JSON: plugins/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.txt
+
+additional files: plugins/puppiCorr.root (used as a correction to the soft-drop mass: https://github.com/cms-jet/PuppiSoftdropMassCorr)
+additional files: plugins/plugins/L1PrefiringMaps_new.root (contains prefire weightings)
+additional files: plugins/quickSignalSubmit_crab.py (explained in quickSignalSubmitInfo.txt)
+
+Once the ntuples are finished, their filepaths need storing in lists.
+e.g. fileLists/8_0_32/*.list and fileLists/9_4_9/*.list
+Make the lists with the python script: batchJobs/makeFileLists.py
+
+
+
+2: ntuples ---> flatTrees
+=========================
+THIS CODE APPLIES PRE-SELECTION + PUTS INTO FLATTREE FORMAT
+
+CURRENT EXAMPLE FLATTREES
+/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/*
+
+source code: main/mainNMSSM.cc
+compilation: $ gmake nTupAnaNMSSM
+execution: $ ./nTupAnaNMSSM <outputRootFilename> <pathToListOfInputFiles> <sampleType> <yearOfRun> <runInstructionString>
+where
+<sampleType> = DATA, SIGNAL, TTJETS, OTHER_MC
+<year> = 2016, 2017
+<runInstructionString> = local, batch
+
+This is batchified using the python script: main/submitCondorNtupleJobs_VJ.py
+Note, it does not set off the jobs.
+EITHER cd into outputDirectory/tmp to set them off with $ ./submitCondorJobs_nTupAnaNMSSM.sh
+OR use the script: batchJobs/setoffJobs.py
+
+NOTE
+In order to keep things slim can impose a HT cut at this stage:
+https://github.com/joseph-taylor/NTupler/blob/joeTestEdit_master/PATNTupler/main/mainNMSSM.cc#L1032-L1033
+(obvs can only have it compiled one way at a time)
+You can see which samples I have done this to on the example flatTrees^^
+
+NOTE
+calls apon systematic/SF info in:
+interface/DoubleBTagSF.h
+interface/SoftDropPuppiSF.h
+interface/IsrWeights.h
+
+after the jobs are finished,
+hadd the output files together with the script: batchJobs/haddBatchOutput.py
+
+NOTE: has hack available (main/quickSignalSubmit_flatTrees.py) for mass signal submission, see quickSignalSubmitInfo.txt
+
+
+
+3a: flatTrees ---> plots
+========================
+MAKE PLOTS DIRECTLY FROM FLATTREES
+this is how all plots not in the "30 bin search region" format are made
+
+this is all achieved in a few lines using the following classes:
+src_macros/PlotEntry.cc (think of object as an elaborate 1d histogram)
+src_macros/PlotEntry2D.cc (think of object as an elaborate 2d histogram)
+src_macros/Plotter.cc (takes vectors of PlotEntry objects, give it a few commands, you get the plots)
+
+EXAMPLE MACROs:
+macros/plotting_compareDifferentCuts.cc (same samples, different cuts)
+macros/plotting_compareDifferentSamples.cc (same cuts, different samples)
+macros/plotting_compare2D.cc (2D scatter plots, *a bit buggy)
+macros/triggerEff.cc (trigger specific efficiency plots)
+
+TIP 1: if you look any of my plots in /opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/
+they have the code used to produce them alongside (nb, a few plots have required hacking of src_macros/Plotter.cc)
+
+TIP 2: the following file might be useful to look at...
+macros/old/plotting_exampleOfHowToUsePlottingClasses.cc
+
+
+
+3b: flatTrees ---> histos
+****
+NOTE
+these are not generic histograms
+they are special histograms that handle the "30 bin search region" format
+****
+========================
+CURRENT EXAMPLES OF HISTOS
+/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/
+(like with the plots, each histo has code used to create it alongside)
+
+source code: macros/histos_create.cc
+compilation: $ gmake histos_create
+
+NOTE: has hack available (quickSignalSubmit_histos.py) for mass signal submission, see quickSignalSubmitInfo.txt
+
+
+
+4a: histos ---> plots
+=====================
+TODO
+
+
+
+4b: histos ---> dataCards
+=========================
+TODO
+inc. QcdSidebandCorr.h
+
+
+
+5: dataCards ---> results
+=========================
+TODO
+
+
+
+*** SPECIAL INTEGRATION ***
+===========================
+TODO
