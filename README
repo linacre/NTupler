@@ -1,1 +1,8 @@
-TODO
+This package can be used to perform the search for boosted light Higgs bosons in NMSSM decay cascades at CMS.
+
+How to setup the package is described in: setupEnv.txt
+The key parts of the workflow are described in: workflowOutline.txt
+The integrals used to calculate the F_i factors are described in: integrals.txt
+How to speed up the submission of signal model jobs is described in: quickSignalSubmitInfo.txt
+
+Note that signal model generation and simulation is not currently supported in this package.

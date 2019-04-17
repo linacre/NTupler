@@ -1,1 +1,37 @@
-batchJobs/SignalMonteCarloDict.py
+Because there are 60+ different signal mass points. This makes all the data processing stages described in workflowOutline.txt rather laborious.
+Fortunately, for each stage we have a work around.
+Unfortunately, the work around is a bit nasty.
+
+ALL THESE WORKAROUNDS USE INFO IN: batchJobs/SignalMonteCarloDict.py
+(they loop through the relevant dictionaries)
+
+These explanations have the same numerical index as in workflowOutline.txt
+
+1: miniAOD ---> ntuples
+=======================
+code: plugins/quickSignalSubmit_crab.py
+execution (do from plugins directory): $ python quickSignalSubmit_crab.py <yearOfRun>
+
+Have everything setup as normal...BUT...
+a. include NAMEXYZ in the uniqueName. E.g. uniqueName = 'NAMEXYZ_CMSSW8029wDBTV4_9b0ff8'
+b. use DATASETXYZ for the dataset name. E.g. config.Data.inputDataset = 'DATASETXYZ'
+^For example see: TODO_INSERT
+
+MAKING FILELISTS:
+code: batchJobs/quickSignalSubmit_filelists.py
+TODO - EXPLANATION
+
+
+
+2: ntuples ---> flatTrees
+=========================
+CODE: main/quickSignalSubmit_flatTrees.py
+TODO - EXPLANATION
+
+
+
+3b: flatTrees ---> histos
+=========================
+CODE: quickSignalSubmit_histos.py
+CODE: quickSignalSubmit_histos_SQUARKONLY.py
+TODO - EXPLANATION

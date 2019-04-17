@@ -1,3 +1,6 @@
+NB - because all code is in PATNTupler directory, this part of path is never stated.
+
+
 1: miniAOD ---> ntuples
 =======================
 CURRENT EXAMPLE NTUPLES
@@ -22,29 +25,30 @@ additional files: plugins/puppiCorr.root (used as a correction to the soft-drop 
 additional files: plugins/plugins/L1PrefiringMaps_new.root (contains prefire weightings)
 additional files: plugins/quickSignalSubmit_crab.py (explained in quickSignalSubmitInfo.txt)
 
+NOTE: has hack available (plugins/quickSignalSubmit_crab.py) for mass signal submission, see quickSignalSubmitInfo.txt
+
 Once the ntuples are finished, their filepaths need storing in lists.
 e.g. fileLists/8_0_32/*.list and fileLists/9_4_9/*.list
 Make the lists with the python script: batchJobs/makeFileLists.py
 
 
 
-2: ntuples ---> flatTrees
+2: ntuples ---> flatTrees (and applies pre-selection)
 =========================
-THIS CODE APPLIES PRE-SELECTION + PUTS INTO FLATTREE FORMAT
-
 CURRENT EXAMPLE FLATTREES
 /opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/*
+Note how signal samples have full name, e.g. mH30p0_mSusy800p0_ratio0p99_splitting0p1
 
 source code: main/mainNMSSM.cc
 compilation: $ gmake nTupAnaNMSSM
 execution: $ ./nTupAnaNMSSM <outputRootFilename> <pathToListOfInputFiles> <sampleType> <yearOfRun> <runInstructionString>
 where
-<sampleType> = DATA, SIGNAL, TTJETS, OTHER_MC
+<sampleType> = DATA, SIGNAL, TTJETS, OTHER_MC (this changes the systematics applied)
 <year> = 2016, 2017
 <runInstructionString> = local, batch
 
 This is batchified using the python script: main/submitCondorNtupleJobs_VJ.py
-Note, it does not set off the jobs.
+Note that it does not set off the jobs.
 EITHER cd into outputDirectory/tmp to set them off with $ ./submitCondorJobs_nTupAnaNMSSM.sh
 OR use the script: batchJobs/setoffJobs.py
 
@@ -52,10 +56,13 @@ NOTE
 In order to keep things slim can impose a HT cut at this stage:
 https://github.com/joseph-taylor/NTupler/blob/joeTestEdit_master/PATNTupler/main/mainNMSSM.cc#L1032-L1033
 (obvs can only have it compiled one way at a time)
-You can see which samples I have done this to on the example flatTrees^^
+You can see which samples I have done this to in the example flatTrees^^
 
 NOTE
-calls apon systematic/SF info in:
+If you want to create a signal sample that only has squarks, can uncomment toggle which vetos gluinos
+
+NOTE
+calls apon systematic & SF info in:
 interface/DoubleBTagSF.h
 interface/SoftDropPuppiSF.h
 interface/IsrWeights.h
@@ -70,21 +77,21 @@ NOTE: has hack available (main/quickSignalSubmit_flatTrees.py) for mass signal s
 3a: flatTrees ---> plots
 ========================
 MAKE PLOTS DIRECTLY FROM FLATTREES
-this is how all plots not in the "30 bin search region" format are made
+this is how all plots NOT in the "30 bin search region" format are made
 
 this is all achieved in a few lines using the following classes:
 src_macros/PlotEntry.cc (think of object as an elaborate 1d histogram)
 src_macros/PlotEntry2D.cc (think of object as an elaborate 2d histogram)
-src_macros/Plotter.cc (takes vectors of PlotEntry objects, give it a few commands, you get the plots)
+src_macros/Plotter.cc (takes vectors of PlotEntry objects, give it a few simple commands, you get the plots)
 
 EXAMPLE MACROs:
 macros/plotting_compareDifferentCuts.cc (same samples, different cuts)
 macros/plotting_compareDifferentSamples.cc (same cuts, different samples)
-macros/plotting_compare2D.cc (2D scatter plots, *a bit buggy)
+macros/plotting_compare2D.cc (2D scatter plots, *a bit buggy due to class destructor)
 macros/triggerEff.cc (trigger specific efficiency plots)
 
-TIP 1: if you look any of my plots in /opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/
-they have the code used to produce them alongside (nb, a few plots have required hacking of src_macros/Plotter.cc)
+TIP 1: if you look any of my current plots in /opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/
+they have the code used to produce them alongside (NB a few plots have required hacking of src_macros/Plotter.cc)
 
 TIP 2: the following file might be useful to look at...
 macros/old/plotting_exampleOfHowToUsePlottingClasses.cc
@@ -92,6 +99,7 @@ macros/old/plotting_exampleOfHowToUsePlottingClasses.cc
 
 
 3b: flatTrees ---> histos
+=========================
 ****
 NOTE
 these are not generic histograms
@@ -101,9 +109,14 @@ they are special histograms that handle the "30 bin search region" format
 CURRENT EXAMPLES OF HISTOS
 /opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/
 (like with the plots, each histo has code used to create it alongside)
+Note how signal samples have redcued name name, e.g. mH30_mSusy800
 
 source code: macros/histos_create.cc
+The eight different things that need configuring are clearly labelled.
+One non-trivial configuration is the MassRegionCuts object: src_macros/MassRegionCuts.cc
+
 compilation: $ gmake histos_create
+execution: ./histos_create batch
 
 NOTE: has hack available (quickSignalSubmit_histos.py) for mass signal submission, see quickSignalSubmitInfo.txt
 
@@ -111,23 +124,60 @@ NOTE: has hack available (quickSignalSubmit_histos.py) for mass signal submissio
 
 4a: histos ---> plots
 =====================
-TODO
+source code: macros/histos_plot.cc
+compilcation: $ gmake histos_plot
+execution: ./histos_plot
+
+This again uses src_macros/Plotter.cc to make plots
+Now you pass it a vector of regular ROOT histograms (created in stage 3b)
+These histograms are grabbed by a map that takes a string argument.
+
+Some examples (one change at a time):
+h16_["S_anti_data"] = S-mass regions, anti-tag double-b-tag, data, 2016
+h17_["S_anti_data"] = S-mass regions, anti-tag double-b-tag, data, 2017
+h17_["S_tag_data"] = S-mass regions, tag double-b-tag, data, 2017
+h17_["S_tag_TTJets0L"] = S-mass regions, tag double-b-tag, hadronic ttbar, 2017
+h16_["S_tag_TTJets"] = S-mass regions, tag double-b-tag, all ttbar, 2016
+h16_["S_tag_mH70_mSusy2000"] = S-mass regions, tag double-b-tag, signal: mH=70GeV mSusy=2000GeV, 2016
+h16_["UnD_tag_mH70_mSusy2000"] = U+D sideband mass regions, tag double-b-tag, signal mH=70GeV mSusy=2000GeV, 2016
+h16_["UnD_tag_mH70_mSusy2000_dbtTagUp"] = As above but with double-b-tag scale factor shifted up
+
+Some examples (focussing on ABCD estimation method):
+h16_["S_control_data"] = S-mass regions, control double-b-tag, data, 2016
+h16_["predOld_control_data"] = Prediction using abcd method: S-mass regions, control double-b-tag, data, 2016
+h16_["predNewcontrol_data"] = Prediction using abcd method WITH FANCY F_i factors: S-mass regions, control double-b-tag, data, 2016
+Fancy F_i factors come from: interface/QcdSidebandCorr.h
+^How to derive them is described in: integrals.txt
 
 
 
 4b: histos ---> dataCards
 =========================
-TODO
-inc. QcdSidebandCorr.h
+makes datacards for higgs combined tool
+CURRENT EXAMPLES OF CARDS (and how they are structured):
+/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/
+
+source code: macros/makeCombineDataCardsBOTHYEARS.cc
+compilation: $ gmake makeCombineDataCardsBOTHYEARS
+execution: ./makeCombineDataCardsBOTHYEARS
+
+The six different things that need configuring are clearly labelled.
+
+^Look at example data cards to understand what the code does.
 
 
 
 5: dataCards ---> results
 =========================
-TODO
+code: macros/runCombinedBatch.py
+execution: $ python $CMSSW_BASE/src/NTupler/PATNTupler/macros/runCombinedBatch.py
+^FROM THE LOCATION WHERE YOU WISH TO GET THE OUTPUT
+outputs a ROOT file for each signal mass point.
 
+Can freeze nuisance parameters in the code if you want
+But that is currently the only option
 
-
-*** SPECIAL INTEGRATION ***
-===========================
-TODO
+Can then make limit plots with the following code:
+macros/limits_2d.py
+macros/limits_2d_overlay.py
+macros/plotting_brazil.cc

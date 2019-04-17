@@ -1,0 +1,8 @@
+*** SPECIAL INTEGRATION ***
+===========================
+
+TODO
+
+CODE = integrate.py
+requires fits
+input results into: QcdSidebandCorr.h
