@@ -1,8 +1,18 @@
 *** SPECIAL INTEGRATION ***
 ===========================
 
-TODO
+First you need to get the 1D soft-drop mass functional form.
+The following code does it for 2017 anti-tag data and QCD, in the HT1500-2500 bin:
+https://github.com/joseph-taylor/NTupler/blob/joeTestEdit_master/PATNTupler/macros/plotting_compareDifferentCuts.cc
+An example of the fitting:
+https://github.com/joseph-taylor/NTupler/blob/joeTestEdit_master/PATNTupler/macros/plotting_compareDifferentCuts.cc#L167
 
-CODE = integrate.py
-requires fits
-input results into: QcdSidebandCorr.h
+When the fit is performed, it will print the 16 params to the terminal.
+They need inserting in the script: macros/integrate.py
+Copy the following format: https://github.com/joseph-taylor/NTupler/blob/joeTestEdit_master/PATNTupler/macros/integrate.py#L219-L238
+
+In the above example, the corresponding F_i factors are be calculated at the bottom like so:
+https://github.com/joseph-taylor/NTupler/blob/joeTestEdit_master/PATNTupler/macros/integrate.py#L397
+when running $ python integrate.py
+
+Results can be input into: interface/QcdSidebandCorr.h
