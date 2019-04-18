@@ -28,9 +28,9 @@ whichPartOfProcess = 'processMc04' # turns AOD in MINIAOD
 #-----------------------------------------------
 ##### INFO constant workflow INFO ##############
 madGraphProjects = [
-						'mH70p0_mSusy1200p0_ratio0p99_splitting0p1_600000events',
-						'mH70p0_mSusy2000p0_ratio0p99_splitting0p1_600000events',
-						'mH70p0_mSusy2800p0_ratio0p99_splitting0p1_600000events',
+						'mH70p0_mSusy1200p0_ratio0p99_splitting0p1_600001events',
+						'mH70p0_mSusy2000p0_ratio0p99_splitting0p1_600008events',
+						'mH70p0_mSusy2800p0_ratio0p99_splitting0p1_600002events',
 					]
 
 outputPrimaryDatasetIntro = 'nmssmSignalCascadeV05_13TeV2017'
@@ -145,7 +145,7 @@ totalNumberOfFilesPro04 = -1 # -1 to select them all
 if (simulationYear != 2016 and simulationYear != 2017):
 	print "You have not set a correct year of simulation"
 	print "You should be using 2016 or 2017"
-	print "You fool"
+	print "Exiting..."
 	sys.exit()
 
 cmsswVersion = os.popen("echo $CMSSW_VERSION", "r").readline()
@@ -154,7 +154,7 @@ cmsswVersion = cmsswVersion.rstrip()
 if cmsswVersion != processMc_cmsswVersion:
 	print "You are using " + cmsswVersion
 	print "You should be using " + processMc_cmsswVersion
-	print "You Fool"
+	print "Exiting..."
 	sys.exit()
 
 cmsswBase = os.popen("echo $CMSSW_BASE", "r").readline()
@@ -164,7 +164,7 @@ dirShouldBe = cmsswBase + "/src/Analysis/Analysis_boostedNmssmHiggs/crab3"
 if os.getcwd() != dirShouldBe:
 	print "We are not in the correct directory to run this script"
 	print "Get yourself in $CMSSW_BASE/src/Analysis/Analysis_boostedNmssmHiggs/crab3"
-	print "You Fool"
+	print "Exiting..."
 	sys.exit()
 
 # strip events section off madGraph info
@@ -183,7 +183,7 @@ if manuallySetData == True and whichPartOfProcess != "processMc01":
 	print ""
 	if len(dataSetsToUse) != len(madGraphProjects):
 		print "The number of datasets specified does not match the number of projects to run"
-		print "Sort this out you fool"	
+		print "Exiting..."
 		sys.exit()
 
 
