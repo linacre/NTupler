@@ -1,21 +1,20 @@
 import os
 import sys
 
-# 1. select the correct options in this script!!!
-# 2. make sure you are in the Analysis_boostedNmssmHiggs/crab3 repository
+# HOW TO RUN
+# 1. select the correct user options in this script!!!
+# 2. make sure you are in the signalGeneration repository
 # 3. run with $ python McProduction_Controller.py
 
+# NOTES:
 # must use one fixed CMSSW version for the full chain. (Can use manual dataset entry to mitigate this)
-# make sure you have a valid grid certificate and the correct (for your CMSSW environment) crab loaded.
-
-# note that if a crab project is old the info disapears and thus you cannot get the publication status!!!
-# ie can't get the files to run over in the next step!!! Need to enter them maually!!! Sorry:(
+# make sure you have a valid grid certificate and crab loaded.
+# if a crab project is old and the publication status is lost, need to enter files manually!!! Sorry:(
 #################################################################
 #################################################################
 #################################################################
 #################################################################
 ###### @ U S E R @ O P T I O N S @ ##############################
-
 
 mode = 'submit'
 # mode = 'resubmit'
@@ -25,20 +24,13 @@ mode = 'submit'
 # whichPartOfProcess = 'processMc02' # step one of GENSIM into AOD
 # whichPartOfProcess = 'processMc03' # step two of GENSIM into AOD
 whichPartOfProcess = 'processMc04' # turns AOD in MINIAOD
-# whichPartOfProcess = 'patTupleAddBTag' # turns AOD into patTuple form (no longer part of the full workflow)
-
 
 #-----------------------------------------------
 ##### INFO constant workflow INFO ##############
 madGraphProjects = [
-						'mH110p0_mSusy800p0_ratio0p99_splitting0p1_600000events',
-						'mH110p0_mSusy1200p0_ratio0p99_splitting0p1_600000events',
-						'mH110p0_mSusy1600p0_ratio0p99_splitting0p1_600000events',
-						'mH110p0_mSusy2000p0_ratio0p99_splitting0p1_600000events',
-						'mH110p0_mSusy2200p0_ratio0p99_splitting0p1_600000events',
-						'mH110p0_mSusy2400p0_ratio0p99_splitting0p1_600000events',
-						'mH110p0_mSusy2600p0_ratio0p99_splitting0p1_600000events',
-						'mH110p0_mSusy2800p0_ratio0p99_splitting0p1_600000events',
+						'mH70p0_mSusy1200p0_ratio0p99_splitting0p1_600000events',
+						'mH70p0_mSusy2000p0_ratio0p99_splitting0p1_600000events',
+						'mH70p0_mSusy2800p0_ratio0p99_splitting0p1_600000events',
 					]
 
 outputPrimaryDatasetIntro = 'nmssmSignalCascadeV05_13TeV2017'
@@ -49,21 +41,13 @@ simulationYear = 2017
 blacklist = ['T3_US_UMiss']
 dryRun = False
 
-# This switches default is False. The script finds the dataset to use for you.
-# However if the crab project has expired this will no longer work.
-# You need to set manuallySetData to True
+# This boolian default is False. The script finds the dataset to use for you.
+# However, if the crab project has expired this will no longer work.
+# You will need to set manuallySetData to True
 # And fill in the list dataSetsToUse to correspond to madGraphProjects
 manuallySetData = False
 # manuallySetData = True
 dataSetsToUse = [
-'/nmssmSignalCascadeV05_13TeV2017_mH110p0_mSusy800p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV2017_processMc02_ed94Xv1_mH110p0_mSusy800p0_ratio0p99_splitting0p1-9d8f590933956796cd3e18bfb7642a20/USER',
-'/nmssmSignalCascadeV05_13TeV2017_mH110p0_mSusy1200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV2017_processMc02_ed94Xv1_mH110p0_mSusy1200p0_ratio0p99_splitting0p1-9d8f590933956796cd3e18bfb7642a20/USER',
-'/nmssmSignalCascadeV05_13TeV2017_mH110p0_mSusy1600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV2017_processMc02_ed94Xv1_mH110p0_mSusy1600p0_ratio0p99_splitting0p1-9d8f590933956796cd3e18bfb7642a20/USER',
-'/nmssmSignalCascadeV05_13TeV2017_mH110p0_mSusy2000p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV2017_processMc02_ed94Xv1_mH110p0_mSusy2000p0_ratio0p99_splitting0p1-9d8f590933956796cd3e18bfb7642a20/USER',
-'/nmssmSignalCascadeV05_13TeV2017_mH110p0_mSusy2200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV2017_processMc02_ed94Xv1_mH110p0_mSusy2200p0_ratio0p99_splitting0p1-9d8f590933956796cd3e18bfb7642a20/USER',
-'/nmssmSignalCascadeV05_13TeV2017_mH110p0_mSusy2400p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV2017_processMc02_ed94Xv1_mH110p0_mSusy2400p0_ratio0p99_splitting0p1-9d8f590933956796cd3e18bfb7642a20/USER',
-'/nmssmSignalCascadeV05_13TeV2017_mH110p0_mSusy2600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV2017_processMc02_ed94Xv1_mH110p0_mSusy2600p0_ratio0p99_splitting0p1-9d8f590933956796cd3e18bfb7642a20/USER',
-'/nmssmSignalCascadeV05_13TeV2017_mH110p0_mSusy2800p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV2017_processMc02_ed94Xv1_mH110p0_mSusy2800p0_ratio0p99_splitting0p1-9d8f590933956796cd3e18bfb7642a20/USER',
 				# 'DAS_DATASET',
 				# 'DAS_DATASET',
 				# 'etc',
@@ -76,7 +60,7 @@ editionNamePro01 = "ed94Xv1"
 
 eventsPerJob = 450
 totalNumberOfEvents = 600000 # -1 to select them all
-localMadGraphProjectStore = '/storage/jt15104/madGraphProjects/nmssmCascadeAnalysis_v05/paramCard_type03/'
+localMadGraphProjectStore = '/opt/ppd/scratch/xap79297/madGraphProjects/nmssmCascadeAnalysis_v05/paramCard_type03/'
 pathWithinMadgraphProject = 'Events/run_01/unweighted_events.lhe' # ensure that you have unzipped these files using python/unzipMadgraphLhe.py
 #-------------------------------------------
 
@@ -90,7 +74,7 @@ totalNumberOfFilesPro02 = -1 # -1 to select them all
 
 #------------------------------------------- Note that running submission of processMc03
 ##### INFO 'processMc03' INFO ############## requires valid editionNamePro02
-editionNamePro03 = "ed94Xv4"
+editionNamePro03 = "ed94Xv1"
 
 filesPerJobPro03 = 1
 totalNumberOfFilesPro03 = -1 # -1 to select them all
@@ -104,15 +88,6 @@ filesPerJobPro04 = 2
 totalNumberOfFilesPro04 = -1 # -1 to select them all
 #-------------------------------------------
 
-#------------------------------------------- Note that running submission of patTupleAddBTag
-##### INFO 'patTupleAddBTag' INFO ########## requires valid editionNamePro03
-editionNamePAT = "ed94Xv1"
-
-filesPerJobPAT = 3
-totalNumberOfFilesPAT = -1 # -1 to select them all
-#-------------------------------------------
-
-
 #################################################################
 #################################################################
 ### ## # HELPFUL INFO # ## ###
@@ -122,36 +97,31 @@ totalNumberOfFilesPAT = -1 # -1 to select them all
 # partTwoUniqueName = outputPrimaryDatasetIntro + '_processMc02_' + editionNamePro02 + '_' + madGraphProjectsStripOffEvents[i]
 # partThreeUniqueName = outputPrimaryDatasetIntro + '_processMc03_' + editionNamePro03 + '_' + madGraphProjectsStripOffEvents[i]
 # partFourUniqueName = outputPrimaryDatasetIntro + '_processMc04_' + editionNamePro04 + '_' + madGraphProjectsStripOffEvents[i]
-# patTupleUniqueName = outputPrimaryDatasetIntro + '_patTupleAddBTag_' + editionNamePAT + '_' + madGraphProjectsStripOffEvents[i]
 # (the unique names must be less than 100 characters)
 #
 # the public location of the ouput will go here:
-# 1. /<outputPrimaryDataset>/taylor-<partOneUniqueName>-<randomHash>/USER
-# 2. /<outputPrimaryDataset>/taylor-<partTwoUniqueName>-<randomHash>/USER
-# 3. /<outputPrimaryDataset>/taylor-<partThreeUniqueName>-<randomHash>/USER
-# 4. /<outputPrimaryDataset>/taylor-<partFourUniqueName>-<randomHash>/USER
-# 5. /<outputPrimaryDataset>/taylor-<patTupleUniqueName>-<randomHash>/USER
+# 1. /<outputPrimaryDataset>/<cernUserName>-<partOneUniqueName>-<randomHash>/USER
+# 2. /<outputPrimaryDataset>/<cernUserName>-<partTwoUniqueName>-<randomHash>/USER
+# 3. /<outputPrimaryDataset>/<cernUserName>-<partThreeUniqueName>-<randomHash>/USER
+# 4. /<outputPrimaryDataset>/<cernUserName>-<partFourUniqueName>-<randomHash>/USER
 #
 # crab projects will go here:
 # 1. ./crab_projects/crab_<partOneUniqueName>/
 # 2. ./crab_projects/crab_<partTwoUniqueName>/
 # 3. ./crab_projects/crab_<partThreeUniqueName>/
 # 4. ./crab_projects/crab_<partFourUniqueName>/
-# 5. ./crab_projects/crab_<patTupleUniqueName>/
 #
 # output ROOT files will go here:
-# 1. /hdfs/dpm/phy.bris.ac.uk/home/cms/store/user/taylor/<outputPrimaryDataset>/<partOneUniqueName>/<dateStamp>/0000/
-# 2. /hdfs/dpm/phy.bris.ac.uk/home/cms/store/user/taylor/<outputPrimaryDataset>/<partTwoUniqueName>/<dateStamp>/0000/
-# 3. /hdfs/dpm/phy.bris.ac.uk/home/cms/store/user/taylor/<outputPrimaryDataset>/<partThreeUniqueName>/<dateStamp>/0000/
-# 4. /hdfs/dpm/phy.bris.ac.uk/home/cms/store/user/taylor/<outputPrimaryDataset>/<partFourUniqueName>/<dateStamp>/0000/
-# 5. /hdfs/dpm/phy.bris.ac.uk/home/cms/store/user/taylor/<outputPrimaryDataset>/<patTupleUniqueName>/<dateStamp>/0000/
+# 1. /store/user/<cernUserName>/<outputPrimaryDataset>/<partOneUniqueName>/<dateStamp>/0000/
+# 2. /store/user/<cernUserName>/<outputPrimaryDataset>/<partTwoUniqueName>/<dateStamp>/0000/
+# 3. /store/user/<cernUserName>/<outputPrimaryDataset>/<partThreeUniqueName>/<dateStamp>/0000/
+# 4. /store/user/<cernUserName>/<outputPrimaryDataset>/<partFourUniqueName>/<dateStamp>/0000/
 #
 # the names of the output ROOT files will be:
 # 1. nmssmSignal_GENSIM_<jobNum>.root (as stated by the config file processMc01_mgLheToGenSim_cfg.py)
 # 2. nmssmSignal_AODSIMstep1of2_<jobNum>.root (as stated by the config file processMc02_genSimToAOD_step1of2_cfg.py)
 # 3. nmssmSignal_AODSIMstep2of2_<jobNum>.root (as stated by the config file processMc03_genSimToAOD_step1of2_cfg.py)
 # 4. nmssmSignal_MINIAODSIM_<jobNum>.root (as stated by the config file processMc04_AODToMINIAOD_cfg.py)
-# 5. bTagPatTuple_<jobNum>.root (as stated by the config file patTuple_addBTagging_cfg.py)
 ###############################
 
 #################################################################
@@ -616,107 +586,6 @@ if mode == 'resubmit' and whichPartOfProcess == 'processMc04':
 		print ""
 
 
-
-#-----------------------------------------------------------#
-#----------------------patTupleAddBTag----------------------#
-#-----------------------------------------------------------#
-
-if mode == 'submit' and whichPartOfProcess == 'patTupleAddBTag':
-
-	for i in range(0,len(madGraphProjects)):
-		partThreeUniqueName = outputPrimaryDatasetIntro + '_processMc03_' + editionNamePro03 + '_' + madGraphProjectsStripOffEvents[i]
-		patTupleUniqueName = outputPrimaryDatasetIntro + '_patTupleAddBTag_' + editionNamePAT + '_' + madGraphProjectsStripOffEvents[i]
-
-		# get the name of the DAS input dataset name
-		if manuallySetData == False:
-			inputDataset = []
-			statusLines = os.popen("crab status -d crab_projects/crab_%s" % partThreeUniqueName, "r").readlines()
-			for line in statusLines:
-				if line[:15] == "Output dataset:":
-					inputDataset = line.rstrip()
-					for c in range(15,len(inputDataset)):
-						if inputDataset[c] == '/':
-							inputDataset = inputDataset[c:]
-							# print inputDataset # for debugging
-							break
-					break
-		if manuallySetData == True:
-			inputDataset = dataSetsToUse[i]
-
-		if (simulationYear != 2016):
-			print "Only have a PatTuple config for 2016, exiting..."
-			sys.exit()
-
-		# create the tempory crab config file to submit
-		f = open("temp_crab3config_patTuple.py", 'w')
-		f.write("from CRABClient.UserUtilities import config\n")
-		f.write("config = config()\n")
-		f.write("config.Data.inputDataset = '%s'\n" % inputDataset)
-		f.write("config.Data.unitsPerJob = %d\n" % filesPerJobPAT)
-		f.write("config.Data.totalUnits = %d\n" % totalNumberOfFilesPAT)
-		f.write("config.Data.inputDBS = 'phys03'\n")
-		f.write("config.Data.splitting = 'FileBased'\n")
-		f.write("config.Data.publication = False\n")
-		# f.write("config.Data.ignoreLocality = True\n") # To avoid problems with data being stored on a black_listed site
-		f.write("config.Data.outputDatasetTag = '%s'\n" % patTupleUniqueName)
-		f.write("config.General.requestName = '%s'\n" % patTupleUniqueName)
-		f.write("config.General.workArea = 'crab_projects'\n")
-		f.write("config.General.transferOutputs = True\n")
-		f.write("config.General.transferLogs = True\n")
-		f.write("config.JobType.pluginName = 'Analysis'\n")
-		f.write("config.JobType.psetName = 'patTuple_addBTagging_cfg.py'\n")
-		f.write("config.Site.storageSite = '%s'\n" % storageSite)
-		f.write("config.Site.blacklist = %s\n" % str(blacklist) )
-		f.close()
-		print ""
-		# os.system("cat temp_crab3config_patTuple.py") # for testing
-		if (dryRun == False): os.system("crab submit -c temp_crab3config_patTuple.py") # for the real deal
-		if (dryRun == True): os.system("crab submit -c temp_crab3config_patTuple.py --dryrun") # does a dryRun test
-		os.system("rm temp_crab3config_patTuple.py")
-		print ""
-
-
-
-if mode == 'checkStatus' and whichPartOfProcess == 'patTupleAddBTag':
-	print ""
-	print "*** CHECKING STATUS FOR PAT.TUPLE.ADDBTAG ***"
-	print "NB if no info printed the task is most likely not bootstrapped yet"
-	for i in range(0,len(madGraphProjects)):
-		print ""
-		print ""
-		patTupleUniqueName = outputPrimaryDatasetIntro + '_patTupleAddBTag_' + editionNamePAT + '_' + madGraphProjectsStripOffEvents[i]
-		statusLines = os.popen("crab status -d crab_projects/crab_%s" % patTupleUniqueName, "r").readlines()
-		print patTupleUniqueName
-		foundJobLine = False
-		for line in statusLines:
-			if foundJobLine == False and line[:12] == "Jobs status:":
-				print line.rstrip()
-				foundJobLine = True
-				continue
-			if foundJobLine == True:
-				if line == "\n":
-					break
-				print line.rstrip()
-		foundPubLine = False
-		for line in statusLines:
-			if foundPubLine == False and line[:19] == "Publication status:":
-				print line.rstrip()
-				foundPubLine = True
-				continue
-			if foundPubLine == True:
-				if line == "\n":
-					break
-				print line.rstrip()
-	print ""
-
-
-
-if mode == 'resubmit' and whichPartOfProcess == 'patTupleAddBTag':
-
-	for i in range(0,len(madGraphProjects)):
-		patTupleUniqueName = outputPrimaryDatasetIntro + '_patTupleAddBTag_' + editionNamePAT + '_' + madGraphProjectsStripOffEvents[i]
-		os.system("crab resubmit -d crab_projects/crab_%s" % patTupleUniqueName)
-		print ""
 
 #################################################################
 #################################################################
