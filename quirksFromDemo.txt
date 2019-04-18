@@ -1,0 +1,7 @@
+Most macros try to write job logs to xap79297
+
+'batch' option in mainNMSSM.cc is a bit misleading, only runs on batch following the use of submitCondorNtupleJobs.py
+
+In CMSSW_9_4_X: fits do not work :(
+
+In CMSSW_9_4_X: histos_create.cc does not compile (std::replace)
