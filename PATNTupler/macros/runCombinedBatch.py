@@ -20,7 +20,7 @@ nuisancesToFreeze = "" # >>> no freezing a thing
 # nuisancesToFreeze = "isrReweightBOTH"
 # nuisancesToFreeze = "SigDbtTag2016,SigDbtTag2017"
 # nuisancesToFreeze = "TtDbtTag2016,TtDbtTag2017"
-# nuisancesToFreeze = "XS_TTJets2016,XS_TTJets0L2017,XS_TTJets1L2017,XS_TTJets2L2017"
+# nuisancesToFreeze = "XS_TTJets2016,XS_TTJets2017"
 # nuisancesToFreeze = "XS_ZJets2016,XS_ZJets2017"
 # nuisancesToFreeze = "XS_WJets2016,XS_WJets2017"
 # nuisancesToFreeze = "luminosity2016,luminosity2017"
@@ -29,6 +29,7 @@ nuisancesToFreeze = "" # >>> no freezing a thing
 # nuisancesToFreeze = "jmsUncBOTH"
 # nuisancesToFreeze = "jmrUncBOTH"
 # nuisancesToFreeze = "prefire2016,prefire2017"
+# nuisancesToFreeze = "ch1_F,ch2_F,ch3_F,ch4_F,ch5_F,ch6_F,ch7_F,ch8_F,ch9_F,ch10_F,ch11_F,ch12_F,ch13_F,ch14_F,ch15_F,ch16_F,ch17_F,ch18_F,ch19_F,ch20_F,ch21_F,ch22_F,ch23_F,ch24_F,ch25_F,ch26_F,ch27_F,ch28_F,ch29_F,ch30_F,ch31_F,ch32_F,ch33_F,ch34_F,ch35_F,ch36_F,ch37_F,ch38_F,ch39_F,ch40_F,ch41_F,ch42_F,ch43_F,ch44_F,ch45_F,ch46_F,ch47_F,ch48_F,ch49_F,ch50_F,ch51_F,ch52_F,ch53_F,ch54_F,ch55_F,ch56_F,ch57_F,ch58_F,ch59_F,ch60_F"
 
 #############################
 #############################
