@@ -193,6 +193,11 @@ tdrStyle(TDRStyle())
 		th1Stack[iTh1S]->GetYaxis()->SetTitleSize(0.05);
 		th1Stack[iTh1S]->GetYaxis()->SetLabelSize(0.04);
 	}
+
+	// JOE HACK:::
+	// th1Stack[th1Stack.size()-1]->SetFillColor(kBlack);
+	// th1Stack[th1Stack.size()-1]->SetFillStyle(3004);
+	// th1Stack[th1Stack.size()-1]->Draw("same, E2");
 }
 
 
@@ -1140,6 +1145,202 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 
 	return;
 } // closes function SaveSpec01
+
+
+void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::string> htBins){
+
+	if (th1Indi.size() != 1){
+		std::cout << "Plotter::SaveSpec02 @@@ Exiting without saving... only want one indi input" << std::endl;
+		return;
+	}
+	th1Indi[0]->SetBinErrorOption(TH1::kPoisson);
+
+	if (th1Stack.empty()){
+		std::cout << "Plotter::SaveSpec02 @@@ Exiting without saving... no stacked histos @@@" << std::endl;
+		return;
+	}
+
+	std::string hsTitles = ""; // NB, can't set title for THStack after construction
+	if (!th1Stack.empty()) hsTitles = Form("%s;%s;%s", th1Stack[0]->GetTitle(), th1Stack[0]->GetXaxis()->GetTitle(), th1Stack[0]->GetYaxis()->GetTitle());	
+	THStack * hs = new THStack("hs", hsTitles.c_str());
+	for (size_t iTh1S = 0; iTh1S != th1Stack.size()-1; ++iTh1S)
+		hs->Add(th1Stack[iTh1S], "HIST");
+
+	tdrStyle->cd();
+	TCanvas * c = new TCanvas("c","c");
+	
+	if (addRatioBox){
+		TPad *padUp = new TPad("padUp","padUp",0,0.3,1,1);
+		padUp->SetBottomMargin(0.016);
+		padUp->Draw();
+		padUp->cd();
+		th1Indi[0]->SetLabelOffset(777.7);
+	}
+
+	if (useLogY) gPad->SetLogy();
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	// find max and min (don't want zero values for min, they won't work properly for logY plots)
+	double max = 0.0;
+	double min = 0.0; // for logY plots only
+		
+	// MAX from th1Indi
+	for (int i=1; i != th1Indi[0]->GetNbinsX()+1; ++i)
+		if ( (th1Indi[0]->GetBinContent(i) + th1Indi[0]->GetBinError(i) > max) || i==1 ) max = th1Indi[0]->GetBinContent(i) + th1Indi[0]->GetBinError(i);	
+
+	if (setYValueMin) min = yValueMin;
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
+	// set histo max and min and draw
+	double initialMax = 0.0; // use to reset the histo max and min to what it initially was
+	double initialMin = 0.0;
+
+	// max = 2.1; // HACK maxima
+	double graphMaxLin = 1.12 * max;
+	double graphMaxLog = log10(max/min) * max;
+	double graphMinLin = 0.0;
+	double graphMinLog = min/log10(max/min);
+
+	initialMax = th1Indi[0]->GetMaximum();
+	initialMin = th1Indi[0]->GetMinimum();
+	if (useLogY == false){
+		th1Indi[0]->SetMaximum(graphMaxLin);
+		th1Indi[0]->SetMinimum(graphMinLin);
+	}
+	else{
+		th1Indi[0]->SetMaximum(graphMaxLog);
+		th1Indi[0]->SetMinimum(graphMinLog);
+	}
+	
+	th1Indi[0]->Draw("E0");
+	hs->Draw("same");
+	
+	TH1D *histoStackClone2 = (TH1D*)th1Stack[th1Stack.size()-1]->Clone();
+	histoStackClone2->SetFillColor(kBlack);
+	histoStackClone2->SetFillStyle(3004);
+	histoStackClone2->Draw("same, E2");
+
+	th1Indi[0]->Draw("same, E0");
+
+	if (addLatex) DrawLatex();
+	if (leg != NULL) leg->Draw("same");
+	if (leg2Cols != NULL) leg2Cols->Draw("same");
+	gPad->RedrawAxis();
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Add the HT division Lines
+	if (!htBins.empty()){
+		c->Update();
+		unsigned int numberOfBins = 0;
+		if (!th1Indi.empty()) numberOfBins = th1Indi[0]->GetNbinsX();
+		else numberOfBins = th1Stack[0]->GetNbinsX();
+		unsigned int binsPerDivision = numberOfBins / htBins.size();
+		for (unsigned int c = 0; c < numberOfBins; c = c + binsPerDivision){
+			
+			double lineMax = 0.0;
+			if (useLogY == false) lineMax = 1.03 * max;
+			else lineMax = pow(10, 0.92 * (log10(graphMaxLog) - log10(graphMinLog)) + log10(graphMinLog));
+
+			if (c != 0){
+				TLine * line = new TLine(c, 0, c, lineMax); // xmin, ymin, xmax, ymax
+				line->SetLineStyle(2);
+				line->SetLineWidth(3);
+				line->Draw();
+			}
+			TLatex * latexHT = new TLatex();
+		    latexHT->SetTextFont(42);
+		    latexHT->SetTextAlign(11); // align from left
+		    latexHT->DrawLatex(c+1, lineMax, htBins[c/binsPerDivision].c_str());
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
+	// do ratio box plot if implemented
+	if (addRatioBox && addRatioBoxInfo == "typeB"){
+		c->cd();
+		TPad *padDown = new TPad("padDown","padDown",0,0,1,0.3);
+		padDown->SetTopMargin(0.0);
+		padDown->SetBottomMargin(0.30);
+		padDown->Draw("same");
+		padDown->cd();
+
+		TH1D * hStackNoErrors = (TH1D*)th1Stack[th1Stack.size()-1]->Clone();
+		for (int i=1; i != hStackNoErrors->GetNbinsX()+1; ++i) hStackNoErrors->SetBinError(i, 0.0);
+
+		TH1D * ratioPlotEntry;
+		Int_t nBins = th1Indi[0]->GetNbinsX();
+		if (th1Indi[0]->GetXaxis()->GetXbins()->GetArray() == NULL) ratioPlotEntry = new TH1D("ratioPlotEntry", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetBinLowEdge(1), th1Indi[0]->GetBinLowEdge(nBins+1));
+		else ratioPlotEntry = new TH1D("hTotal", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetXaxis()->GetXbins()->GetArray());
+		
+		TH1D * ratioPlotEntryBackground;
+		if (th1Indi[0]->GetXaxis()->GetXbins()->GetArray() == NULL) ratioPlotEntryBackground = new TH1D("ratioPlotEntryBackground", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetBinLowEdge(1), th1Indi[0]->GetBinLowEdge(nBins+1));
+		else ratioPlotEntryBackground = new TH1D("hTotal", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetXaxis()->GetXbins()->GetArray());
+
+		ratioPlotEntry->Divide(th1Indi[0], hStackNoErrors);
+		ratioPlotEntry->SetMarkerStyle(20);
+		ratioPlotEntry->SetMarkerSize(0.7);
+		ratioPlotEntry->SetLineColor(kBlack);
+		ratioPlotEntry->SetLineWidth(1.5);
+
+		if (ratioBoxYAxisMinMax.size()==2){
+			ratioPlotEntry->SetMinimum(ratioBoxYAxisMinMax[0]);
+			ratioPlotEntry->SetMaximum(ratioBoxYAxisMinMax[1]);
+		}
+		ratioPlotEntry->GetXaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntry->GetXaxis()->SetTitleOffset(1.00);
+		ratioPlotEntry->GetXaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntry->GetXaxis()->SetLabelOffset(0.007);
+		ratioPlotEntry->GetXaxis()->SetTickLength(0.03 * 2.5);
+
+		ratioPlotEntry->GetYaxis()->SetTitle(ratioBoxYAxisTitle.c_str());
+		ratioPlotEntry->GetYaxis()->CenterTitle(true);
+		ratioPlotEntry->GetYaxis()->SetNdivisions(505);
+		ratioPlotEntry->GetYaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntry->GetYaxis()->SetTitleOffset(0.4);
+		ratioPlotEntry->GetYaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntry->GetYaxis()->SetLabelOffset(0.007);
+
+		ratioPlotEntry->Draw("E0");
+		
+		ratioPlotEntryBackground->Divide( th1Stack[th1Stack.size()-1], hStackNoErrors);
+		ratioPlotEntryBackground->Draw("same");
+		ratioPlotEntryBackground->SetFillColor(kBlack);
+		ratioPlotEntryBackground->SetFillStyle(3004);
+		ratioPlotEntryBackground->Draw("same, E2");
+
+		if (addRatioBoxUnityLine){
+			TLine * lineRatio = new TLine(ratioPlotEntry->GetBinLowEdge(1), 1.0, ratioPlotEntry->GetBinLowEdge(ratioPlotEntry->GetNbinsX()+1), 1.0); // xmin, ymin, xmax, ymax
+			lineRatio->SetLineStyle(2);
+			lineRatio->SetLineWidth(1);
+			lineRatio->SetLineColor(36);
+			lineRatio->Draw("same");
+			ratioPlotEntry->Draw("E0, same");
+			ratioPlotEntryBackground->Draw("same, E2");
+		}
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
+	c->SaveAs(saveName.c_str());
+	c->Close();
+	std::cout << std::endl;
+
+	// reset the max values of histograms that we altered
+	if (!th1Indi.empty()){
+		th1Indi[0]->SetMaximum(initialMax);
+		th1Indi[0]->SetMinimum(initialMin);
+	}
+	else {
+		th1Stack[0]->SetMaximum(initialMax);
+		th1Stack[0]->SetMinimum(initialMin);
+	}
+
+	if (addRatioBox) th1Indi[0]->SetLabelOffset(0.007);
+
+	return;
+} // closes function SaveSpec02
 
 
 void Plotter::Save2D(const std::string& saveName){
