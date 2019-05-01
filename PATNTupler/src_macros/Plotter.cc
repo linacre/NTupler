@@ -195,9 +195,9 @@ tdrStyle(TDRStyle())
 	}
 
 	// JOE HACK:::
-	th1Stack[th1Stack.size()-1]->SetFillColor(kBlack);
-	th1Stack[th1Stack.size()-1]->SetFillStyle(3004);
-	th1Stack[th1Stack.size()-1]->Draw("same, E2");
+	// th1Stack[th1Stack.size()-1]->SetFillColor(kBlack);
+	// th1Stack[th1Stack.size()-1]->SetFillStyle(3004);
+	// th1Stack[th1Stack.size()-1]->Draw("same, E2");
 }
 
 
@@ -478,9 +478,9 @@ void Plotter::AddLegend2Cols(const unsigned int& numRowsBeforeUsing2Cols, const 
 			else leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
 		}
 		else {
-			// if (i < th1Indi.size()) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
-			if (i < th1Indi.size() && i != 0) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "L"); // JOE HACK
-			if (i == 0) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "pL"); // JOE HACK
+			if (i < th1Indi.size()) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
+			// if (i < th1Indi.size() && i != 0) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "L"); // JOE HACK
+			// if (i == 0) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "pL"); // JOE HACK
 			else leg2Cols->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
 		}
 	}
