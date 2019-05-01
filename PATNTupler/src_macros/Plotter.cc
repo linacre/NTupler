@@ -195,9 +195,9 @@ tdrStyle(TDRStyle())
 	}
 
 	// JOE HACK:::
-	// th1Stack[th1Stack.size()-1]->SetFillColor(kBlack);
-	// th1Stack[th1Stack.size()-1]->SetFillStyle(3004);
-	// th1Stack[th1Stack.size()-1]->Draw("same, E2");
+	th1Stack[th1Stack.size()-1]->SetFillColor(kBlack);
+	th1Stack[th1Stack.size()-1]->SetFillStyle(3004);
+	th1Stack[th1Stack.size()-1]->Draw("same, E2");
 }
 
 
@@ -478,7 +478,9 @@ void Plotter::AddLegend2Cols(const unsigned int& numRowsBeforeUsing2Cols, const 
 			else leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
 		}
 		else {
-			if (i < th1Indi.size()) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
+			// if (i < th1Indi.size()) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
+			if (i < th1Indi.size() && i != 0) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "L"); // JOE HACK
+			if (i == 0) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "pL"); // JOE HACK
 			else leg2Cols->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
 		}
 	}
@@ -1213,6 +1215,11 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 		th1Indi[0]->SetMinimum(graphMinLog);
 	}
 	
+	th1Indi[0]->SetMarkerStyle(20);
+	th1Indi[0]->SetMarkerSize(0.7);
+	th1Indi[0]->SetLineColor(kBlack);
+	th1Indi[0]->SetLineWidth(1.5);
+
 	th1Indi[0]->Draw("E0");
 	hs->Draw("same");
 	
@@ -1266,58 +1273,72 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 		padDown->Draw("same");
 		padDown->cd();
 
-		TH1D * hStackNoErrors = (TH1D*)th1Stack[th1Stack.size()-1]->Clone();
-		for (int i=1; i != hStackNoErrors->GetNbinsX()+1; ++i) hStackNoErrors->SetBinError(i, 0.0);
-
-		TH1D * ratioPlotEntry;
 		Int_t nBins = th1Indi[0]->GetNbinsX();
-		if (th1Indi[0]->GetXaxis()->GetXbins()->GetArray() == NULL) ratioPlotEntry = new TH1D("ratioPlotEntry", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetBinLowEdge(1), th1Indi[0]->GetBinLowEdge(nBins+1));
-		else ratioPlotEntry = new TH1D("hTotal", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetXaxis()->GetXbins()->GetArray());
+		std::vector<double> emptyVec;
+		std::vector<double> searchRegionVec;
+		std::vector<double> ratioNomVec;
+		std::vector<double> ratioUpVec;
+		std::vector<double> ratioDownVec;
+
+		TH1D * hStackNoErrors = (TH1D*)th1Stack[th1Stack.size()-1]->Clone();
+		for (int i=1; i != hStackNoErrors->GetNbinsX()+1; ++i){
+			
+			hStackNoErrors->SetBinError(i, 0.0);
+
+			emptyVec.push_back(0.5);
+			searchRegionVec.push_back(i - 0.5);
+			ratioNomVec.push_back( th1Indi[0]->GetBinContent(i)/(hStackNoErrors->GetBinContent(i)) );
+			ratioUpVec.push_back( th1Indi[0]->GetBinErrorUp(i)/(hStackNoErrors->GetBinContent(i)) );
+			ratioDownVec.push_back( th1Indi[0]->GetBinErrorLow(i)/(hStackNoErrors->GetBinContent(i)) );
+		}
+
+		TGraphAsymmErrors * ratioPlotEntry = new TGraphAsymmErrors(nBins, &(searchRegionVec[0]), &(ratioNomVec[0]), &(emptyVec[0]), &(emptyVec[0]), &(ratioDownVec[0]), &(ratioUpVec[0]) );
 		
 		TH1D * ratioPlotEntryBackground;
 		if (th1Indi[0]->GetXaxis()->GetXbins()->GetArray() == NULL) ratioPlotEntryBackground = new TH1D("ratioPlotEntryBackground", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetBinLowEdge(1), th1Indi[0]->GetBinLowEdge(nBins+1));
 		else ratioPlotEntryBackground = new TH1D("hTotal", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetXaxis()->GetXbins()->GetArray());
 
-		ratioPlotEntry->Divide(th1Indi[0], hStackNoErrors);
+		ratioPlotEntryBackground->Divide( th1Stack[th1Stack.size()-1], hStackNoErrors);
+
 		ratioPlotEntry->SetMarkerStyle(20);
 		ratioPlotEntry->SetMarkerSize(0.7);
-		ratioPlotEntry->SetLineColor(kBlack);
+		ratioPlotEntry->SetMarkerColor(kBlack);
 		ratioPlotEntry->SetLineWidth(1.5);
 
-		if (ratioBoxYAxisMinMax.size()==2){
-			ratioPlotEntry->SetMinimum(ratioBoxYAxisMinMax[0]);
-			ratioPlotEntry->SetMaximum(ratioBoxYAxisMinMax[1]);
-		}
-		ratioPlotEntry->GetXaxis()->SetTitleSize(0.05 * 2.5);
-		ratioPlotEntry->GetXaxis()->SetTitleOffset(1.00);
-		ratioPlotEntry->GetXaxis()->SetLabelSize(0.04 * 2.5);
-		ratioPlotEntry->GetXaxis()->SetLabelOffset(0.007);
-		ratioPlotEntry->GetXaxis()->SetTickLength(0.03 * 2.5);
+		ratioPlotEntryBackground->GetXaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntryBackground->GetXaxis()->SetTitleOffset(1.00);
+		ratioPlotEntryBackground->GetXaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntryBackground->GetXaxis()->SetLabelOffset(0.007);
+		ratioPlotEntryBackground->GetXaxis()->SetTickLength(0.03 * 2.5);
 
-		ratioPlotEntry->GetYaxis()->SetTitle(ratioBoxYAxisTitle.c_str());
-		ratioPlotEntry->GetYaxis()->CenterTitle(true);
-		ratioPlotEntry->GetYaxis()->SetNdivisions(505);
-		ratioPlotEntry->GetYaxis()->SetTitleSize(0.05 * 2.5);
-		ratioPlotEntry->GetYaxis()->SetTitleOffset(0.4);
-		ratioPlotEntry->GetYaxis()->SetLabelSize(0.04 * 2.5);
-		ratioPlotEntry->GetYaxis()->SetLabelOffset(0.007);
-
-		ratioPlotEntry->Draw("E0");
+		ratioPlotEntryBackground->GetYaxis()->SetTitle(ratioBoxYAxisTitle.c_str());
+		ratioPlotEntryBackground->GetYaxis()->CenterTitle(true);
+		ratioPlotEntryBackground->GetYaxis()->SetNdivisions(505);
+		ratioPlotEntryBackground->GetYaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntryBackground->GetYaxis()->SetTitleOffset(0.4);
+		ratioPlotEntryBackground->GetYaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntryBackground->GetYaxis()->SetLabelOffset(0.007);
 		
-		ratioPlotEntryBackground->Divide( th1Stack[th1Stack.size()-1], hStackNoErrors);
-		ratioPlotEntryBackground->Draw("same");
+		ratioPlotEntryBackground->Draw();
+		if (ratioBoxYAxisMinMax.size()==2){
+			ratioPlotEntryBackground->SetMinimum(ratioBoxYAxisMinMax[0]);
+			ratioPlotEntryBackground->SetMaximum(ratioBoxYAxisMinMax[1]);
+		}
+		ratioPlotEntryBackground->SetLineWidth(0.0);
 		ratioPlotEntryBackground->SetFillColor(kBlack);
 		ratioPlotEntryBackground->SetFillStyle(3004);
-		ratioPlotEntryBackground->Draw("same, E2");
+		ratioPlotEntryBackground->Draw("same, P, E2");
+		gStyle->SetEndErrorSize(0);
+		ratioPlotEntry->Draw("P, same");
 
 		if (addRatioBoxUnityLine){
-			TLine * lineRatio = new TLine(ratioPlotEntry->GetBinLowEdge(1), 1.0, ratioPlotEntry->GetBinLowEdge(ratioPlotEntry->GetNbinsX()+1), 1.0); // xmin, ymin, xmax, ymax
-			lineRatio->SetLineStyle(2);
+			TLine * lineRatio = new TLine(ratioPlotEntryBackground->GetBinLowEdge(1), 1.0, ratioPlotEntryBackground->GetBinLowEdge(ratioPlotEntryBackground->GetNbinsX()+1), 1.0); // xmin, ymin, xmax, ymax
+			// lineRatio->SetLineStyle(2);
 			lineRatio->SetLineWidth(1);
-			lineRatio->SetLineColor(36);
+			lineRatio->SetLineColor(9);
 			lineRatio->Draw("same");
-			ratioPlotEntry->Draw("E0, same");
 			ratioPlotEntryBackground->Draw("same, E2");
+			ratioPlotEntry->Draw("P, same");
 		}
 	}
 
