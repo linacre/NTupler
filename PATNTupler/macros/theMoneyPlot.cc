@@ -33,7 +33,7 @@ int main(){
 
     // ONE: input file name, save info, and lumi
     const std::string inputFile = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/fitDiagnostics/mH30_mSusy2800/fitDiagnostics.root";
-    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/fitDiagnostics/mH30_mSusy2800/testing01/";
+    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/fitDiagnostics/mH30_mSusy2800/testing03/";
     const double luminosity = 35.867; // 2016 Plots::: NB this is just a label for the plot.
     // const double luminosity = 41.370; // 2017 Plots::: NB this is just a label for the plot.
   
@@ -42,8 +42,8 @@ int main(){
     const std::string massType = "S"; // S type mass regions
     // const std::string massType = "UnD"; // U+D type mass regions
     
-    // const unsigned int yearOfRun = 2016;
-    const unsigned int yearOfRun = 2017;
+    const unsigned int yearOfRun = 2016;
+    // const unsigned int yearOfRun = 2017;
     
     // const std::string fitType = "prefit";
     const std::string fitType = "fit_b";
@@ -121,16 +121,11 @@ int main(){
     Plotter plot = Plotter(indiHistoVec, stackHistoVec);
 
     std::vector<std::string> legendNames = {"data", "WJets", "ZJets", "TTJets", "QCD", "unc."};
-
-    // plot.AddLegend(legendNames, 0.16, 0.38, 0.64, 0.83, 0.028);
-    // plot.AddLegend(legendNames, 0.18, 0.38, 0.18, 0.30, 0.040);
-    // plot.AddLegend(legendNames, 0.67, 0.88, 0.64, 0.83, 0.028);
-    // plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
     plot.AddLegend2Cols(0, legendNames, 0.67, 0.95, 0.55, 0.80, 0.045);
     
     // plot.AddLatex(luminosity);
     plot.AddLatex(luminosity, "#it{Preliminary}");    
-    plot.AddRatioBox(0.1, 1.9, "N_{obs} / N_{pred}", true);
+    plot.AddRatioBox(0.0, 2.7, "data / pred", true);
 
     std::vector<std::string> stringVec = {" HT1500-2500 GeV", " HT2500-3500 GeV", " HT3500+ GeV"};
     std::string plotName = "linear";
@@ -138,9 +133,8 @@ int main(){
     
     plotName = "log";
     plot.SetLogY();
-    plot.SetYValueMin(0.15); // REMEMBER THIS PARAM! (only for log)
+    plot.SetYValueMin(0.13); // REMEMBER THIS PARAM! (only for log)
     plot.SaveSpec02(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
-
 
     return 0;
 }
