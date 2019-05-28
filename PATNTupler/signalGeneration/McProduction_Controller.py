@@ -20,10 +20,10 @@ mode = 'submit'
 # mode = 'resubmit'
 # mode = 'checkStatus'
 
-# whichPartOfProcess = 'processMc01' # turns madgraph LHE into cmssw GENSIM
+whichPartOfProcess = 'processMc01' # turns madgraph LHE into cmssw GENSIM
 # whichPartOfProcess = 'processMc02' # step one of GENSIM into AOD
 # whichPartOfProcess = 'processMc03' # step two of GENSIM into AOD
-whichPartOfProcess = 'processMc04' # turns AOD in MINIAOD
+# whichPartOfProcess = 'processMc04' # turns AOD in MINIAOD
 
 #-----------------------------------------------
 ##### INFO constant workflow INFO ##############
@@ -33,11 +33,11 @@ madGraphProjects = [
 						'mH70p0_mSusy2800p0_ratio0p99_splitting0p1_600002events',
 					]
 
-outputPrimaryDatasetIntro = 'nmssmSignalCascadeV05_13TeV2017'
+outputPrimaryDatasetIntro = 'nmssmSignalCascadeV05_13TeV2018'
 
 storageSite = 'T2_UK_SGrid_RALPP'
-processMc_cmsswVersion = 'CMSSW_9_4_0_patch1'
-simulationYear = 2017
+processMc_cmsswVersion = 'CMSSW_10_2_6'
+simulationYear = 2018
 blacklist = ['T3_US_UMiss']
 dryRun = False
 
@@ -56,7 +56,7 @@ dataSetsToUse = [
 
 #-------------------------------------------
 ##### INFO 'processMc01' INFO ##############
-editionNamePro01 = "ed94Xv1"
+editionNamePro01 = "ed102Xv1"
 
 eventsPerJob = 450
 totalNumberOfEvents = 600000 # -1 to select them all
@@ -66,7 +66,7 @@ pathWithinMadgraphProject = 'Events/run_01/unweighted_events.lhe' # ensure that 
 
 #------------------------------------------- Note that running submission of processMc02
 ##### INFO 'processMc02' INFO ############## requires valid editionNamePro01
-editionNamePro02 = "ed94Xv1"
+editionNamePro02 = "ed102Xv1"
 
 filesPerJobPro02 = 3
 totalNumberOfFilesPro02 = -1 # -1 to select them all
@@ -74,7 +74,7 @@ totalNumberOfFilesPro02 = -1 # -1 to select them all
 
 #------------------------------------------- Note that running submission of processMc03
 ##### INFO 'processMc03' INFO ############## requires valid editionNamePro02
-editionNamePro03 = "ed94Xv1"
+editionNamePro03 = "ed102Xv1"
 
 filesPerJobPro03 = 1
 totalNumberOfFilesPro03 = -1 # -1 to select them all
@@ -82,7 +82,7 @@ totalNumberOfFilesPro03 = -1 # -1 to select them all
 
 #------------------------------------------- Note that running submission of processMc04
 ##### INFO 'processMc04' INFO ############## requires valid editionNamePro03
-editionNamePro04 = "ed94Xv1"
+editionNamePro04 = "ed102Xv1"
 
 filesPerJobPro04 = 2
 totalNumberOfFilesPro04 = -1 # -1 to select them all
@@ -142,9 +142,9 @@ totalNumberOfFilesPro04 = -1 # -1 to select them all
 #################################################################
 #################################################################
 
-if (simulationYear != 2016 and simulationYear != 2017):
+if (simulationYear != 2016 and simulationYear != 2017 and simulationYear != 2018):
 	print "You have not set a correct year of simulation"
-	print "You should be using 2016 or 2017"
+	print "You should be using 2016 or 2017 or 2018"
 	print "Exiting..."
 	sys.exit()
 
@@ -160,10 +160,10 @@ if cmsswVersion != processMc_cmsswVersion:
 cmsswBase = os.popen("echo $CMSSW_BASE", "r").readline()
 cmsswBase = cmsswBase.rstrip()
 # check that you submit from the correct directory
-dirShouldBe = cmsswBase + "/src/Analysis/Analysis_boostedNmssmHiggs/crab3"
+dirShouldBe = cmsswBase + "/src/NTupler/PATNTupler/signalGeneration"
 if os.getcwd() != dirShouldBe:
 	print "We are not in the correct directory to run this script"
-	print "Get yourself in $CMSSW_BASE/src/Analysis/Analysis_boostedNmssmHiggs/crab3"
+	print "Get yourself in $CMSSW_BASE/src/NTupler/PATNTupler/signalGeneration"
 	print "Exiting..."
 	sys.exit()
 
@@ -220,6 +220,8 @@ if mode == 'submit' and whichPartOfProcess == 'processMc01':
 			f.write("config.JobType.psetName = 'processMc01_mgLheToGenSim_cfg.py'\n")
 		elif (simulationYear == 2017):
 			f.write("config.JobType.psetName = 'processMc01_mgLheToGenSim_2017_cfg.py'\n")
+		elif (simulationYear == 2018):
+			f.write("config.JobType.psetName = 'processMc01_mgLheToGenSim_2018_cfg.py'\n")
 		f.write("config.JobType.inputFiles = ['%s']\n" % inputFiles)
 		f.write("config.Site.storageSite = '%s'\n" % storageSite)
 		f.write("config.Site.blacklist = %s\n" % str(blacklist) )
@@ -325,6 +327,8 @@ if mode == 'submit' and whichPartOfProcess == 'processMc02':
 			f.write("config.JobType.psetName = 'processMc02_genSimToAOD_step1of2_cfg.py'\n")
 		elif (simulationYear == 2017):
 			f.write("config.JobType.psetName = 'processMc02_genSimToAOD_step1of2_2017_cfg.py'\n")
+		elif (simulationYear == 2018):
+			f.write("config.JobType.psetName = 'processMc02_genSimToAOD_step1of2_2018_cfg.py'\n")
 		f.write("config.Site.storageSite = '%s'\n" % storageSite)
 		f.write("config.Site.blacklist = %s\n" % str(blacklist) )
 		f.close()
@@ -429,6 +433,8 @@ if mode == 'submit' and whichPartOfProcess == 'processMc03':
 			f.write("config.JobType.psetName = 'processMc03_genSimToAOD_step2of2_cfg.py'\n")
 		elif (simulationYear == 2017):
 			f.write("config.JobType.psetName = 'processMc03_genSimToAOD_step2of2_2017_cfg.py'\n")
+		elif (simulationYear == 2018):
+			f.write("config.JobType.psetName = 'processMc03_genSimToAOD_step2of2_2018_cfg.py'\n")
 		f.write("config.Site.storageSite = '%s'\n" % storageSite)
 		f.write("config.Site.blacklist = %s\n" % str(blacklist) )
 		f.close()
@@ -532,6 +538,8 @@ if mode == 'submit' and whichPartOfProcess == 'processMc04':
 			f.write("config.JobType.psetName = 'processMc04_AODToMINIAOD_cfg.py'\n")
 		elif (simulationYear == 2017):
 			f.write("config.JobType.psetName = 'processMc04_AODToMINIAOD_2017_cfg.py'\n")
+		elif (simulationYear == 2018):
+			f.write("config.JobType.psetName = 'processMc04_AODToMINIAOD_2018_cfg.py'\n")
 		f.write("config.Site.storageSite = '%s'\n" % storageSite)
 		f.write("config.Site.blacklist = %s\n" % str(blacklist) )
 		f.close()
