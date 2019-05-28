@@ -184,6 +184,9 @@ TO THE FOLLOWING
 'SLHA:verbose = 3', # default = 1 
 
 cmsDriver.py step1 --filein file:nmssmSignal_GENSIM.root --fileout file:nmssmSignal_AODSIMstep1of2.root --pileup_input "dbs:/Neutrino_E-10_gun/RunIISummer17PrePremix-PUAutumn18_102X_upgrade2018_realistic_v15-v1/GEN-SIM-DIGI-RAW" --mc --eventcontent PREMIXRAW --datatier GEN-SIM-RAW --conditions 102X_upgrade2018_realistic_v15 --step DIGI,DATAMIX,L1,DIGI2RAW,HLT:@relval2018 --procModifiers premix_stage2 --geometry DB:Extended --datamix PreMix --era Run2_2018 --python_filename processMc02_genSimToAOD_step1of2_2018_cfg.py --no_exec --customise Configuration/DataProcessing/Utils.addMonitoring -n 5
+cmsDriver.py step1 --filein file:nmssmSignal_GENSIM.root --fileout file:nmssmSignal_AODSIMstep1of2.root --pileup_input "dbs:/Neutrino_E-10_gun/RunIISummer17PrePremix-PU2018_100X_upgrade2018_realistic_v10-v1/GEN-SIM-DIGI-RAW" --mc --eventcontent PREMIXRAW --datatier GEN-SIM-RAW --conditions 102X_upgrade2018_realistic_v15 --step DIGI,DATAMIX,L1,DIGI2RAW,HLT:@relval2018 --procModifiers premix_stage2 --geometry DB:Extended --datamix PreMix --era Run2_2018 --python_filename processMc02_genSimToAOD_step1of2_2018_cfg.py --no_exec --customise Configuration/DataProcessing/Utils.addMonitoring -n 5
+^^^
+hacked the PU files...then put correct collection in by hand...
 
 cmsDriver.py step2 --filein file:nmssmSignal_AODSIMstep1of2.root --fileout file:nmssmSignal_AODSIMstep2of2.root --mc --eventcontent AODSIM --runUnscheduled --datatier AODSIM --conditions 102X_upgrade2018_realistic_v15 --step RAW2DIGI,L1Reco,RECO,RECOSIM,EI --procModifiers premix_stage2 --era Run2_2018 --python_filename processMc03_genSimToAOD_step2of2_2018_cfg.py --no_exec --customise Configuration/DataProcessing/Utils.addMonitoring -n 5
 
