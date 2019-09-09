@@ -64,6 +64,8 @@ histos_plot_special: histos_plot_special.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
 plotting_brazil: plotting_brazil.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
+theMoneyPlot: theMoneyPlot.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 
 %.o: 	%.cc %.hh
 	$(info generic.o target's commands)
@@ -101,3 +103,4 @@ clean:
 	rm -rf makeLatexTables makeLatexTables.o ${OBJDIR}/*
 	rm -rf histos_plot_special histos_plot_special.o ${OBJDIR}/*
 	rm -rf plotting_brazil plotting_brazil.o ${OBJDIR}/*
+	rm -rf theMoneyPlot theMoneyPlot.o ${OBJDIR}/*

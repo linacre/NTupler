@@ -56,7 +56,7 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
   
 
 
@@ -123,9 +123,7 @@ int main(){
     // CommonSystematicVec[2017].push_back( CommonSystematic("signalPdfBOTH lnN", 1.1, {"SIGNAL"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("isrReweightBOTH lnN", "isr", {"SIGNAL"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("luminosity2017 lnN", 1.023, {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets0L2017 lnN", 1.5, {"TTJets0L"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets1L2017 lnN", 1.5, {"TTJets1L"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets2L2017 lnN", 1.5, {"TTJets2L"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets2017 lnN", 1.5, {"TTJets0L", "TTJets1L", "TTJets2L"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_ZJets2017 lnN", 1.5, {"ZJets"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_WJets2017 lnN", 1.5, {"WJets"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
@@ -139,7 +137,7 @@ int main(){
 
 
     // SIX: are we blinded ? if true, uses Fi * data_obs_UnD as a dummy for data_obs_S
-    bool areWeBlinded = true;
+    bool areWeBlinded = false;
 
 
 
@@ -420,8 +418,8 @@ int main(){
                 double corrRatioError = QcdSidebandCorr::GetCorrErr(iBin, yearOfRun);
                 WriteBlock(Form("ch%d_F", binLabel), otherColSize, dataCard);
                 dataCard << "param " << std::to_string(corrRatio) << " " << std::to_string(corrRatioError) << "\n";
-                WriteBlock(Form("ch%d_abcdErr", binLabel), otherColSize, dataCard);
-                dataCard << "param 1.000000 0.100000\n";
+                // WriteBlock(Form("ch%d_abcdErr", binLabel), otherColSize, dataCard);
+                // dataCard << "param 1.000000 0.100000\n";
                 WriteBlock(Form("ch%d_alpha", binLabel), otherColSize, dataCard);
                 dataCard << "rateParam mass_UnD " << qcdName << " ";
                 double qcdInitialEstimate = data_obs_UnD;
@@ -433,7 +431,8 @@ int main(){
                 double qcdUpperLimit = 2.0 * data_obs_UnD + 30.0;
                 dataCard << std::to_string(qcdInitialEstimate) << " " << "[" << std::to_string(qcdUnDLowerBound) << "," << std::to_string(qcdUpperLimit) << "]\n";            
                 WriteBlock(Form("ch%d_beta", binLabel), otherColSize, dataCard);
-                dataCard << "rateParam mass_S " << qcdName << " (@0*@1*@2) ch" << binLabel << "_F,ch" << binLabel << "_abcdErr,ch" << binLabel << "_alpha\n";
+                // dataCard << "rateParam mass_S " << qcdName << " (@0*@1*@2) ch" << binLabel << "_F,ch" << binLabel << "_abcdErr,ch" << binLabel << "_alpha\n";
+                dataCard << "rateParam mass_S " << qcdName << " (@0*@1) ch" << binLabel << "_F,ch" << binLabel << "_alpha\n";
 
                 dataCard.close();
 

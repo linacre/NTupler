@@ -145,7 +145,7 @@ h16_["UnD_tag_mH70_mSusy2000_dbtTagUp"] = As above but with double-b-tag scale f
 Some examples (focussing on ABCD estimation method):
 h16_["S_control_data"] = S-mass regions, control double-b-tag, data, 2016
 h16_["predOld_control_data"] = Prediction using abcd method: S-mass regions, control double-b-tag, data, 2016
-h16_["predNewcontrol_data"] = Prediction using abcd method WITH FANCY F_i factors: S-mass regions, control double-b-tag, data, 2016
+h16_["predNew_control_data"] = Prediction using abcd method WITH FANCY F_i factors: S-mass regions, control double-b-tag, data, 2016
 Fancy F_i factors come from: interface/QcdSidebandCorr.h
 ^How to derive them is described in: integrals.txt
 

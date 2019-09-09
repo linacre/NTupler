@@ -7,31 +7,44 @@ ALL THESE WORKAROUNDS USE INFO IN: batchJobs/SignalMonteCarloDict.py
 
 These explanations have the same numerical index as in workflowOutline.txt
 
-1: miniAOD ---> ntuples
-=======================
+1a: miniAOD ---> ntuples
+========================
 code: plugins/quickSignalSubmit_crab.py
 execution (do from plugins directory): $ python quickSignalSubmit_crab.py <yearOfRun>
 
-Have everything setup as normal...BUT...
+Have everything setup as normal... BUT, in relevant crab config...
 a. include NAMEXYZ in the uniqueName. E.g. uniqueName = 'NAMEXYZ_CMSSW8029wDBTV4_9b0ff8'
 b. use DATASETXYZ for the dataset name. E.g. config.Data.inputDataset = 'DATASETXYZ'
-^For example see: TODO_INSERT
+^For example see: https://github.com/joseph-taylor/NTupler/blob/ralDemoMaster/PATNTupler/plugins/crabConfig_nTupleProd_VJ.py
 
-MAKING FILELISTS:
+
+1b: making ntuple filelists
+===========================
 code: batchJobs/quickSignalSubmit_filelists.py
-TODO - EXPLANATION
+execution (from batchJobs directory): $ python quickSignalSubmit_filelists.py <yearOfRun>
 
+Make sure that in batchJobs/makeFileLists.py ...
+the motherDirs and outputFileList contain NAMEXYZ
 
 
 2: ntuples ---> flatTrees
 =========================
-CODE: main/quickSignalSubmit_flatTrees.py
-TODO - EXPLANATION
+code: main/quickSignalSubmit_flatTrees.py
+execution (from main directory): $ python quickSignalSubmit_flatTrees.py <yearOfRun>
 
+Make sure that in main/submitCondorNtupleJobs_VJ.py ...
+inputFileListPath and outputDirectory contain NAMEXYZ
+(note that these jobs will still need setting off)
 
 
 3b: flatTrees ---> histos
 =========================
-CODE: quickSignalSubmit_histos.py
-CODE: quickSignalSubmit_histos_SQUARKONLY.py
-TODO - EXPLANATION
+code: quickSignalSubmit_histos.py
+OR: quickSignalSubmit_histos_SQUARKONLY.py (uses squarkSamples dictionary in SignalMonteCarloDict.py)
+execution (from macros directory): $ python quickSignalSubmit_histos.py <yearOfRun>
+OR: python quickSignalSubmit_histos_SQUARKONLY.py
+
+make sure that in macros/histos_create.cc ...
+you use SLIMXYZ in outputdir
+you use NAMEXYZ for the flatTree location
+you use 987654321.0 for the cross section
