@@ -6,7 +6,7 @@
 // Enter the fatJet's info and get the DBT SF info back
 // info from https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation80XReReco
 
-// TODO: need to fill in tt2017 scale factors (currently set to unity)
+// TODO: need to fill in tt2018 scale factors (currently set to unity)
 
 namespace DoubleBTagSF{
 
@@ -525,15 +525,251 @@ namespace DoubleBTagSF{
 			return (0.893 - 0.089);
 	}
 
+
+
+	// ----------------------------------------------------------//
+	// 2018: https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation102X#DoubleB_and_DeepDoubleBvL_2018_S //
+	// ----------------------------------------------------------//
+
+	double getLooseScaleFactor_signal_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return 0.93;
+		else if (fatJet_pt < 350.0)
+			return 0.93;
+		else if (fatJet_pt < 850.0)
+			return 0.98;
+		else
+			return 0.98;
+	}
+
+	double getLooseScaleFactorUp_signal_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (0.93 + 2 * 0.04);
+		else if (fatJet_pt < 350.0)
+			return (0.93 + 0.04);
+		else if (fatJet_pt < 850.0)
+			return (0.98 + 0.05);
+		else
+			return (0.98 + 2 * 0.05);
+	}
+
+	double getLooseScaleFactorDown_signal_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (0.93 - 2 * 0.04);
+		else if (fatJet_pt < 350.0)
+			return (0.93 - 0.04);
+		else if (fatJet_pt < 850.0)
+			return (0.98 - 0.04);
+		else
+			return (0.98 - 2 * 0.04);
+	}
+
+	// ----------------------------------------------------------//
+
+	double getMed1ScaleFactor_signal_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return 0.93;
+		else if (fatJet_pt < 350.0)
+			return 0.93;
+		else if (fatJet_pt < 850.0)
+			return 0.89;
+		else
+			return 0.89;
+	}
+
+	double getMed1ScaleFactorUp_signal_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (0.93 + 2 * 0.05);
+		else if (fatJet_pt < 350.0)
+			return (0.93 + 0.05);
+		else if (fatJet_pt < 850.0)
+			return (0.89 + 0.06);
+		else
+			return (0.89 + 2 * 0.06);
+	}
+
+	double getMed1ScaleFactorDown_signal_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (0.93 - 2 * 0.05);
+		else if (fatJet_pt < 350.0)
+			return (0.93 - 0.05);
+		else if (fatJet_pt < 850.0)
+			return (0.89 - 0.04);
+		else
+			return (0.89 - 2 * 0.04);
+	}
+
+	// ----------------------------------------------------------//
+
+	double getMed2ScaleFactor_signal_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return 0.89;
+		else if (fatJet_pt < 350.0)
+			return 0.89;
+		else if (fatJet_pt < 850.0)
+			return 0.84;
+		else
+			return 0.84;
+	}
+
+	double getMed2ScaleFactorUp_signal_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (0.89 + 2 * 0.08);
+		else if (fatJet_pt < 350.0)
+			return (0.89 + 0.08);
+		else if (fatJet_pt < 850.0)
+			return (0.84 + 0.05);
+		else
+			return (0.84 + 2 * 0.05);
+	}
+
+	double getMed2ScaleFactorDown_signal_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (0.89 - 2 * 0.04);
+		else if (fatJet_pt < 350.0)
+			return (0.89 - 0.04);
+		else if (fatJet_pt < 850.0)
+			return (0.84 - 0.05);
+		else
+			return (0.84 - 2 * 0.05);
+	}
+
+	// ----------------------------------------------------------//
+	// TODO: these are not yet available. Set to unity for now. But should not be necessary, since we use data-driven ttbar estimate. //
+	// ----------------------------------------------------------//
+
+	double getLooseScaleFactor_ttbar_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return 1. ;
+		else if (fatJet_pt < 350.0)
+			return 1. ;
+		else if (fatJet_pt < 430.0)
+			return 1. ;
+		else
+			return 1. ;
+	}
+
+	double getLooseScaleFactorUp_ttbar_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (1.  + 2 * 0.026);
+		else if (fatJet_pt < 350.0)
+			return (1.  + 0.026);
+		else if (fatJet_pt < 430.0)
+			return (1.  + 0.055);
+		else
+			return (1.  + 0.080);
+	}
+
+	double getLooseScaleFactorDown_ttbar_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (1.  - 2 * 0.026);
+		else if (fatJet_pt < 350.0)
+			return (1.  - 0.026);
+		else if (fatJet_pt < 430.0)
+			return (1.  - 0.054);
+		else
+			return (1.  - 0.078);
+	}
+
+	// ----------------------------------------------------------//
+
+	double getMed1ScaleFactor_ttbar_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return 1. ;
+		else if (fatJet_pt < 350.0)
+			return 1. ;
+		else if (fatJet_pt < 430.0)
+			return 1. ;
+		else
+			return 1. ;
+	}
+
+	double getMed1ScaleFactorUp_ttbar_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (1.  + 2 * 0.027);
+		else if (fatJet_pt < 350.0)
+			return (1.  + 0.027);
+		else if (fatJet_pt < 430.0)
+			return (1.  + 0.057);
+		else
+			return (1.  + 0.083);
+	}
+
+	double getMed1ScaleFactorDown_ttbar_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (1.  - 2 * 0.027);
+		else if (fatJet_pt < 350.0)
+			return (1.  - 0.027);
+		else if (fatJet_pt < 430.0)
+			return (1.  - 0.056);
+		else
+			return (1.  - 0.081);
+	}
+
+	// ----------------------------------------------------------//
+
+	double getMed2ScaleFactor_ttbar_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return 1. ;
+		else if (fatJet_pt < 350.0)
+			return 1. ;
+		else if (fatJet_pt < 430.0)
+			return 1. ;
+		else
+			return 1. ;
+	}
+
+	double getMed2ScaleFactorUp_ttbar_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (1.  + 2 * 0.030);
+		else if (fatJet_pt < 350.0)
+			return (1.  + 0.030);
+		else if (fatJet_pt < 430.0)
+			return (1.  + 0.063);
+		else
+			return (1.  + 0.091);
+	}
+
+	double getMed2ScaleFactorDown_ttbar_2018(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (1.  - 2 * 0.030);
+		else if (fatJet_pt < 350.0)
+			return (1.  - 0.030);
+		else if (fatJet_pt < 430.0)
+			return (1.  - 0.063);
+		else
+			return (1.  - 0.089);
+	}
+
+
+
 	// ----------------------------------------------------------//
 	// ----------------------------------------------------------//
 	// ----------------------------------------------------------//
 
 	double getDbtTagScaleFactor_signal(const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt, const unsigned int& yearOfRun)
 	{
-		if (yearOfRun != 2016 && yearOfRun != 2017){
+		if (yearOfRun != 2016 && yearOfRun != 2017 && yearOfRun != 2018){
             std::cout << "You have not provided a valid yearOfRun for the function DoubleBTagSF::getDbtTagScaleFactor_signal()" << std::endl;
-            std::cout << "It should be 2016 or 2017" << std::endl;
+            std::cout << "It should be 2016, 2017 or 2018" << std::endl;
             std::cout << "Returning a dummy value of -111111.1" << std::endl;
             return -111111.1;
 		}
@@ -544,7 +780,8 @@ namespace DoubleBTagSF{
 		// are fatJets in the Med1 * Med1 square?
 		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1")){
 			if (yearOfRun == 2016) return getMed1ScaleFactor_signal_2016(fatJetA_pt) * getMed1ScaleFactor_signal_2016(fatJetB_pt);
-			else return getMed1ScaleFactor_signal_2017(fatJetA_pt) * getMed1ScaleFactor_signal_2017(fatJetB_pt);
+			else if (yearOfRun == 2017) return getMed1ScaleFactor_signal_2017(fatJetA_pt) * getMed1ScaleFactor_signal_2017(fatJetB_pt);
+			else return getMed1ScaleFactor_signal_2018(fatJetA_pt) * getMed1ScaleFactor_signal_2018(fatJetB_pt);
 		}
 
 		// otherwise, need to do claires trick
@@ -566,9 +803,13 @@ namespace DoubleBTagSF{
 				sX = getMed2ScaleFactor_signal_2016(fatJetSpecA_pt) * getMed1ScaleFactor_signal_2016(fatJetSpecB_pt);
 				sZ = getMed2ScaleFactor_signal_2016(fatJetSpecA_pt) * getLooseScaleFactor_signal_2016(fatJetSpecB_pt); 
 			}
- 			else{
+ 			else if (yearOfRun == 2017){
 				sX = getMed2ScaleFactor_signal_2017(fatJetSpecA_pt) * getMed1ScaleFactor_signal_2017(fatJetSpecB_pt);
 				sZ = getMed2ScaleFactor_signal_2017(fatJetSpecA_pt) * getLooseScaleFactor_signal_2017(fatJetSpecB_pt); 
+			}
+			else{
+				sX = getMed2ScaleFactor_signal_2018(fatJetSpecA_pt) * getMed1ScaleFactor_signal_2018(fatJetSpecB_pt);
+				sZ = getMed2ScaleFactor_signal_2018(fatJetSpecA_pt) * getLooseScaleFactor_signal_2018(fatJetSpecB_pt); 
 			}
 			return (sZ - fX_signal * sX) / fY_signal;
 		}
@@ -577,9 +818,9 @@ namespace DoubleBTagSF{
 
 	double getDbtTagScaleFactorUp_signal(const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt, const unsigned int& yearOfRun)
 	{
-		if (yearOfRun != 2016 && yearOfRun != 2017){
+		if (yearOfRun != 2016 && yearOfRun != 2017 && yearOfRun != 2018){
             std::cout << "You have not provided a valid yearOfRun for the function DoubleBTagSF::getDbtTagScaleFactorUp_signal()" << std::endl;
-            std::cout << "It should be 2016 or 2017" << std::endl;
+            std::cout << "It should be 2016, 2017 or 2018" << std::endl;
             std::cout << "Returning a dummy value of -222222.1" << std::endl;
             return -222222.1;
 		}
@@ -590,7 +831,8 @@ namespace DoubleBTagSF{
 		// are fatJets in the Med1 * Med1 square?
 		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1")){
 			if (yearOfRun == 2016) return getMed1ScaleFactorUp_signal_2016(fatJetA_pt) * getMed1ScaleFactorUp_signal_2016(fatJetB_pt);
-			else return getMed1ScaleFactorUp_signal_2017(fatJetA_pt) * getMed1ScaleFactorUp_signal_2017(fatJetB_pt);
+			else if (yearOfRun == 2017) return getMed1ScaleFactorUp_signal_2017(fatJetA_pt) * getMed1ScaleFactorUp_signal_2017(fatJetB_pt);
+			else return getMed1ScaleFactorUp_signal_2018(fatJetA_pt) * getMed1ScaleFactorUp_signal_2018(fatJetB_pt);
 		}
 
 		// otherwise, need to do claires trick
@@ -612,9 +854,13 @@ namespace DoubleBTagSF{
 				sX = getMed2ScaleFactorUp_signal_2016(fatJetSpecA_pt) * getMed1ScaleFactorUp_signal_2016(fatJetSpecB_pt);
 				sZ = getMed2ScaleFactorUp_signal_2016(fatJetSpecA_pt) * getLooseScaleFactorUp_signal_2016(fatJetSpecB_pt); 
 			}
- 			else{
+ 			else if (yearOfRun == 2017){
 				sX = getMed2ScaleFactorUp_signal_2017(fatJetSpecA_pt) * getMed1ScaleFactorUp_signal_2017(fatJetSpecB_pt);
 				sZ = getMed2ScaleFactorUp_signal_2017(fatJetSpecA_pt) * getLooseScaleFactorUp_signal_2017(fatJetSpecB_pt); 
+			}
+			else{
+				sX = getMed2ScaleFactorUp_signal_2018(fatJetSpecA_pt) * getMed1ScaleFactorUp_signal_2018(fatJetSpecB_pt);
+				sZ = getMed2ScaleFactorUp_signal_2018(fatJetSpecA_pt) * getLooseScaleFactorUp_signal_2018(fatJetSpecB_pt); 
 			}
 			return (sZ - fX_signal * sX) / fY_signal;
 		}
@@ -623,9 +869,9 @@ namespace DoubleBTagSF{
 
 	double getDbtTagScaleFactorDown_signal(const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt, const unsigned int& yearOfRun)
 	{
-		if (yearOfRun != 2016 && yearOfRun != 2017){
+		if (yearOfRun != 2016 && yearOfRun != 2017 && yearOfRun != 2018){
             std::cout << "You have not provided a valid yearOfRun for the function DoubleBTagSF::getDbtTagScaleFactorDown_signal()" << std::endl;
-            std::cout << "It should be 2016 or 2017" << std::endl;
+            std::cout << "It should be 2016, 2017 or 2018" << std::endl;
             std::cout << "Returning a dummy value of -333333.1" << std::endl;
             return -333333.1;
 		}
@@ -636,7 +882,8 @@ namespace DoubleBTagSF{
 		// are fatJets in the Med1 * Med1 square?
 		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1")){
 			if (yearOfRun == 2016) return getMed1ScaleFactorDown_signal_2016(fatJetA_pt) * getMed1ScaleFactorDown_signal_2016(fatJetB_pt);
-			else return getMed1ScaleFactorDown_signal_2017(fatJetA_pt) * getMed1ScaleFactorDown_signal_2017(fatJetB_pt);
+			else if (yearOfRun == 2017) return getMed1ScaleFactorDown_signal_2017(fatJetA_pt) * getMed1ScaleFactorDown_signal_2017(fatJetB_pt);
+			else return getMed1ScaleFactorDown_signal_2018(fatJetA_pt) * getMed1ScaleFactorDown_signal_2018(fatJetB_pt);
 		}
 
 		// otherwise, need to do claires trick
@@ -658,9 +905,13 @@ namespace DoubleBTagSF{
 				sX = getMed2ScaleFactorDown_signal_2016(fatJetSpecA_pt) * getMed1ScaleFactorDown_signal_2016(fatJetSpecB_pt);
 				sZ = getMed2ScaleFactorDown_signal_2016(fatJetSpecA_pt) * getLooseScaleFactorDown_signal_2016(fatJetSpecB_pt); 
 			}
- 			else{
+ 			else if (yearOfRun == 2017){
 				sX = getMed2ScaleFactorDown_signal_2017(fatJetSpecA_pt) * getMed1ScaleFactorDown_signal_2017(fatJetSpecB_pt);
 				sZ = getMed2ScaleFactorDown_signal_2017(fatJetSpecA_pt) * getLooseScaleFactorDown_signal_2017(fatJetSpecB_pt); 
+			}
+			else{
+				sX = getMed2ScaleFactorDown_signal_2018(fatJetSpecA_pt) * getMed1ScaleFactorDown_signal_2018(fatJetSpecB_pt);
+				sZ = getMed2ScaleFactorDown_signal_2018(fatJetSpecA_pt) * getLooseScaleFactorDown_signal_2018(fatJetSpecB_pt); 
 			}
 			return (sZ - fX_signal * sX) / fY_signal;
 		}
@@ -672,9 +923,9 @@ namespace DoubleBTagSF{
 
 	double getDbtTagScaleFactor_ttbar(const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt, const unsigned int& yearOfRun)
 	{
-		if (yearOfRun != 2016 && yearOfRun != 2017){
+		if (yearOfRun != 2016 && yearOfRun != 2017 && yearOfRun != 2018){
             std::cout << "You have not provided a valid yearOfRun for the function DoubleBTagSF::getDbtTagScaleFactor_ttbar()" << std::endl;
-            std::cout << "It should be 2016 or 2017" << std::endl;
+            std::cout << "It should be 2016, 2017 or 2018" << std::endl;
             std::cout << "Returning a dummy value of -444444.1" << std::endl;
             return -444444.1;
 		}
@@ -682,7 +933,8 @@ namespace DoubleBTagSF{
 		// // HACK FOR TTJETS EVENTS IN tagPRIME DBT REGION
 		// if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
 		// 	if (yearOfRun == 2016) return getLooseScaleFactor_ttbar_2016(fatJetA_pt) * getLooseScaleFactor_ttbar_2016(fatJetB_pt);
-		// 	else return getLooseScaleFactor_ttbar_2017(fatJetA_pt) * getLooseScaleFactor_ttbar_2017(fatJetB_pt);
+		// 	else if (yearOfRun == 2017) return getLooseScaleFactor_ttbar_2017(fatJetA_pt) * getLooseScaleFactor_ttbar_2017(fatJetB_pt);
+		// 	else return getLooseScaleFactor_ttbar_2018(fatJetA_pt) * getLooseScaleFactor_ttbar_2018(fatJetB_pt);
 		// }
 		// else return 1.0;
 
@@ -692,7 +944,8 @@ namespace DoubleBTagSF{
 		// are fatJets in the Med1 * Med1 square?
 		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1")){
 			if (yearOfRun == 2016) return getMed1ScaleFactor_ttbar_2016(fatJetA_pt) * getMed1ScaleFactor_ttbar_2016(fatJetB_pt);
-			else return getMed1ScaleFactor_ttbar_2017(fatJetA_pt) * getMed1ScaleFactor_ttbar_2017(fatJetB_pt);
+			else if (yearOfRun == 2017) return getMed1ScaleFactor_ttbar_2017(fatJetA_pt) * getMed1ScaleFactor_ttbar_2017(fatJetB_pt);
+			else return getMed1ScaleFactor_ttbar_2018(fatJetA_pt) * getMed1ScaleFactor_ttbar_2018(fatJetB_pt);
 		}
 
 		// otherwise, need to do claires trick
@@ -714,9 +967,13 @@ namespace DoubleBTagSF{
 				sX = getMed2ScaleFactor_ttbar_2016(fatJetSpecA_pt) * getMed1ScaleFactor_ttbar_2016(fatJetSpecB_pt);
 				sZ = getMed2ScaleFactor_ttbar_2016(fatJetSpecA_pt) * getLooseScaleFactor_ttbar_2016(fatJetSpecB_pt); 
 			}
- 			else{
+ 			else if (yearOfRun == 2017){
 				sX = getMed2ScaleFactor_ttbar_2017(fatJetSpecA_pt) * getMed1ScaleFactor_ttbar_2017(fatJetSpecB_pt);
 				sZ = getMed2ScaleFactor_ttbar_2017(fatJetSpecA_pt) * getLooseScaleFactor_ttbar_2017(fatJetSpecB_pt); 
+			}
+			else{
+				sX = getMed2ScaleFactor_ttbar_2018(fatJetSpecA_pt) * getMed1ScaleFactor_ttbar_2018(fatJetSpecB_pt);
+				sZ = getMed2ScaleFactor_ttbar_2018(fatJetSpecA_pt) * getLooseScaleFactor_ttbar_2018(fatJetSpecB_pt); 
 			}
 			return (sZ - fX_ttbar * sX) / fY_ttbar;
 		}
@@ -726,9 +983,9 @@ namespace DoubleBTagSF{
 	double getDbtTagScaleFactorUp_ttbar(const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt, const unsigned int& yearOfRun)
 	{
 
-		if (yearOfRun != 2016 && yearOfRun != 2017){
+		if (yearOfRun != 2016 && yearOfRun != 2017 && yearOfRun != 2018){
             std::cout << "You have not provided a valid yearOfRun for the function DoubleBTagSF::getDbtTagScaleFactorUp_ttbar()" << std::endl;
-            std::cout << "It should be 2016 or 2017" << std::endl;
+            std::cout << "It should be 2016, 2017 or 2018" << std::endl;
             std::cout << "Returning a dummy value of -555555.1" << std::endl;
             return -555555.1;
 		}
@@ -736,7 +993,8 @@ namespace DoubleBTagSF{
 		// // HACK FOR TTJETS EVENTS IN tagPRIME DBT REGION
 		// if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
 		// 	if (yearOfRun == 2016) return getLooseScaleFactorUp_ttbar_2016(fatJetA_pt) * getLooseScaleFactorUp_ttbar_2016(fatJetB_pt);
-		// 	else return getLooseScaleFactorUp_ttbar_2017(fatJetA_pt) * getLooseScaleFactorUp_ttbar_2017(fatJetB_pt);
+		// 	else if (yearOfRun == 2017) return getLooseScaleFactorUp_ttbar_2017(fatJetA_pt) * getLooseScaleFactorUp_ttbar_2017(fatJetB_pt);
+		// 	else return getLooseScaleFactorUp_ttbar_2018(fatJetA_pt) * getLooseScaleFactorUp_ttbar_2018(fatJetB_pt);
 		// }
 		// else return 1.0;
 
@@ -746,7 +1004,8 @@ namespace DoubleBTagSF{
 		// are fatJets in the Med1 * Med1 square?
 		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1")){
 			if (yearOfRun == 2016) return getMed1ScaleFactorUp_ttbar_2016(fatJetA_pt) * getMed1ScaleFactorUp_ttbar_2016(fatJetB_pt);
-			else return getMed1ScaleFactorUp_ttbar_2017(fatJetA_pt) * getMed1ScaleFactorUp_ttbar_2017(fatJetB_pt);
+			else if (yearOfRun == 2017) return getMed1ScaleFactorUp_ttbar_2017(fatJetA_pt) * getMed1ScaleFactorUp_ttbar_2017(fatJetB_pt);
+			else return getMed1ScaleFactorUp_ttbar_2018(fatJetA_pt) * getMed1ScaleFactorUp_ttbar_2018(fatJetB_pt);
 		}
 
 		// otherwise, need to do claires trick
@@ -768,9 +1027,13 @@ namespace DoubleBTagSF{
 				sX = getMed2ScaleFactorUp_ttbar_2016(fatJetSpecA_pt) * getMed1ScaleFactorUp_ttbar_2016(fatJetSpecB_pt);
 				sZ = getMed2ScaleFactorUp_ttbar_2016(fatJetSpecA_pt) * getLooseScaleFactorUp_ttbar_2016(fatJetSpecB_pt); 
 			}
- 			else{
+ 			else if (yearOfRun == 2017){
 				sX = getMed2ScaleFactorUp_ttbar_2017(fatJetSpecA_pt) * getMed1ScaleFactorUp_ttbar_2017(fatJetSpecB_pt);
 				sZ = getMed2ScaleFactorUp_ttbar_2017(fatJetSpecA_pt) * getLooseScaleFactorUp_ttbar_2017(fatJetSpecB_pt); 
+			}
+			else{
+				sX = getMed2ScaleFactorUp_ttbar_2018(fatJetSpecA_pt) * getMed1ScaleFactorUp_ttbar_2018(fatJetSpecB_pt);
+				sZ = getMed2ScaleFactorUp_ttbar_2018(fatJetSpecA_pt) * getLooseScaleFactorUp_ttbar_2018(fatJetSpecB_pt); 
 			}
 			return (sZ - fX_ttbar * sX) / fY_ttbar;
 		}
@@ -779,9 +1042,9 @@ namespace DoubleBTagSF{
 
 	double getDbtTagScaleFactorDown_ttbar(const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt, const unsigned int& yearOfRun)
 	{
-		if (yearOfRun != 2016 && yearOfRun != 2017){
+		if (yearOfRun != 2016 && yearOfRun != 2017 && yearOfRun != 2018){
             std::cout << "You have not provided a valid yearOfRun for the function DoubleBTagSF::getDbtTagScaleFactorDown_ttbar()" << std::endl;
-            std::cout << "It should be 2016 or 2017" << std::endl;
+            std::cout << "It should be 2016, 2017 or 2018" << std::endl;
             std::cout << "Returning a dummy value of -666666.1" << std::endl;
             return -666666.1;
 		}
@@ -789,7 +1052,8 @@ namespace DoubleBTagSF{
 		// // HACK FOR TTJETS EVENTS IN tagPRIME DBT REGION
 		// if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
 		// 	if (yearOfRun == 2016) return getLooseScaleFactorDown_ttbar_2016(fatJetA_pt) * getLooseScaleFactorDown_ttbar_2016(fatJetB_pt);
-		// 	else return getLooseScaleFactorDown_ttbar_2017(fatJetA_pt) * getLooseScaleFactorDown_ttbar_2017(fatJetB_pt);
+		// 	else if (yearOfRun == 2017) return getLooseScaleFactorDown_ttbar_2017(fatJetA_pt) * getLooseScaleFactorDown_ttbar_2017(fatJetB_pt);
+		// 	else return getLooseScaleFactorDown_ttbar_2018(fatJetA_pt) * getLooseScaleFactorDown_ttbar_2018(fatJetB_pt);
 		// }
 		// else return 1.0;
 
@@ -799,7 +1063,8 @@ namespace DoubleBTagSF{
 		// are fatJets in the Med1 * Med1 square?
 		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1")){
 			if (yearOfRun == 2016) return getMed1ScaleFactorDown_ttbar_2016(fatJetA_pt) * getMed1ScaleFactorDown_ttbar_2016(fatJetB_pt);
-			else return getMed1ScaleFactorDown_ttbar_2017(fatJetA_pt) * getMed1ScaleFactorDown_ttbar_2017(fatJetB_pt);
+			else if (yearOfRun == 2017) return getMed1ScaleFactorDown_ttbar_2017(fatJetA_pt) * getMed1ScaleFactorDown_ttbar_2017(fatJetB_pt);
+			else return getMed1ScaleFactorDown_ttbar_2018(fatJetA_pt) * getMed1ScaleFactorDown_ttbar_2018(fatJetB_pt);
 		}
 
 		// otherwise, need to do claires trick
@@ -821,9 +1086,13 @@ namespace DoubleBTagSF{
 				sX = getMed2ScaleFactorDown_ttbar_2016(fatJetSpecA_pt) * getMed1ScaleFactorDown_ttbar_2016(fatJetSpecB_pt);
 				sZ = getMed2ScaleFactorDown_ttbar_2016(fatJetSpecA_pt) * getLooseScaleFactorDown_ttbar_2016(fatJetSpecB_pt); 
 			}
- 			else{
+ 			else if (yearOfRun == 2017){
 				sX = getMed2ScaleFactorDown_ttbar_2017(fatJetSpecA_pt) * getMed1ScaleFactorDown_ttbar_2017(fatJetSpecB_pt);
 				sZ = getMed2ScaleFactorDown_ttbar_2017(fatJetSpecA_pt) * getLooseScaleFactorDown_ttbar_2017(fatJetSpecB_pt); 
+			}
+			else{
+				sX = getMed2ScaleFactorDown_ttbar_2018(fatJetSpecA_pt) * getMed1ScaleFactorDown_ttbar_2018(fatJetSpecB_pt);
+				sZ = getMed2ScaleFactorDown_ttbar_2018(fatJetSpecA_pt) * getLooseScaleFactorDown_ttbar_2018(fatJetSpecB_pt); 
 			}
 			return (sZ - fX_ttbar * sX) / fY_ttbar;
 		}

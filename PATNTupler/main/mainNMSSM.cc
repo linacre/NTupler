@@ -848,9 +848,10 @@ int main(int argc, char** argv){
     std::string yearOfRunString(argv[4]);
     if (yearOfRunString == "2016") yearOfRun = 2016;
     else if (yearOfRunString == "2017") yearOfRun = 2017;
+    else if (yearOfRunString == "2018") yearOfRun = 2018;
     else{
         std::cout << "yearOfRun provided is not valid" << std::endl;
-        std::cout << "Use either 2016 or 2017" << std::endl;
+        std::cout << "Use either 2016, 2017 or 2018" << std::endl;
         std::cout << "Exiting..." << std::endl;
         return -1;
     }
