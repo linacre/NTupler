@@ -1037,7 +1037,7 @@ int main(int argc, char** argv){
 
 				std::vector<ran::NtJet> slimJets;
 				for (const ran::NtJet& jet : jetVec) {
-					if (fabs(jet.eta())>3.0 || isJetLooseID(jet)==false)
+					if (fabs(jet.eta())>2.4 || isJetLooseID(jet)==false)
 						continue;
 					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
 						continue;
