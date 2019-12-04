@@ -550,6 +550,55 @@ void Plotter::SetErrors(const std::string& errorInfo){
 	return;
 }
 
+void Plotter::CalculateKS(const int nCompare){
+
+	//drawKS = true;
+	std::cout << "Plotter::CalculateKS" << std::endl;
+	std::vector<TH1D*> th1Indi_temp;
+
+	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
+		th1Indi_temp.push_back(iIndi->GetHistogram());
+	}
+
+	std::cout << th1Indi_temp.size()<< std::endl;
+	for (size_t iTh1I = 0; iTh1I != th1Indi_temp.size()/2; ++iTh1I){
+        th1Indi_temp[iTh1I]->Chi2Test(th1Indi_temp[iTh1I+nCompare],"WW CHI2 P");
+        th1Indi_temp[iTh1I]->KolmogorovTest(th1Indi_temp[iTh1I+nCompare],"D");
+	}
+
+
+}
+
+void Plotter::DivideHistos(){
+
+	//drawKS = true;
+	std::cout << "Plotter::DivideHistos" << std::endl;
+	std::vector<TH1D*> th1Indi_temp;
+
+	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
+		th1Indi_temp.push_back(iIndi->GetHistogram());
+	}
+
+	std::cout << th1Indi_temp.size()<< " " << histoIndi.size()<< std::endl;
+	for (size_t iTh1I = 0; iTh1I != th1Indi_temp.size()/2; ++iTh1I){
+        th1Indi_temp[iTh1I]->Divide(th1Indi_temp[iTh1I+th1Indi_temp.size()/2]);
+        //histoIndi.pop_back();
+	}
+	std::cout << th1Indi_temp.size()<< " " << histoIndi.size()<< std::endl;
+
+	int ih = 0;
+	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
+
+		for (int iBin = 0; iBin < iIndi->GetHistogram()->GetNbinsX()+2; ++iBin){
+			iIndi->GetHistogram()->SetBinError(iBin, th1Indi_temp.at(ih)->GetBinError(iBin));
+			iIndi->GetHistogram()->SetBinContent(iBin, th1Indi_temp.at(ih)->GetBinContent(iBin));
+		}
+
+		ih++;
+	}
+
+}
+
 
 void Plotter::SetYValueMin(const double& yValueMinDummy){
 
@@ -725,6 +774,13 @@ void Plotter::Save(const std::string& saveName){
 				iIndi->GetTEff()->SetLineWidth(2);
 				// iIndi->GetTEff()->SetMarkerStyle(1);
 				iIndi->GetHistogram()->Draw("same P");
+				if( TString(saveName).EndsWith("SReff_doubleRatio.pdf") && iIndi - histoIndi.begin() < int(histoIndi.size())/2 ) {
+					iIndi->GetHistogram()->Fit("pol1");
+					iIndi->GetHistogram()->GetFunction("pol1")->SetLineColor(iIndi->GetHistogram()->GetLineColor()+1);
+					iIndi->GetHistogram()->GetFunction("pol1")->SetLineWidth(2);
+
+					iIndi->GetHistogram()->SetMinimum(0.4);
+				}
 				iIndi->GetTEff()->Draw("same");
 				continue;
 			}
@@ -1626,7 +1682,13 @@ int Plotter::SetColor_stark(const int& index)
 
 	if (index==3) return kOrange+1;
 	// if (index==3) return kGreen+3;
-	
+
+	if (index==4) return kBlue-8;
+
+	if (index==5) return kSpring+10;
+
+	if (index==6) return kGray;
+
 	else return kBlack;
 }
 

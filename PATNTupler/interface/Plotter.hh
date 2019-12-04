@@ -36,6 +36,8 @@ public:
 	void SaveSpec01(const std::string& saveName, const std::vector<std::string>);
 	void SaveSpec02(const std::string& saveName, const std::vector<std::string>);
 	void SaveBrazil(const std::string& saveName, const double&, const double&);
+	void CalculateKS(const int nCompare);
+	void DivideHistos();
 
 private:
 	std::vector<PlotEntry> histoIndi;

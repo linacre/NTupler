@@ -40,6 +40,8 @@ TMPDIR		= ${PWD}/../tmp
 
 # ================================================================================
 
+plotting_2017to2018SigEffCorrection: plotting_2017to2018SigEffCorrection.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 plotting_compareDifferentSamples: plotting_compareDifferentSamples.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 plotting_compareDifferentCuts: plotting_compareDifferentCuts.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
@@ -83,6 +85,7 @@ ${TMPDIR}/ParticleDict.cc:	${INCDIR}/Particles.hh ${INCDIR}/ntpLinkDef.h
 	rootcint -f $@ -c $< ${INCDIR}/ntpLinkDef.h
 
 clean:
+	# rm -rf plotting_2017to2018SigEffCorrection plotting_2017to2018SigEffCorrection.o ${OBJDIR}/* ${TMPDIR}/*
 	# rm -rf plotting_compareDifferentSamples plotting_compareDifferentSamples.o ${OBJDIR}/* ${TMPDIR}/*
 	# rm -rf plotting_compareDifferentCuts plotting_compareDifferentCuts.o ${OBJDIR}/* ${TMPDIR}/*
 	# rm -rf plotting_compare2D plotting_compare2D.o ${OBJDIR}/* ${TMPDIR}/*
@@ -91,6 +94,7 @@ clean:
 	# rm -rf histos_create histos_create.o ${OBJDIR}/* ${TMPDIR}/*
 	# rm -rf histos_plot histos_plot.o ${OBJDIR}/* ${TMPDIR}/*
 
+	rm -rf plotting_2017to2018SigEffCorrection plotting_2017to2018SigEffCorrection.o ${OBJDIR}/*
 	rm -rf plotting_compareDifferentSamples plotting_compareDifferentSamples.o ${OBJDIR}/*
 	rm -rf plotting_compareDifferentCuts plotting_compareDifferentCuts.o ${OBJDIR}/*
 	rm -rf plotting_compare2D plotting_compare2D.o ${OBJDIR}/*

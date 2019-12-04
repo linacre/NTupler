@@ -90,6 +90,7 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	for (int iBin = 0; iBin < hContainer.GetNbinsX()+2; ++iBin){
 		hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
 		statErrorSquared[iBin] += hContainer.GetBinContent(iBin);
+		//hTotal->SetBinError(iBin, sqrt(statErrorSquared[iBin]));
 	}
 	delete T;
 	delete evT;
@@ -115,6 +116,7 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
     }
     numberOfEventsBeforeCuts += 1000.0 * crossSection * luminosity;
     double eventWeighting = 1000.0 * crossSection * luminosity / nEvtsRunOverForInputTotal;
+    std::cout << "PlotEntry::AddInput, eventWeighting: " << eventWeighting << " numberOfEventsAfterPreSelection: " << numberOfEventsAfterPreSelection << " nEvtsRunOverForInputTotal: " << nEvtsRunOverForInputTotal << " ratio: " << double(numberOfEventsAfterPreSelection)/nEvtsRunOverForInputTotal << std::endl;
 
 	TTree * T = (TTree*)f->Get("doubleBFatJetPairTree");
 	if (T->GetEntries() != numberOfEventsAfterPreSelection){
@@ -141,13 +143,14 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 		std::string drawStringA_sf = Form("(%s)>>hSFW", scaleFactorWeightStr.c_str());
 		T->Draw(drawStringA_sf.c_str(), selectionCut.c_str(), "");
 		if (hSFW->GetMean() != 0) scaleFactorWeight = hSFW->GetMean();
-		// std::cout << "Average Scale Factor Weighting: " << scaleFactorWeight << std::endl;
+		std::cout << "Average Scale Factor Weighting: " << scaleFactorWeight << std::endl;
 	}
 
 	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");
 	for (int iBin = 0; iBin < hContainer.GetNbinsX()+2; ++iBin){
 		hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
 		statErrorSquared[iBin] += hContainer.GetBinContent(iBin) * eventWeighting * scaleFactorWeight;
+		//hTotal->SetBinError(iBin, sqrt(statErrorSquared[iBin]));
 	}
 	delete T;
 	delete evT;
@@ -155,7 +158,7 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	std::cout << std::endl;
 }
 
-void PlotEntry::AddInputEfficiency(const std::string& flatTreeAddress, const std::string& commonCut, const std::string& numeratorCut)
+void PlotEntry::AddInputEfficiency(const std::string& flatTreeAddress, const std::string& commonCut, const std::string& numeratorCut, bool setApproxSymErrors)
 {
 	TFile * f = TFile::Open(flatTreeAddress.c_str());
 	TTree * T = (TTree*)f->Get("doubleBFatJetPairTree");
@@ -188,6 +191,7 @@ void PlotEntry::AddInputEfficiency(const std::string& flatTreeAddress, const std
 	for (int iBin = 0; iBin < hNull.GetNbinsX()+2; ++iBin){
 		hTotal->AddBinContent(iBin, hEffDummy->GetEfficiency(iBin));
 		// we don't set errors here as in general they are asymmetrical for effiencies
+		if(setApproxSymErrors) hTotal->SetBinError(iBin, hEffDummy->GetEfficiencyErrorLow(iBin));
 	}
 	delete T;
 	delete f;
@@ -226,7 +230,7 @@ void PlotEntry::FitFunction(const std::string& functionToFit, const double& minX
 	TF1* f1 = new TF1("f1", functionToFit.c_str(), minXFit, maxXFit);
 	f1->SetLineColor(colour);
 	for (size_t i = 0; i < initialParams.size(); ++i) f1->SetParameter(i, initialParams[i]);
-	hTotal->Fit("f1", "RI");
+	hTotal->Fit("f1", "RI"); //note, this stopped working after CMSSW_8_0_32 (2016 analysis)
 	hTotal->SetStats(0);
 	std::cout << std::endl;
 	std::cout << std::endl;
