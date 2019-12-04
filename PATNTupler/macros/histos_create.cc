@@ -6,6 +6,7 @@
 #include <map>
 #include <fstream>
 #include <sys/stat.h>
+#include <algorithm>
 
 //ROOT HEADERS
 #include <TH1D.h>
@@ -66,9 +67,12 @@ int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    TString sampleString(argv[2]?argv[2]:"QCD");
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2016/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    //std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2016/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "histos_"+std::string(sampleString); // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::cout<<"Using outputDir "<<outputDir<<std::endl;
 
 
     // TWO: do we want to blind the S mass region? (true for data, false for everything else)
@@ -79,9 +83,9 @@ int main(int argc, char** argv){
     std::vector<std::vector<std::string>> cut2_ak8Dbt;
     cut2_ak8Dbt.push_back({"DIAG_UP", "Loose"}); // TAG: Top Diagnol Corner Crossing Axis at...--> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     // cut2_ak8Dbt.push_back({"Loose", "Max", "Loose", "Max"}); // tagPRIME for TTJets special
-    // cut2_ak8Dbt.push_back({"Off","Loose","Off","Loose"}); // ANTI: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
-    // cut2_ak8Dbt.push_back({"Loose","Med2","Off","IDBTCv23"}); // CONTROL_A: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
-    // cut2_ak8Dbt.push_back({"Off","IDBTCv23","Loose","Med2"}); // CONTROL_B: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    cut2_ak8Dbt.push_back({"Off","Loose","Off","Loose"}); // ANTI: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    cut2_ak8Dbt.push_back({"Loose","Med2","Off","IDBTCv23"}); // CONTROL_A: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    cut2_ak8Dbt.push_back({"Off","IDBTCv23","Loose","Med2"}); // CONTROL_B: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     const int cut3_ak8Pt = 300;
     const std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {2500,3500}, {3500,99999} }; // HT BIN
     // const std::vector<std::vector<int>> cut4_ht = { {1500,99999} }; // HT BIN
@@ -109,16 +113,26 @@ int main(int argc, char** argv){
 
 
     // FIVE: set up the luminosity
-    const double luminosity = 35.922; // 2016 DATASET
+    // const double luminosity = 35.922; // 2016 DATASET
     // const double luminosity = 41.529; // 2017 DATASET
+    const double luminosity = 59.740565202; // 2018 DATASET
 
 
     // SIX: systematics to run over. only need to use them for TAG dbt. start with 'SF_' for scale factors.
-    // const std::vector<std::string> systematicNameVec = {"NOSYS"}; // >> data & no systematic
-    // const std::vector<std::string> systematicNameVec = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_prefireUp", "SF_prefireDown"}; // >> WJets and ZJets
-    // const std::vector<std::string> systematicNameVec = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_prefireUp", "SF_prefireDown"}; // >> TTJets
-    const std::vector<std::string> systematicNameVec = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown"}; // >> SIGNAL
-    // const std::vector<std::string> systematicNameVec = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown", "SF_scaleUp", "SF_scaleDown"}; // >> CENTRAL SIGNAL
+    const std::vector<std::string> systematicNameVec_nosys = {"NOSYS"}; // >> data & no systematic
+    const std::vector<std::string> systematicNameVec_vjets = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_prefireUp", "SF_prefireDown"}; // >> WJets and ZJets
+    const std::vector<std::string> systematicNameVec_ttjets = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_prefireUp", "SF_prefireDown"}; // >> TTJets
+    const std::vector<std::string> systematicNameVec_signal = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown"}; // >> SIGNAL
+    const std::vector<std::string> systematicNameVec_centralsignal = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown", "SF_scaleUp", "SF_scaleDown"}; // >> CENTRAL SIGNAL
+
+    std::vector<std::string> systematicNameVec_temp;
+    if(sampleString=="data" || sampleString=="QCD") systematicNameVec_temp = systematicNameVec_nosys;
+    else if(sampleString.BeginsWith("TTJets")) systematicNameVec_temp = systematicNameVec_ttjets;
+    else if(sampleString.EndsWith("Jets")) systematicNameVec_temp = systematicNameVec_vjets;
+    else if(sampleString.Contains("mH")) systematicNameVec_temp = systematicNameVec_signal;
+    else systematicNameVec_temp = systematicNameVec_nosys;
+
+    const std::vector<std::string> systematicNameVec = systematicNameVec_temp;
 
 
     // SEVEN: variables to use AND the systematics that affect their distributions
@@ -139,7 +153,7 @@ int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-    if (argc != 2){
+    if (argc < 2){
         std::cout << "Haven't provided valid argument, the format should be:" << std::endl;
         std::cout << argv[0] << " <runInstructionString>" << std::endl;
         std::cout << "runInstructionString = 'local' or 'batch'" << std::endl;
@@ -160,7 +174,7 @@ int main(int argc, char** argv){
         std::string makeDirCommand = "mkdir -p " + outputDir;
         if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
         std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/histos_create.cc %s/%s__histos_create.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
-        MacrosOnCondor::SubmitJob(outputDir.c_str(), "histos_create", "/opt/ppd/scratch/xap79297/jobLogs/macros/");
+        MacrosOnCondor::SubmitJob(outputDir.c_str(), "histos_create", "/opt/ppd/scratch/xxt18833/jobLogs/macros/");
         return 0;
     }
     else if (runInstructionString == "batchRUN"){
@@ -200,6 +214,11 @@ int main(int argc, char** argv){
         std::replace(slimJetA_pt_name.begin(), slimJetA_pt_name.end(), 'X', '4');
         std::replace(slimJetB_pt_name.begin(), slimJetB_pt_name.end(), 'X', '4');
         std::replace(ht_name.begin(), ht_name.end(), 'X', '4');
+        //std::cout<<fatJetA_pt_name<<std::endl;
+        //std::cout<<fatJetB_pt_name<<std::endl;
+        //std::cout<<slimJetA_pt_name<<std::endl;
+        //std::cout<<slimJetB_pt_name<<std::endl;
+        //std::cout<<ht_name<<std::endl;
 
         MassRegionCuts MassCutsObject = MassRegionCuts(massCutObjectName.c_str(), S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes, fatJetA_mass_name, fatJetB_mass_name, sideBandScaleFactor);
 
@@ -275,7 +294,7 @@ int main(int argc, char** argv){
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/CPS_h70s2600/flatTree.root", cutToApply.c_str(), 0.0006167*0.840*0.840, SF_weight.c_str());
 
                     // SIGNAL 2016
-                    plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
 
                     // 2016 GOLDEN JSON DATASET
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/JetHT_Run2016TOTAL/flatTree.root", cutToApply.c_str());
@@ -309,6 +328,56 @@ int main(int argc, char** argv){
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
+                    
+
+
+                    // 2018 (10_2X)
+
+                    std::string treepath = "/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/";
+
+                    if(sampleString=="QCD") {
+                        plotEntry.AddInput((treepath+"QCD_HT1000to1500_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 1005, SF_weight.c_str());
+                        plotEntry.AddInput((treepath+"QCD_HT1500to2000_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 101.8, SF_weight.c_str());
+                        plotEntry.AddInput((treepath+"QCD_HT2000toInf_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 20.54, SF_weight.c_str());
+                    }
+
+                    else if(sampleString.BeginsWith("TTJets")) {
+                        double PDGhadBF = 67.41/100.;
+                        if(sampleString=="TTJets2L" || sampleString=="TTJetsALL") plotEntry.AddInput((treepath+"TTToHadronic_TuneCP5_13TeV-powheg-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 831.76*PDGhadBF*PDGhadBF, SF_weight.c_str());
+                        if(sampleString=="TTJets1L" || sampleString=="TTJetsALL") plotEntry.AddInput((treepath+"TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 831.76*PDGhadBF*(1.-PDGhadBF)*2., SF_weight.c_str());
+                        if(sampleString=="TTJets0L" || sampleString=="TTJetsALL") plotEntry.AddInput((treepath+"TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 831.76*(1.-PDGhadBF)*(1.-PDGhadBF), SF_weight.c_str());
+                    }
+
+                    else if(sampleString=="WJets") {
+                        plotEntry.AddInput((treepath+"WJetsToQQ_HT-800toInf_qc19_3j_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 16, SF_weight.c_str());
+                    }
+
+                    else if(sampleString=="ZJets") {
+                        plotEntry.AddInput((treepath+"ZJetsToQQ_HT-800toInf_qc19_4j_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 7, SF_weight.c_str());
+                    }
+
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s1200/flatTree.root", cutToApply.c_str(), 0.4951000*0.840*0.840, SF_weight.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s2000/flatTree.root", cutToApply.c_str(), 0.0091050*0.840*0.840, SF_weight.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s2600/flatTree.root", cutToApply.c_str(), 0.0006167*0.840*0.840, SF_weight.c_str());
+
+                    // SIGNAL 2017
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
+
+                    // 2018 GOLDEN JSON DATASET
+                    else if(sampleString=="data") {
+                        plotEntry.AddInput((treepath+"JetHT_RunA/flatTree.root").c_str(), cutToApply.c_str());
+                        plotEntry.AddInput((treepath+"JetHT_RunB/flatTree.root").c_str(), cutToApply.c_str());
+                        plotEntry.AddInput((treepath+"JetHT_RunC/flatTree.root").c_str(), cutToApply.c_str());
+                        plotEntry.AddInput((treepath+"JetHT_RunD/flatTree.root").c_str(), cutToApply.c_str());
+                    }
+                    else {
+                        std::cout << "No such sample "<<std::endl;
+                    }
+
+
+
+
+
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
