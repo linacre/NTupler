@@ -120,16 +120,16 @@ int main(int argc, char** argv){
 
     // SIX: systematics to run over. only need to use them for TAG dbt. start with 'SF_' for scale factors.
     const std::vector<std::string> systematicNameVec_nosys = {"NOSYS"}; // >> data & no systematic
-    const std::vector<std::string> systematicNameVec_vjets = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_prefireUp", "SF_prefireDown"}; // >> WJets and ZJets
-    const std::vector<std::string> systematicNameVec_ttjets = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_prefireUp", "SF_prefireDown"}; // >> TTJets
-    const std::vector<std::string> systematicNameVec_signal = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown"}; // >> SIGNAL
-    const std::vector<std::string> systematicNameVec_centralsignal = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown", "SF_scaleUp", "SF_scaleDown"}; // >> CENTRAL SIGNAL
+    const std::vector<std::string> systematicNameVec_vjets = {"NOSYS", "jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown", "SF_scaleUp", "SF_scaleDown"}; // >> WJets and ZJets
+    const std::vector<std::string> systematicNameVec_ttjets = {"NOSYS", "jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown", "SF_scaleUp", "SF_scaleDown"}; // >> TTJets
+    const std::vector<std::string> systematicNameVec_signal = {"NOSYS", "jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown"}; // >> SIGNAL
+    const std::vector<std::string> systematicNameVec_centralsignal = {"NOSYS", "jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown", "SF_scaleUp", "SF_scaleDown"}; // >> CENTRAL SIGNAL
 
     std::vector<std::string> systematicNameVec_temp;
     if(sampleString=="data" || sampleString=="QCD") systematicNameVec_temp = systematicNameVec_nosys;
     else if(sampleString.BeginsWith("TTJets")) systematicNameVec_temp = systematicNameVec_ttjets;
     else if(sampleString.EndsWith("Jets")) systematicNameVec_temp = systematicNameVec_vjets;
-    else if(sampleString.Contains("mH")) systematicNameVec_temp = systematicNameVec_signal;
+    else if(sampleString.Contains("mH")) systematicNameVec_temp = systematicNameVec_centralsignal;
     else systematicNameVec_temp = systematicNameVec_nosys;
 
     const std::vector<std::string> systematicNameVec = systematicNameVec_temp;
@@ -328,7 +328,8 @@ int main(int argc, char** argv){
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
-                    
+
+
 
 
                     // 2018 (10_2X)
@@ -356,12 +357,17 @@ int main(int argc, char** argv){
                         plotEntry.AddInput((treepath+"ZJetsToQQ_HT-800toInf_qc19_4j_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 7, SF_weight.c_str());
                     }
 
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s1200/flatTree.root", cutToApply.c_str(), 0.4951000*0.840*0.840, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s2000/flatTree.root", cutToApply.c_str(), 0.0091050*0.840*0.840, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s2600/flatTree.root", cutToApply.c_str(), 0.0006167*0.840*0.840, SF_weight.c_str());
 
-                    // SIGNAL 2017
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
+                    else if(sampleString=="mH70_mSusy1200") {
+                        plotEntry.AddInput((treepath+"nmssmSignalCascadeV05_mH70p0_mSusy1200/flatTree.root").c_str(), cutToApply.c_str(), 0.4951000*0.840*0.840, SF_weight.c_str());
+                    }
+                    else if(sampleString=="mH70_mSusy2000") {
+                        plotEntry.AddInput((treepath+"nmssmSignalCascadeV05_mH70p0_mSusy2000/flatTree.root").c_str(), cutToApply.c_str(), 0.0091050*0.840*0.840, SF_weight.c_str());
+                    }
+                    else if(sampleString=="mH70_mSusy2800") {
+                        plotEntry.AddInput((treepath+"nmssmSignalCascadeV05_mH70p0_mSusy2800/flatTree.root").c_str(), cutToApply.c_str(), 0.0002753*0.840*0.840, SF_weight.c_str());
+                    }
+
 
                     // 2018 GOLDEN JSON DATASET
                     else if(sampleString=="data") {
