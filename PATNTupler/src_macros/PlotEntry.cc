@@ -158,7 +158,7 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	std::cout << std::endl;
 }
 
-void PlotEntry::AddInputEfficiency(const std::string& flatTreeAddress, const std::string& commonCut, const std::string& numeratorCut, bool setApproxSymErrors)
+void PlotEntry::AddInputEfficiency(const std::string& flatTreeAddress, const std::string& commonCut, const std::string& numeratorCut, bool isSigEffCorrectionPlot)
 {
 	TFile * f = TFile::Open(flatTreeAddress.c_str());
 	TTree * T = (TTree*)f->Get("doubleBFatJetPairTree");
@@ -166,7 +166,8 @@ void PlotEntry::AddInputEfficiency(const std::string& flatTreeAddress, const std
 	TH1D hDenominator = hNull; // make a copy of the empty histogram to fill with TTreeDraw
 	hDenominator.SetName("hDenominator");
 	std::string drawStringA = Form("%s>>hDenominator", variableToPlot.c_str());
-	std::string drawStringB = Form("%s", commonCut.c_str());
+	std::string drawStringB = Form("(%s)", commonCut.c_str());
+	if (isSigEffCorrectionPlot) drawStringB += Form("*(%s)", "weight_combined");
 	std::cout << "Filling Denominator from TTree: " << flatTreeAddress << std::endl;
 	std::cout << "Variable used: " << variableToPlot << std::endl;
 	if (!drawStringB.empty()) std::cout << "Cut applied: " << drawStringB << std::endl;
@@ -177,8 +178,10 @@ void PlotEntry::AddInputEfficiency(const std::string& flatTreeAddress, const std
 	TH1D hNumerator = hNull; // make a copy of the empty histogram to fill with TTreeDraw
 	hNumerator.SetName("hNumerator");
 	drawStringA = Form("%s>>hNumerator", variableToPlot.c_str());
-	if (commonCut.empty()) drawStringB = numeratorCut;
-	else drawStringB = numeratorCut + " && " + drawStringB;
+	if (commonCut.empty()) drawStringB = "("+numeratorCut+")";
+	//else drawStringB = numeratorCut + " && " + drawStringB;
+	else drawStringB = Form("(%s && %s)", numeratorCut.c_str(), commonCut.c_str());
+	if (isSigEffCorrectionPlot) drawStringB += Form("*(%s)", "weight_combined");
 	std::cout << "Filling Numerator from TTree: " << flatTreeAddress << std::endl;
 	std::cout << "Variable used: " << variableToPlot << std::endl;
 	if (!drawStringB.empty()) std::cout << "Cut applied: " << drawStringB << std::endl;
@@ -191,7 +194,7 @@ void PlotEntry::AddInputEfficiency(const std::string& flatTreeAddress, const std
 	for (int iBin = 0; iBin < hNull.GetNbinsX()+2; ++iBin){
 		hTotal->AddBinContent(iBin, hEffDummy->GetEfficiency(iBin));
 		// we don't set errors here as in general they are asymmetrical for effiencies
-		if(setApproxSymErrors) hTotal->SetBinError(iBin, hEffDummy->GetEfficiencyErrorLow(iBin));
+		if(isSigEffCorrectionPlot) hTotal->SetBinError(iBin, hEffDummy->GetEfficiencyErrorLow(iBin));
 	}
 	delete T;
 	delete f;
