@@ -237,6 +237,116 @@ def f1d_fullCutsMC_anti_ht3500toInf_2017(x):
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
 function_1d["fullCutsMC_anti_ht3500toInf_2017"] = f1d_fullCutsMC_anti_ht3500toInf_2017
 
+
+#*,. #*,. #*,. #*,.
+#*,. 2018 #*,. #*,.
+#def f1d_specCutsData_anti_2018(x): note these are the 2017 numbers and should be updated to 2018 if needed
+#	p0  =  3.06265e-03
+#	p1  =  2.83999e-01
+#	p2  = -3.81039e-03
+#	p3  =  7.14707e-02
+#	p4  = -5.39992e-03
+#	p5  = -1.75432e+01
+#	p6  = -3.61788e-03
+#	p7  =  5.76027e+02
+#	p8  = -1.33423e-02
+#	p9  =  5.44448e-07
+#	p10 = -3.01546e-04
+#	p11 = -3.98188e-08
+#	p12 =  5.30418e-05
+#	p13 = -1.18476e-10
+#	p14 =  6.79786e-05
+#	p15 =  7.08076e-13
+#	p16 =  3.53151e-04
+#	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
+#function_1d["specCutsData_anti_2018"] = f1d_specCutsData_anti_2018
+#
+#def f1d_specCutsData_tagLoose_2018(x): note these are the 2017 numbers and should be updated to 2018 if needed
+#	p0  =  1.24637e-03
+#	p1  =  2.50924e-01
+#	p2  = -6.25704e-04
+#	p3  =  3.31444e+00
+#	p4  = -5.00434e-03
+#	p5  =  8.34498e+00
+#	p6  = -5.06778e-03
+#	p7  =  2.54845e+02
+#	p8  = -1.11619e-02
+#	p9  = -1.96489e-06
+#	p10 = -1.27259e-05
+#	p11 = -2.48779e-08
+#	p12 =  3.68912e-05
+#	p13 = -6.16472e-11
+#	p14 =  5.68417e-05
+#	p15 =  3.84316e-13
+#	p16 =  2.91480e-04
+#	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
+#function_1d["specCutsData_tagLoose_2018"] = f1d_specCutsData_tagLoose_2018
+
+def f1d_fullCutsData_anti_ht1500to2500_2018(x):
+        p0 = 6.78129e-03
+        p1 = 2.30689e-01
+        p2 = -1.19346e-02
+        p3 = -2.86367e+00
+        p4 = -3.60630e-02
+        p5 = 1.65724e+02
+        p6 = 2.43485e-02
+        p7 = -1.51856e+03
+        p8 = -4.04398e-01
+        p9 = -1.06680e-05
+        p10 = 1.97497e-03
+        p11 = -1.83962e-07
+        p12 = -5.31991e-04
+        p13 = -4.35825e-10
+        p14 = -3.67022e-03
+        p15 = 3.82412e-12
+        p16 = 3.43333e-03
+	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
+function_1d["fullCutsData_anti_ht1500to2500_2018"] = f1d_fullCutsData_anti_ht1500to2500_2018
+
+def f1d_fullCutsData_anti_ht2500to3500_2018(x):
+        p0 = 6.12626e-03
+        p1 = 9.70817e-02
+        p2 = -4.74266e-03
+        p3 = 4.85590e-01
+        p4 = -9.28444e-04
+        p5 = 2.06024e+02
+        p6 = -3.05070e-03
+        p7 = -1.96126e+03
+        p8 = -1.28936e-01
+        p9 = -4.53290e-06
+        p10 = 6.01122e-04
+        p11 = -1.62113e-07
+        p12 = 3.64665e-04
+        p13 = -4.09136e-10
+        p14 = -1.40858e-03
+        p15 = 3.61326e-12
+        p16 = 1.90858e-03
+	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
+function_1d["fullCutsData_anti_ht2500to3500_2018"] = f1d_fullCutsData_anti_ht2500to3500_2018
+
+def f1d_fullCutsMC_anti_ht3500toInf_2018(x):
+        p0 = 1.19167e-02
+        p1 = -1.01894e+00
+        p2 = -4.76384e+01
+        p3 = 4.36277e+01
+        p4 = -5.21297e+00
+        p5 = 5.18747e+02
+        p6 = -2.62470e+00
+        p7 = -9.26328e+03
+        p8 = -2.20642e+00
+        p9 = 4.92050e-05
+        p10 = 3.42770e+01
+        p11 = -5.74495e-07
+        p12 = 6.94793e+01
+        p13 = -1.90346e-09
+        p14 = -2.12834e+01
+        p15 = 1.47985e-11
+        p16 = 1.71154e+01
+	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
+function_1d["fullCutsMC_anti_ht3500toInf_2018"] = f1d_fullCutsMC_anti_ht3500toInf_2018
+
+
+
 ####################
 ####################
 ####################
@@ -392,12 +502,28 @@ for i in range(0, len(three_x_points_vec)-1):
 	ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500_2017 = integral_S["fullCutsData_anti_ht1500to2500_2017"] / (2 * integral_U["fullCutsData_anti_ht1500to2500_2017"])
 	ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500_2017 = integral_S["fullCutsData_anti_ht2500to3500_2017"] / (2 * integral_U["fullCutsData_anti_ht2500to3500_2017"])
 	ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf_2017_MC = integral_S["fullCutsMC_anti_ht3500toInf_2017"] / (2 * integral_U["fullCutsMC_anti_ht3500toInf_2017"])	
-	# print "2017 ht1500to2500 F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500_2017)
-	# print "2017 ht2500to3500 F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500_2017)
+	print "2017 ht1500to2500 F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500_2017)
+	print "2017 ht2500to3500 F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500_2017)
 	print "2017 MC ht3500toInf F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf_2017_MC)
 
 	correctionFactor_specCutsDataLoose_2017 = (integral_S["specCutsData_tagLoose_2017"] / integral_S["specCutsData_anti_2017"]) * (integral_U["specCutsData_anti_2017"] / integral_U["specCutsData_tagLoose_2017"])
 	# print "2017 correction factor C_" + str(iMR) + " = " + str(correctionFactor_specCutsDataLoose_2017)
+
+
+
+	#*,. #*,. #*,. #*,.
+	#*,. 2018 #*,. #*,.
+	ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500_2018 = integral_S["fullCutsData_anti_ht1500to2500_2018"] / (2 * integral_U["fullCutsData_anti_ht1500to2500_2018"])
+	ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500_2018 = integral_S["fullCutsData_anti_ht2500to3500_2018"] / (2 * integral_U["fullCutsData_anti_ht2500to3500_2018"])
+	ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf_2018_MC = integral_S["fullCutsMC_anti_ht3500toInf_2018"] / (2 * integral_U["fullCutsMC_anti_ht3500toInf_2018"])	
+	print "2018 ht1500to2500 F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500_2018)
+	print "2018 ht2500to3500 F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500_2018)
+	print "2018 MC ht3500toInf F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf_2018_MC)
+
+	# correctionFactor_specCutsDataLoose_2018 = (integral_S["specCutsData_tagLoose_2018"] / integral_S["specCutsData_anti_2018"]) * (integral_U["specCutsData_anti_2018"] / integral_U["specCutsData_tagLoose_2018"])
+	# print "2018 correction factor C_" + str(iMR) + " = " + str(correctionFactor_specCutsDataLoose_2018)
+	
+
 	
 	###############################################################
 	###############################################################

@@ -135,11 +135,67 @@ namespace QcdSidebandCorr{
 			}
 		} // closes 'if' yearOfRun==2017
 
+
+
+
+		// #*,. #*,. #*,. #*,.
+		// #*,. 2018 #*,. #*,.
+		// #*,. #*,. #*,. #*,.
+		else if (yearOfRun == 2018){
+
+			std::vector<double> corrVec;
+
+			// ht1500to2500 - calculation (data)
+			corrVec.push_back(1.53428987043);
+			corrVec.push_back(0.768011954491);
+			corrVec.push_back(0.874103679037);
+			corrVec.push_back(0.941439829979);
+			corrVec.push_back(0.99046956522);
+			corrVec.push_back(1.03390640814);
+			corrVec.push_back(1.0790902241);
+			corrVec.push_back(1.13073048745);
+			corrVec.push_back(1.19061412987);
+			corrVec.push_back(1.25165417934);
+
+			// ht2500to3500 - calculation (data)
+			corrVec.push_back(1.42830684039);
+			corrVec.push_back(0.670927376897);
+			corrVec.push_back(0.793705440783);
+			corrVec.push_back(0.882686886776);
+			corrVec.push_back(0.944992064498);
+			corrVec.push_back(0.991526669366);
+			corrVec.push_back(1.02832056413);
+			corrVec.push_back(1.05609842908);
+			corrVec.push_back(1.06910715931);
+			corrVec.push_back(1.05273356677);
+
+			// ht3500toInf - calculation (mc)
+			corrVec.push_back(1.68721755451);
+			corrVec.push_back(0.655192797454);
+			corrVec.push_back(0.672116965034);
+			corrVec.push_back(0.735130001363);
+			corrVec.push_back(0.814937934144);
+			corrVec.push_back(0.898663386375);
+			corrVec.push_back(0.978877942795);
+			corrVec.push_back(1.05080225636);
+			corrVec.push_back(1.1068970932);
+			corrVec.push_back(1.12798370143);
+
+			if (binIndex > 0 && binIndex < corrVec.size() + 1 ) return corrVec[binIndex - 1];
+			else{
+				std::cout << "WARNING: you haven't provided a valid index for the QCD 2018 sideband correction factor" << std::endl;
+				std::cout << "You are being given a dummy value of -123456789.0" << std::endl;
+				return -123456789.0;
+			}
+		} // closes 'if' yearOfRun==2018
+
 		else{
-			std::cout << "You have not provided QcdSidebandCorr::GetCorr with a valid yearOfRun, must be 2016 or 2017" << std::endl;
+			std::cout << "You have not provided QcdSidebandCorr::GetCorr with a valid yearOfRun, must be 2016, 2017 or 2018" << std::endl;
 			std::cout << "You are being given a dummy value of -2635426354.0" << std::endl;
 			return -2635426354.0;
 		}
+
+
 
 	} // closes function GetCorr
 
@@ -273,10 +329,75 @@ namespace QcdSidebandCorr{
 				std::cout << "You are being given a dummy value of -123456789.0" << std::endl;
 				return -123456789.0;
 			}
-		} // closes 'if' yearOfRun==2016
+		} // closes 'if' yearOfRun==2017
+
+
+		// #*,. #*,. #*,. #*,.
+		// #*,. 2018 #*,. #*,.
+		// #*,. #*,. #*,. #*,.
+		if (yearOfRun == 2018){
+
+			std::vector<double> corrErrVec;
+
+			// ht1500to2500 - normal method
+			// corrErrVec.push_back(0.0345542152);
+			// corrErrVec.push_back(0.0147509712);
+			// corrErrVec.push_back(0.0176379321);
+			// corrErrVec.push_back(0.0191728313);
+			// corrErrVec.push_back(0.0248291208);
+			// corrErrVec.push_back(0.0295094637);
+			// corrErrVec.push_back(0.0332982690);
+			// corrErrVec.push_back(0.0386168015);
+			// corrErrVec.push_back(0.0399156117);
+			// corrErrVec.push_back(0.0458386330);
+
+			// ht1500to2500 - calculation (data)
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+
+			// ht2500to3500 - calculation (data)
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+
+			// ht3500toInf - calculation (mc)
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+
+			if (binIndex > 0 && binIndex < corrErrVec.size() + 1 ) return corrErrVec[binIndex - 1];
+			else{
+				std::cout << "WARNING: you haven't provided a valid index for the QCD 2018 sideband correction factor error" << std::endl;
+				std::cout << "You are being given a dummy value of -123456789.0" << std::endl;
+				return -123456789.0;
+			}
+		} // closes 'if' yearOfRun==2018
+
 
 		else{
-			std::cout << "You have not provided QcdSidebandCorr::GetCorrErr with a valid yearOfRun, must be 2016 or 2017" << std::endl;
+			std::cout << "You have not provided QcdSidebandCorr::GetCorrErr with a valid yearOfRun, must be 2016, 2017 or 2018" << std::endl;
 			std::cout << "You are being given a dummy value of -2635426354.0" << std::endl;
 			return -2635426354.0;
 		}
