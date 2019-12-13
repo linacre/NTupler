@@ -119,10 +119,10 @@ int main(){
     // CommonSystematicVec[2016].push_back( CommonSystematic("signalPdfBOTH lnN", 1.1, {"SIGNAL"}) ); // correlated to 2017
     CommonSystematicVec[2016].push_back( CommonSystematic("isrReweightBOTH lnN", "isr", {"SIGNAL"}) ); // correlated to 2017
     CommonSystematicVec[2016].push_back( CommonSystematic("luminosity2016 lnN", 1.025, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("XS_TTJets2016 lnN", 1.5, {"TTJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("XS_ZJets2016 lnN", 1.5, {"ZJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("XS_WJets2016 lnN", 1.5, {"WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("XS_TTJetsBOTH lnN", 1.5, {"TTJets"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("XS_ZJetsBOTH lnN", 1.5, {"ZJets"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("XS_WJetsBOTH lnN", 1.5, {"WJets"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("jecAKXUnc2016 lnN", "jecAKXUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // uncorrelated
     CommonSystematicVec[2016].push_back( CommonSystematic("jerAKXUnc2016 lnN", "jerAKXUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
     CommonSystematicVec[2016].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
@@ -133,10 +133,10 @@ int main(){
     // CommonSystematicVec[2017].push_back( CommonSystematic("signalPdfBOTH lnN", 1.1, {"SIGNAL"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("isrReweightBOTH lnN", "isr", {"SIGNAL"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("luminosity2017 lnN", 1.023, {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets2017 lnN", 1.5, {"TTJets0L", "TTJets1L", "TTJets2L"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("XS_ZJets2017 lnN", 1.5, {"ZJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("XS_WJets2017 lnN", 1.5, {"WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJetsBOTH lnN", 1.5, {"TTJets0L", "TTJets1L", "TTJets2L"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("XS_ZJetsBOTH lnN", 1.5, {"ZJets"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("XS_WJetsBOTH lnN", 1.5, {"WJets"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("jecAKXUnc2017 lnN", "jecAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
     CommonSystematicVec[2017].push_back( CommonSystematic("jerAKXUnc2017 lnN", "jerAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
@@ -147,10 +147,10 @@ int main(){
     // CommonSystematicVec[2018].push_back( CommonSystematic("signalPdfBOTH lnN", 1.1, {"SIGNAL"}) ); // correlated to 2016
     CommonSystematicVec[2018].push_back( CommonSystematic("isrReweightBOTH lnN", "isr", {"SIGNAL"}) ); // correlated to 2016
     CommonSystematicVec[2018].push_back( CommonSystematic("luminosity2018 lnN", 1.025, {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2018].push_back( CommonSystematic("XS_TTJets2018 lnN", 1.5, {"TTJets0L", "TTJets1L", "TTJets2L"}) );
-    CommonSystematicVec[2018].push_back( CommonSystematic("XS_ZJets2018 lnN", 1.5, {"ZJets"}) );
-    CommonSystematicVec[2018].push_back( CommonSystematic("XS_WJets2018 lnN", 1.5, {"WJets"}) );
-    CommonSystematicVec[2018].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
+    CommonSystematicVec[2018].push_back( CommonSystematic("XS_TTJetsBOTH lnN", 1.5, {"TTJets0L", "TTJets1L", "TTJets2L"}) );
+    CommonSystematicVec[2018].push_back( CommonSystematic("XS_ZJetsBOTH lnN", 1.5, {"ZJets"}) );
+    CommonSystematicVec[2018].push_back( CommonSystematic("XS_WJetsBOTH lnN", 1.5, {"WJets"}) );
+    CommonSystematicVec[2018].push_back( CommonSystematic("jecAKXUnc2018 lnN", "jecAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
     CommonSystematicVec[2018].push_back( CommonSystematic("jerAKXUnc2018 lnN", "jerAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
     CommonSystematicVec[2018].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
     CommonSystematicVec[2018].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
@@ -263,6 +263,8 @@ int main(){
                 }
 
                 const unsigned int data_obs_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
+                //const double rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin)*(yearOfRun == 2018 ? 0.98*59.740565202/41.370 : 1.);
+                //const double rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin)*(yearOfRun == 2018 ? 0.98*59.740565202/41.370 : 1.);
                 const double rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);
                 const double rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);;
                 const std::string data_obs_S_str = std::to_string(data_obs_S);
