@@ -56,7 +56,8 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
+    //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
+    const std::string outputDirGeneral = "combinedDataCards";
   
 
 
@@ -68,6 +69,13 @@ int main(){
 
     // THREE: Samples To Use (different project for each signal sample)
     const std::string dataSample = "data";
+
+    std::vector<std::string> signalVec = { // the different signal samples you wish to use
+                                            "mH70_mSusy1200", 
+                                            "mH70_mSusy2000", 
+                                            "mH70_mSusy2800"
+                                        };
+    /*
     std::vector<std::string> signalVec = { // the different signal samples you wish to use
                                             // "mH30_mSusy800",                                   "mH50_mSusy800",  "mH70_mSusy800",  "mH90_mSusy800",  "mH110_mSusy800",  "mH125_mSusy800",
                                             "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH110_mSusy1200", "mH125_mSusy1200",
@@ -78,6 +86,7 @@ int main(){
                                             "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH70_mSusy2600", "mH90_mSusy2600", "mH110_mSusy2600", "mH125_mSusy2600", 
                                             "mH30_mSusy2800", "mH35_mSusy2800", "mH40_mSusy2800", "mH50_mSusy2800", "mH70_mSusy2800", "mH90_mSusy2800", "mH110_mSusy2800", "mH125_mSusy2800", 
                                         };
+    */
     // std::vector<std::string> signalVec = { // the different signal samples you wish to use: SQUARK PRODUCTION ONLY
     //                                         // "mH30_mSquark800",                                       "mH50_mSquark800",  "mH70_mSquark800",  "mH90_mSquark800",  "mH110_mSquark800",  "mH125_mSquark800",
     //                                         "mH30_mSquark1200", "mH35_mSquark1200", "mH40_mSquark1200", "mH50_mSquark1200", "mH70_mSquark1200", "mH90_mSquark1200", "mH110_mSquark1200", "mH125_mSquark1200",
@@ -91,6 +100,7 @@ int main(){
     std::map<unsigned int, std::vector<std::string>> mcbkVec;
     mcbkVec[2016] = {"TTJets", "ZJets", "WJets"}; // the 2016 MC background samples
     mcbkVec[2017] = {"TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}; // the 2017 MC background samples
+    mcbkVec[2018] = {"TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}; // the 2018 MC background samples
     const std::string qcdName = "QCD"; // this is just a label as QCD contribution is driven during the fit
 
 
@@ -133,7 +143,22 @@ int main(){
     CommonSystematicVec[2017].push_back( CommonSystematic("SigDbtTag2017 lnN", "dbtTag", {"SIGNAL"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("TtDbtTag2017 lnN", "dbtTag", {"TTJets0L", "TTJets1L", "TTJets2L"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("prefire2017 lnN", "prefire", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
+    // *** 2018 ***
+    // CommonSystematicVec[2018].push_back( CommonSystematic("signalPdfBOTH lnN", 1.1, {"SIGNAL"}) ); // correlated to 2016
+    CommonSystematicVec[2018].push_back( CommonSystematic("isrReweightBOTH lnN", "isr", {"SIGNAL"}) ); // correlated to 2016
+    CommonSystematicVec[2018].push_back( CommonSystematic("luminosity2018 lnN", 1.025, {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
+    CommonSystematicVec[2018].push_back( CommonSystematic("XS_TTJets2018 lnN", 1.5, {"TTJets0L", "TTJets1L", "TTJets2L"}) );
+    CommonSystematicVec[2018].push_back( CommonSystematic("XS_ZJets2018 lnN", 1.5, {"ZJets"}) );
+    CommonSystematicVec[2018].push_back( CommonSystematic("XS_WJets2018 lnN", 1.5, {"WJets"}) );
+    CommonSystematicVec[2018].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
+    CommonSystematicVec[2018].push_back( CommonSystematic("jerAKXUnc2018 lnN", "jerAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
+    CommonSystematicVec[2018].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
+    CommonSystematicVec[2018].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
+    CommonSystematicVec[2018].push_back( CommonSystematic("SigDbtTag2018 lnN", "dbtTag", {"SIGNAL"}) );
+    CommonSystematicVec[2018].push_back( CommonSystematic("TtDbtTag2018 lnN", "dbtTag", {"TTJets0L", "TTJets1L", "TTJets2L"}) );
+    //CommonSystematicVec[2018].push_back( CommonSystematic("prefire2018 lnN", "prefire", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
 
+    //TODO: add luminosity correlations https://twiki.cern.ch/twiki/bin/view/CMS/TWikiLUM#LumiComb
 
 
     // SIX: are we blinded ? if true, uses Fi * data_obs_UnD as a dummy for data_obs_S
@@ -152,8 +177,8 @@ int main(){
         return 1;
     }
 
-    // loop through 2016 and 2017
-    std::vector<unsigned int> yearOfRunVec = {2016, 2017};
+    // loop through 2016, 2017 and 2018
+    std::vector<unsigned int> yearOfRunVec = {2016, 2017, 2018};
     for (auto yearOfRun : yearOfRunVec){
 
         std::cout << "*,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. " << std::endl;
@@ -208,6 +233,7 @@ int main(){
                 std::string comboCommandStr = "combineCards.py ";
                 for (unsigned int i = 1; i < numberOfBins + 1; ++i) comboCommandStr += outputDir + "bin" + std::to_string(i) + "_2016.txt ";
                 for (unsigned int i = 1; i < numberOfBins + 1; ++i) comboCommandStr += outputDir + "bin" + std::to_string(i+numberOfBins) + "_2017.txt ";
+                for (unsigned int i = 1; i < numberOfBins + 1; ++i) comboCommandStr += outputDir + "bin" + std::to_string(i+2*numberOfBins) + "_2018.txt ";
                 comboCommandStr += "> " + outputDir + "allbins.txt\n";
                 comboCommand << comboCommandStr;
                 comboCommand.close();
@@ -260,6 +286,7 @@ int main(){
                 std::ofstream dataCard;
                 unsigned int binLabel = iBin;
                 if (yearOfRun == 2017) binLabel += numberOfBins;
+                else if (yearOfRun == 2018) binLabel += 2*numberOfBins;
                 dataCard.open( Form("%sbin%d_%d.txt", outputDir.c_str(),binLabel,yearOfRun) );
                 dataCard << "imax 2\n";
                 dataCard << "jmax " << mcbkVec[yearOfRun].size() + 1 << "\n";
@@ -477,6 +504,10 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
         preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2017/";
         postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
     }
+    else if (yearOfRun == 2018){
+        preamble = "/home/ppd/xxt18833/NMSSM/PATNTupler_18/macros/2018_histos";
+        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi60.root";
+    }
     else{
         std::cout << "You have not given GetHistograms a valid year" << std::endl;
         return;
@@ -491,131 +522,138 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
     
-    histoNameVec.push_back("mH30_mSusy800");
-    histoNameVec.push_back("mH50_mSusy800");
-    histoNameVec.push_back("mH70_mSusy800");
-    histoNameVec.push_back("mH90_mSusy800");
-    histoNameVec.push_back("mH110_mSusy800");
-    histoNameVec.push_back("mH125_mSusy800");
-    histoNameVec.push_back("mH30_mSusy1200");
-    histoNameVec.push_back("mH35_mSusy1200");
-    histoNameVec.push_back("mH40_mSusy1200");
-    histoNameVec.push_back("mH50_mSusy1200");
-    histoNameVec.push_back("mH70_mSusy1200");
-    histoNameVec.push_back("mH90_mSusy1200");
-    histoNameVec.push_back("mH110_mSusy1200");
-    histoNameVec.push_back("mH125_mSusy1200");
-    histoNameVec.push_back("mH30_mSusy1600");
-    histoNameVec.push_back("mH35_mSusy1600");
-    histoNameVec.push_back("mH40_mSusy1600");
-    histoNameVec.push_back("mH50_mSusy1600");
-    histoNameVec.push_back("mH70_mSusy1600");
-    histoNameVec.push_back("mH90_mSusy1600");
-    histoNameVec.push_back("mH110_mSusy1600");
-    histoNameVec.push_back("mH125_mSusy1600");
-    histoNameVec.push_back("mH30_mSusy2000");
-    histoNameVec.push_back("mH35_mSusy2000");
-    histoNameVec.push_back("mH40_mSusy2000");
-    histoNameVec.push_back("mH50_mSusy2000");
-    histoNameVec.push_back("mH70_mSusy2000");
-    histoNameVec.push_back("mH90_mSusy2000");
-    histoNameVec.push_back("mH110_mSusy2000");
-    histoNameVec.push_back("mH125_mSusy2000");
-    histoNameVec.push_back("mH30_mSusy2200");
-    histoNameVec.push_back("mH35_mSusy2200");
-    histoNameVec.push_back("mH40_mSusy2200");
-    histoNameVec.push_back("mH50_mSusy2200");
-    histoNameVec.push_back("mH70_mSusy2200");
-    histoNameVec.push_back("mH90_mSusy2200");
-    histoNameVec.push_back("mH110_mSusy2200");
-    histoNameVec.push_back("mH125_mSusy2200");
-    histoNameVec.push_back("mH30_mSusy2400");
-    histoNameVec.push_back("mH35_mSusy2400");
-    histoNameVec.push_back("mH40_mSusy2400");
-    histoNameVec.push_back("mH50_mSusy2400");
-    histoNameVec.push_back("mH70_mSusy2400");
-    histoNameVec.push_back("mH90_mSusy2400");
-    histoNameVec.push_back("mH110_mSusy2400");
-    histoNameVec.push_back("mH125_mSusy2400");
-    histoNameVec.push_back("mH30_mSusy2600");
-    histoNameVec.push_back("mH35_mSusy2600");
-    histoNameVec.push_back("mH40_mSusy2600");
-    histoNameVec.push_back("mH50_mSusy2600");
-    histoNameVec.push_back("mH70_mSusy2600");
-    histoNameVec.push_back("mH90_mSusy2600");
-    histoNameVec.push_back("mH110_mSusy2600");
-    histoNameVec.push_back("mH125_mSusy2600");
-    histoNameVec.push_back("mH30_mSusy2800");
-    histoNameVec.push_back("mH35_mSusy2800");
-    histoNameVec.push_back("mH40_mSusy2800");
-    histoNameVec.push_back("mH50_mSusy2800");
-    histoNameVec.push_back("mH70_mSusy2800");
-    histoNameVec.push_back("mH90_mSusy2800");
-    histoNameVec.push_back("mH110_mSusy2800");
-    histoNameVec.push_back("mH125_mSusy2800");
+    if (yearOfRun == 2018) {
+        histoNameVec.push_back("mH70_mSusy1200");
+        histoNameVec.push_back("mH70_mSusy2000");
+        histoNameVec.push_back("mH70_mSusy2800");
+    }
+    else {
+        histoNameVec.push_back("mH30_mSusy800");
+        histoNameVec.push_back("mH50_mSusy800");
+        histoNameVec.push_back("mH70_mSusy800");
+        histoNameVec.push_back("mH90_mSusy800");
+        histoNameVec.push_back("mH110_mSusy800");
+        histoNameVec.push_back("mH125_mSusy800");
+        histoNameVec.push_back("mH30_mSusy1200");
+        histoNameVec.push_back("mH35_mSusy1200");
+        histoNameVec.push_back("mH40_mSusy1200");
+        histoNameVec.push_back("mH50_mSusy1200");
+        histoNameVec.push_back("mH70_mSusy1200");
+        histoNameVec.push_back("mH90_mSusy1200");
+        histoNameVec.push_back("mH110_mSusy1200");
+        histoNameVec.push_back("mH125_mSusy1200");
+        histoNameVec.push_back("mH30_mSusy1600");
+        histoNameVec.push_back("mH35_mSusy1600");
+        histoNameVec.push_back("mH40_mSusy1600");
+        histoNameVec.push_back("mH50_mSusy1600");
+        histoNameVec.push_back("mH70_mSusy1600");
+        histoNameVec.push_back("mH90_mSusy1600");
+        histoNameVec.push_back("mH110_mSusy1600");
+        histoNameVec.push_back("mH125_mSusy1600");
+        histoNameVec.push_back("mH30_mSusy2000");
+        histoNameVec.push_back("mH35_mSusy2000");
+        histoNameVec.push_back("mH40_mSusy2000");
+        histoNameVec.push_back("mH50_mSusy2000");
+        histoNameVec.push_back("mH70_mSusy2000");
+        histoNameVec.push_back("mH90_mSusy2000");
+        histoNameVec.push_back("mH110_mSusy2000");
+        histoNameVec.push_back("mH125_mSusy2000");
+        histoNameVec.push_back("mH30_mSusy2200");
+        histoNameVec.push_back("mH35_mSusy2200");
+        histoNameVec.push_back("mH40_mSusy2200");
+        histoNameVec.push_back("mH50_mSusy2200");
+        histoNameVec.push_back("mH70_mSusy2200");
+        histoNameVec.push_back("mH90_mSusy2200");
+        histoNameVec.push_back("mH110_mSusy2200");
+        histoNameVec.push_back("mH125_mSusy2200");
+        histoNameVec.push_back("mH30_mSusy2400");
+        histoNameVec.push_back("mH35_mSusy2400");
+        histoNameVec.push_back("mH40_mSusy2400");
+        histoNameVec.push_back("mH50_mSusy2400");
+        histoNameVec.push_back("mH70_mSusy2400");
+        histoNameVec.push_back("mH90_mSusy2400");
+        histoNameVec.push_back("mH110_mSusy2400");
+        histoNameVec.push_back("mH125_mSusy2400");
+        histoNameVec.push_back("mH30_mSusy2600");
+        histoNameVec.push_back("mH35_mSusy2600");
+        histoNameVec.push_back("mH40_mSusy2600");
+        histoNameVec.push_back("mH50_mSusy2600");
+        histoNameVec.push_back("mH70_mSusy2600");
+        histoNameVec.push_back("mH90_mSusy2600");
+        histoNameVec.push_back("mH110_mSusy2600");
+        histoNameVec.push_back("mH125_mSusy2600");
+        histoNameVec.push_back("mH30_mSusy2800");
+        histoNameVec.push_back("mH35_mSusy2800");
+        histoNameVec.push_back("mH40_mSusy2800");
+        histoNameVec.push_back("mH50_mSusy2800");
+        histoNameVec.push_back("mH70_mSusy2800");
+        histoNameVec.push_back("mH90_mSusy2800");
+        histoNameVec.push_back("mH110_mSusy2800");
+        histoNameVec.push_back("mH125_mSusy2800");
 
-    histoNameVec.push_back("mH30_mSquark800");
-    histoNameVec.push_back("mH50_mSquark800");
-    histoNameVec.push_back("mH70_mSquark800");
-    histoNameVec.push_back("mH90_mSquark800");
-    histoNameVec.push_back("mH110_mSquark800");
-    histoNameVec.push_back("mH125_mSquark800");
-    histoNameVec.push_back("mH30_mSquark1200");
-    histoNameVec.push_back("mH35_mSquark1200");
-    histoNameVec.push_back("mH40_mSquark1200");
-    histoNameVec.push_back("mH50_mSquark1200");
-    histoNameVec.push_back("mH70_mSquark1200");
-    histoNameVec.push_back("mH90_mSquark1200");
-    histoNameVec.push_back("mH110_mSquark1200");
-    histoNameVec.push_back("mH125_mSquark1200");
-    histoNameVec.push_back("mH30_mSquark1600");
-    histoNameVec.push_back("mH35_mSquark1600");
-    histoNameVec.push_back("mH40_mSquark1600");
-    histoNameVec.push_back("mH50_mSquark1600");
-    histoNameVec.push_back("mH70_mSquark1600");
-    histoNameVec.push_back("mH90_mSquark1600");
-    histoNameVec.push_back("mH110_mSquark1600");
-    histoNameVec.push_back("mH125_mSquark1600");
-    histoNameVec.push_back("mH30_mSquark2000");
-    histoNameVec.push_back("mH35_mSquark2000");
-    histoNameVec.push_back("mH40_mSquark2000");
-    histoNameVec.push_back("mH50_mSquark2000");
-    histoNameVec.push_back("mH70_mSquark2000");
-    histoNameVec.push_back("mH90_mSquark2000");
-    histoNameVec.push_back("mH110_mSquark2000");
-    histoNameVec.push_back("mH125_mSquark2000");
-    histoNameVec.push_back("mH30_mSquark2200");
-    histoNameVec.push_back("mH35_mSquark2200");
-    histoNameVec.push_back("mH40_mSquark2200");
-    histoNameVec.push_back("mH50_mSquark2200");
-    histoNameVec.push_back("mH70_mSquark2200");
-    histoNameVec.push_back("mH90_mSquark2200");
-    histoNameVec.push_back("mH110_mSquark2200");
-    histoNameVec.push_back("mH125_mSquark2200");
-    histoNameVec.push_back("mH30_mSquark2400");
-    histoNameVec.push_back("mH35_mSquark2400");
-    histoNameVec.push_back("mH40_mSquark2400");
-    histoNameVec.push_back("mH50_mSquark2400");
-    histoNameVec.push_back("mH70_mSquark2400");
-    histoNameVec.push_back("mH90_mSquark2400");
-    histoNameVec.push_back("mH110_mSquark2400");
-    histoNameVec.push_back("mH125_mSquark2400");
-    histoNameVec.push_back("mH30_mSquark2600");
-    histoNameVec.push_back("mH35_mSquark2600");
-    histoNameVec.push_back("mH40_mSquark2600");
-    histoNameVec.push_back("mH50_mSquark2600");
-    histoNameVec.push_back("mH70_mSquark2600");
-    histoNameVec.push_back("mH90_mSquark2600");
-    histoNameVec.push_back("mH110_mSquark2600");
-    histoNameVec.push_back("mH125_mSquark2600");
-    histoNameVec.push_back("mH30_mSquark2800");
-    histoNameVec.push_back("mH35_mSquark2800");
-    histoNameVec.push_back("mH40_mSquark2800");
-    histoNameVec.push_back("mH50_mSquark2800");
-    histoNameVec.push_back("mH70_mSquark2800");
-    histoNameVec.push_back("mH90_mSquark2800");
-    histoNameVec.push_back("mH110_mSquark2800");
-    histoNameVec.push_back("mH125_mSquark2800");
+        histoNameVec.push_back("mH30_mSquark800");
+        histoNameVec.push_back("mH50_mSquark800");
+        histoNameVec.push_back("mH70_mSquark800");
+        histoNameVec.push_back("mH90_mSquark800");
+        histoNameVec.push_back("mH110_mSquark800");
+        histoNameVec.push_back("mH125_mSquark800");
+        histoNameVec.push_back("mH30_mSquark1200");
+        histoNameVec.push_back("mH35_mSquark1200");
+        histoNameVec.push_back("mH40_mSquark1200");
+        histoNameVec.push_back("mH50_mSquark1200");
+        histoNameVec.push_back("mH70_mSquark1200");
+        histoNameVec.push_back("mH90_mSquark1200");
+        histoNameVec.push_back("mH110_mSquark1200");
+        histoNameVec.push_back("mH125_mSquark1200");
+        histoNameVec.push_back("mH30_mSquark1600");
+        histoNameVec.push_back("mH35_mSquark1600");
+        histoNameVec.push_back("mH40_mSquark1600");
+        histoNameVec.push_back("mH50_mSquark1600");
+        histoNameVec.push_back("mH70_mSquark1600");
+        histoNameVec.push_back("mH90_mSquark1600");
+        histoNameVec.push_back("mH110_mSquark1600");
+        histoNameVec.push_back("mH125_mSquark1600");
+        histoNameVec.push_back("mH30_mSquark2000");
+        histoNameVec.push_back("mH35_mSquark2000");
+        histoNameVec.push_back("mH40_mSquark2000");
+        histoNameVec.push_back("mH50_mSquark2000");
+        histoNameVec.push_back("mH70_mSquark2000");
+        histoNameVec.push_back("mH90_mSquark2000");
+        histoNameVec.push_back("mH110_mSquark2000");
+        histoNameVec.push_back("mH125_mSquark2000");
+        histoNameVec.push_back("mH30_mSquark2200");
+        histoNameVec.push_back("mH35_mSquark2200");
+        histoNameVec.push_back("mH40_mSquark2200");
+        histoNameVec.push_back("mH50_mSquark2200");
+        histoNameVec.push_back("mH70_mSquark2200");
+        histoNameVec.push_back("mH90_mSquark2200");
+        histoNameVec.push_back("mH110_mSquark2200");
+        histoNameVec.push_back("mH125_mSquark2200");
+        histoNameVec.push_back("mH30_mSquark2400");
+        histoNameVec.push_back("mH35_mSquark2400");
+        histoNameVec.push_back("mH40_mSquark2400");
+        histoNameVec.push_back("mH50_mSquark2400");
+        histoNameVec.push_back("mH70_mSquark2400");
+        histoNameVec.push_back("mH90_mSquark2400");
+        histoNameVec.push_back("mH110_mSquark2400");
+        histoNameVec.push_back("mH125_mSquark2400");
+        histoNameVec.push_back("mH30_mSquark2600");
+        histoNameVec.push_back("mH35_mSquark2600");
+        histoNameVec.push_back("mH40_mSquark2600");
+        histoNameVec.push_back("mH50_mSquark2600");
+        histoNameVec.push_back("mH70_mSquark2600");
+        histoNameVec.push_back("mH90_mSquark2600");
+        histoNameVec.push_back("mH110_mSquark2600");
+        histoNameVec.push_back("mH125_mSquark2600");
+        histoNameVec.push_back("mH30_mSquark2800");
+        histoNameVec.push_back("mH35_mSquark2800");
+        histoNameVec.push_back("mH40_mSquark2800");
+        histoNameVec.push_back("mH50_mSquark2800");
+        histoNameVec.push_back("mH70_mSquark2800");
+        histoNameVec.push_back("mH90_mSquark2800");
+        histoNameVec.push_back("mH110_mSquark2800");
+        histoNameVec.push_back("mH125_mSquark2800");
+    }
 
     std::vector<std::string> nonTrivialSysVec;
     nonTrivialSysVec.push_back("NOSYS");
