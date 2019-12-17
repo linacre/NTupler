@@ -22,6 +22,8 @@
 
 // MAKE DATACARDS TO USE WITH COMBINED
 
+bool use2017as2018 = true;
+
 
 void GetHistograms(std::map<std::string,TH1D*>&, const unsigned int&); // NEED TO CHANGE THE FILE PATH IN THIS FUNCTION WHEN USING NEW HISTOGRAMS
 std::vector<double> GetQcdUnDLowerBoundInHtDivison(TH1D*, const unsigned int&);
@@ -69,14 +71,17 @@ int main(){
 
     // THREE: Samples To Use (different project for each signal sample)
     const std::string dataSample = "data";
+    std::vector<std::string> signalVec;
 
-    std::vector<std::string> signalVec = { // the different signal samples you wish to use
-                                            "mH70_mSusy1200", 
-                                            "mH70_mSusy2000", 
-                                            "mH70_mSusy2800"
-                                        };
-    /*
-    std::vector<std::string> signalVec = { // the different signal samples you wish to use
+    if(use2017as2018 == false) {
+        signalVec = { // the different signal samples you wish to use
+                                                "mH70_mSusy1200", 
+                                                "mH70_mSusy2000", 
+                                                "mH70_mSusy2800"
+                                            };
+    }
+    else{
+        signalVec = { // the different signal samples you wish to use
                                             // "mH30_mSusy800",                                   "mH50_mSusy800",  "mH70_mSusy800",  "mH90_mSusy800",  "mH110_mSusy800",  "mH125_mSusy800",
                                             "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH110_mSusy1200", "mH125_mSusy1200",
                                             "mH30_mSusy1600", "mH35_mSusy1600", "mH40_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH110_mSusy1600", "mH125_mSusy1600",
@@ -86,7 +91,7 @@ int main(){
                                             "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH70_mSusy2600", "mH90_mSusy2600", "mH110_mSusy2600", "mH125_mSusy2600", 
                                             "mH30_mSusy2800", "mH35_mSusy2800", "mH40_mSusy2800", "mH50_mSusy2800", "mH70_mSusy2800", "mH90_mSusy2800", "mH110_mSusy2800", "mH125_mSusy2800", 
                                         };
-    */
+    }
     // std::vector<std::string> signalVec = { // the different signal samples you wish to use: SQUARK PRODUCTION ONLY
     //                                         // "mH30_mSquark800",                                       "mH50_mSquark800",  "mH70_mSquark800",  "mH90_mSquark800",  "mH110_mSquark800",  "mH125_mSquark800",
     //                                         "mH30_mSquark1200", "mH35_mSquark1200", "mH40_mSquark1200", "mH50_mSquark1200", "mH70_mSquark1200", "mH90_mSquark1200", "mH110_mSquark1200", "mH125_mSquark1200",
@@ -264,11 +269,16 @@ int main(){
                     data_obs_S = round(dataEstimate);
                 }
 
+                double rate_signal_S, rate_signal_UnD;
                 const unsigned int data_obs_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
-                //const double rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin)*(yearOfRun == 2018 ? 0.98*59.740565202/41.370 : 1.);
-                //const double rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin)*(yearOfRun == 2018 ? 0.98*59.740565202/41.370 : 1.);
-                const double rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);
-                const double rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);;
+                if(use2017as2018) {
+                    rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin)*(yearOfRun == 2018 ? 0.98*59.740565202/41.370 : 1.);
+                    rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin)*(yearOfRun == 2018 ? 0.98*59.740565202/41.370 : 1.);
+                }
+                else {
+                    rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);
+                    rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);
+                }
                 const std::string data_obs_S_str = std::to_string(data_obs_S);
                 const std::string data_obs_UnD_str = std::to_string(data_obs_UnD);
                 const std::string rate_signal_S_str = std::to_string(rate_signal_S);
@@ -508,8 +518,12 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
         preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2017/";
         postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
     }
-    else if (yearOfRun == 2018){
+    else if (yearOfRun == 2018 && use2017as2018 == false){
         preamble = "/home/ppd/xxt18833/NMSSM/PATNTupler_18/macros/2018_histos";
+        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi60.root";
+    }
+    else if (yearOfRun == 2018 && use2017as2018 == true){
+        preamble = "/home/ppd/xxt18833/NMSSM/PATNTupler_18/macros/2018_histos/2017as2018";
         postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi60.root";
     }
     else{
@@ -526,7 +540,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
     
-    if (yearOfRun == 2018) {
+    if (yearOfRun == 2018 && use2017as2018 == false) {
         histoNameVec.push_back("mH70_mSusy1200");
         histoNameVec.push_back("mH70_mSusy2000");
         histoNameVec.push_back("mH70_mSusy2800");
