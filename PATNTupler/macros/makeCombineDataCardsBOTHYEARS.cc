@@ -178,6 +178,7 @@ int main(){
     }
 
     // loop through 2016, 2017 and 2018
+    int numYearsCount = 0;
     std::vector<unsigned int> yearOfRunVec = {2016, 2017, 2018};
     for (auto yearOfRun : yearOfRunVec){
 
@@ -221,7 +222,7 @@ int main(){
 
             std::cout << signal << " ::: " << yearOfRun << std::endl;
 
-            if (yearOfRun == 2016){
+            if (numYearsCount == 0){
                 const std::string dirExistCommand = "test -e " + outputDir;
                 const std::string makeDirCommand = "mkdir -p " + outputDir;
                 if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
@@ -231,9 +232,10 @@ int main(){
                 std::ofstream comboCommand;
                 comboCommand.open( Form("%scomboCommand.sh", outputDir.c_str()) );
                 std::string comboCommandStr = "combineCards.py ";
-                for (unsigned int i = 1; i < numberOfBins + 1; ++i) comboCommandStr += outputDir + "bin" + std::to_string(i) + "_2016.txt ";
-                for (unsigned int i = 1; i < numberOfBins + 1; ++i) comboCommandStr += outputDir + "bin" + std::to_string(i+numberOfBins) + "_2017.txt ";
-                for (unsigned int i = 1; i < numberOfBins + 1; ++i) comboCommandStr += outputDir + "bin" + std::to_string(i+2*numberOfBins) + "_2018.txt ";
+                for (unsigned int iYear = 0; iYear < yearOfRunVec.size(); ++iYear)
+                {
+                    for (unsigned int i = 1; i < numberOfBins + 1; ++i) comboCommandStr += outputDir + "bin" + std::to_string(i+iYear*numberOfBins) + "_" + std::to_string(yearOfRunVec.at(iYear)) + ".txt ";
+                }
                 comboCommandStr += "> " + outputDir + "allbins.txt\n";
                 comboCommand << comboCommandStr;
                 comboCommand.close();
@@ -287,8 +289,7 @@ int main(){
                 // write the data card
                 std::ofstream dataCard;
                 unsigned int binLabel = iBin;
-                if (yearOfRun == 2017) binLabel += numberOfBins;
-                else if (yearOfRun == 2018) binLabel += 2*numberOfBins;
+                binLabel += numYearsCount*numberOfBins;
                 dataCard.open( Form("%sbin%d_%d.txt", outputDir.c_str(),binLabel,yearOfRun) );
                 dataCard << "imax 2\n";
                 dataCard << "jmax " << mcbkVec[yearOfRun].size() + 1 << "\n";
@@ -468,6 +469,7 @@ int main(){
             } // closes loop through the search region bins
             std::cout << std::endl;
         } // closes loop through the different signal samples
+        ++numYearsCount;
     } // closes loop through yearOfRunVec elements
 
     std::cout << "*,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. " << std::endl;
