@@ -30,7 +30,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2017_94X/fatJetAmass_theFITS/fullKinematicCuts_antiDBT/ht1500to2500/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "plotting_compare_cuts"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
@@ -44,7 +44,7 @@ int main(int argc, char** argv){
     // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"DIAG_UP", "Loose"} };
     std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Loose","Off","Loose"} };
     std::vector<int> cut3_ak8Pt = {300};
-    std::vector<std::vector<int>> cut4_ht = { {1500,2500} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum)
+    std::vector<std::vector<int>> cut4_ht = { {1500,2500} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum) {1500,2500}, {2500,3500}, {3500,99999}
     std::vector<std::vector<int>> cut5_ak4Pt = { {300,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
 
@@ -52,19 +52,27 @@ int main(int argc, char** argv){
 
     // THREE: plot histogram settings
     
-    // double luminosity = 35.867; // 2016 DATASET (data plots should not be using this object)
-    double luminosity = 41.370; // 2017 DATASET
+    // double luminosity = 35.922; // 2016 DATASET (data plots should not be using this object)
+    // double luminosity = 41.529; // 2017 DATASET
+    double luminosity = 59.740565202; // 2018 DATASET
     
     std::string varToPlot = "fatJetA_softDropMassPuppi";
     // std::string varToPlot = "fatJetA_doubleBtagDiscrim";
     // std::string varToPlot = "fatJetA_p4.Pt()";
     // std::string varToPlot = "slimJetA_p4.Pt()";
     // std::string varToPlot = "ht";
+    // std::string varToPlot = "fatJetA_p4.Eta()";
+    // std::string varToPlot = "slimJetB_p4.Eta()";
+    // std::string varToPlot = "slimJetA_p4.Eta()";
     
     TH1D hTemplate("hTemplate", ";fatJetA SoftDropMass (GeV);fraction of events / bin", 88, 0, 220);
+    //TH1D hTemplate("hTemplate", ";fatJetA SoftDropMass (GeV);events / bin", 88, 0, 220);
     // TH1D hTemplate("hTemplate", ";fatJetA SoftDropMass (GeV);ratio", 40, 0, 200);
     // TH1D hTemplate("hTemplate", ";fatJetA doubleBtagDiscriminator;fraction of events / bin", 40, -1, 1);
     // TH1D hTemplate("hTemplate", ";fatJetA p_{T} (GeV);fraction of events / bin", 40, 0, 3000);
+    // TH1D hTemplate("hTemplate", ";fatJetA #eta;AU", 70, -3.5, 3.5);
+    // TH1D hTemplate("hTemplate", ";subleadingAK4Jet #eta;AU", 70, -3.5, 3.5);
+    // TH1D hTemplate("hTemplate", ";leadingAK4Jet #eta;AU", 70, -3.5, 3.5);
 
 
 
@@ -92,7 +100,7 @@ int main(int argc, char** argv){
         std::string makeDirCommand = "mkdir -p " + outputDir;
         if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
         std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_compareDifferentCuts.cc %s/%s__plotting_compareDifferentCuts.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
-        MacrosOnCondor::SubmitJob(outputDir.c_str(), "plotting_compareDifferentCuts", "/opt/ppd/scratch/xap79297/jobLogs/macros/");
+        MacrosOnCondor::SubmitJob(outputDir.c_str(), "plotting_compareDifferentCuts", "/opt/ppd/scratch/xxt18833/jobLogs/macros/");
         return 0;
     }
     else if (runInstructionString == "batchRUN"){
@@ -155,13 +163,13 @@ int main(int argc, char** argv){
 
 
                     // FOUR: sample info
-
+/*
                     // DATA
                     PlotEntry plotElementA = PlotEntry("Data", hTemplate, varToPlot.c_str()); // NO LUMI
                     // PlotEntry plotElementA = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str()); // NO LUMI
                     
                     // plotElementA.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/data16/JetHT_Run2016Total_ht1499plus/flatTree.root", cutToApply.c_str());
-                    plotElementA.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/data17/JetHT_Run2017TOTAL_ht1499plus/flatTree.root", cutToApply.c_str());
+                    plotElementA.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/JetHT_Run2017TOTAL/flatTree.root", cutToApply.c_str());
                     
                     plotElementA.NormalisePlot(); // OPTIONAL: toggle on or off
                     if (iCut2 == 0) plotElementA.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8])) + [9]*(x-[10]) + [11]*(x-[12])*(x-[12]) + [13]*(x-[14])*(x-[14])*(x-[14]) + [15]*(x-[16])*(x-[16])*(x-[16])*(x-[16])", 13, 220, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, 46);
@@ -175,9 +183,9 @@ int main(int argc, char** argv){
                     // plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1206);
                     // plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 120.4);
                     // plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 25.25);
-                    plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1005);
-                    plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 101.8);
-                    plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54);
+                    plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1005, "weight_combined");
+                    plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 101.8, "weight_combined");
+                    plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54, "weight_combined");
                     
                     plotElementB.NormalisePlot(); // OPTIONAL: toggle on or off
                     // if (iCut2 == 0) plotElementB.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8])) + [9]*(x-[10]) + [11]*(x-[12])*(x-[12]) + [13]*(x-[14])*(x-[14])*(x-[14]) + [15]*(x-[16])*(x-[16])*(x-[16])*(x-[16])", 13, 220, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, 46);
@@ -204,13 +212,70 @@ int main(int argc, char** argv){
                     // PlotEntry plotElement = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str(), luminosity);
                     // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/mH125p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.0091050*0.85*0.85);
                     // plotElement.NormalisePlot();
+*/
 
+                    std::string treepath = "/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/";
 
+                    // DATA
+                    PlotEntry plotElementA = PlotEntry("Data", hTemplate, varToPlot.c_str()); // NO LUMI
+                    // PlotEntry plotElementA = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str()); // NO LUMI
+                    
+                    plotElementA.AddInput((treepath+"JetHT_RunA/flatTree.root").c_str(), cutToApply.c_str());
+                    plotElementA.AddInput((treepath+"JetHT_RunB/flatTree.root").c_str(), cutToApply.c_str());
+                    plotElementA.AddInput((treepath+"JetHT_RunC/flatTree.root").c_str(), cutToApply.c_str());
+                    plotElementA.AddInput((treepath+"JetHT_RunD/flatTree.root").c_str(), cutToApply.c_str());
+                    
+                    plotElementA.NormalisePlot(); // OPTIONAL: toggle on or off
+                    if (iCut2 == 0) plotElementA.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8])) + [9]*(x-[10]) + [11]*(x-[12])*(x-[12]) + [13]*(x-[14])*(x-[14])*(x-[14]) + [15]*(x-[16])*(x-[16])*(x-[16])*(x-[16])", 13, 220, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, 46);
+                    // else plotElementA.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8])) + [9]*(x-[10]) + [11]*(x-[12])*(x-[12]) + [13]*(x-[14])*(x-[14])*(x-[14]) + [15]*(x-[16])*(x-[16])*(x-[16])*(x-[16])", 13, 220, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, 38);
+                    
+
+                    // QCD
+                    PlotEntry plotElementB = PlotEntry("QCD MC", hTemplate, varToPlot.c_str(), luminosity); // note that the luminosity value doesn't matter IF we will normalise later
+                    // PlotEntry plotElementB = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str(), luminosity); // note that the luminosity value doesn't matter IF we will normalise later
+                    
+                    plotElementB.AddInput((treepath+"QCD_HT1000to1500_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 1005, "weight_combined");
+                    plotElementB.AddInput((treepath+"QCD_HT1500to2000_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 101.8, "weight_combined");
+                    plotElementB.AddInput((treepath+"QCD_HT2000toInf_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 20.54, "weight_combined");
+                    
+                    plotElementB.NormalisePlot(); // OPTIONAL: toggle on or off
+                    // if (iCut2 == 0) plotElementB.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8])) + [9]*(x-[10]) + [11]*(x-[12])*(x-[12]) + [13]*(x-[14])*(x-[14])*(x-[14]) + [15]*(x-[16])*(x-[16])*(x-[16])*(x-[16])", 13, 220, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, 46);
+                    plotElementB.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8])) + [9]*(x-[10]) + [11]*(x-[12])*(x-[12]) + [13]*(x-[14])*(x-[14])*(x-[14]) + [15]*(x-[16])*(x-[16])*(x-[16])*(x-[16])", 13, 220, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, 38);
+
+/*
+                    // ZJets
+                    PlotEntry plotElementC = PlotEntry("ZJets", hTemplate, varToPlot.c_str(), luminosity);
+                    plotElementC.AddInput((treepath+"ZJetsToQQ_HT-800toInf_qc19_4j_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 7, "weight_combined");
+                    plotElementC.NormalisePlot(); // OPTIONAL: toggle on or off
+
+                    // WJets
+                    PlotEntry plotElementD = PlotEntry("WJets", hTemplate, varToPlot.c_str(), luminosity);
+                    plotElementD.AddInput((treepath+"WJetsToQQ_HT-800toInf_qc19_3j_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 16, "weight_combined");
+                    plotElementD.NormalisePlot(); // OPTIONAL: toggle on or off
+
+                    // TTJets
+                    double PDGhadBF = 67.41/100.;
+                    PlotEntry plotElementE = PlotEntry("TTJets", hTemplate, varToPlot.c_str(), luminosity);
+                    plotElementE.AddInput((treepath+"TTToHadronic_TuneCP5_13TeV-powheg-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 831.76*PDGhadBF*PDGhadBF, "weight_combined");
+                    plotElementE.AddInput((treepath+"TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 831.76*PDGhadBF*(1.-PDGhadBF)*2., "weight_combined");
+                    plotElementE.AddInput((treepath+"TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 831.76*(1.-PDGhadBF)*(1.-PDGhadBF), "weight_combined");
+                    plotElementE.NormalisePlot(); // OPTIONAL: toggle on or off
+*/
+                    // Signal
+                    // PlotEntry plotElement = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str(), luminosity);
+                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/mH125p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.0091050*0.85*0.85, "weight_combined");
+                    // plotElement.NormalisePlot();
 
 
 
                     plotEntryVec_MC.push_back(plotElementA);
                     plotEntryVec_MC.push_back(plotElementB);
+                    /*
+                    plotEntryVec_MC.push_back(plotElementC);
+                    plotEntryVec_MC.push_back(plotElementD);
+                    plotEntryVec_MC.push_back(plotElementE);
+                    */
+
                     // plotEntryVec_MC.push_back(plotElement);
                     // plotEntryVec_Data.push_back(plotElementB);
 
