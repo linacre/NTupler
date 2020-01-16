@@ -169,17 +169,30 @@ namespace QcdSidebandCorr{
 			corrVec.push_back(1.06910715931);
 			corrVec.push_back(1.05273356677);
 
-			// ht3500toInf - calculation (mc)
-			corrVec.push_back(1.68721755451);
-			corrVec.push_back(0.655192797454);
-			corrVec.push_back(0.672116965034);
-			corrVec.push_back(0.735130001363);
-			corrVec.push_back(0.814937934144);
-			corrVec.push_back(0.898663386375);
-			corrVec.push_back(0.978877942795);
-			corrVec.push_back(1.05080225636);
-			corrVec.push_back(1.1068970932);
-			corrVec.push_back(1.12798370143);
+			// ht3500toInf - calculation (mc, wide bins)
+			// corrVec.push_back(1.68721755451);
+			// corrVec.push_back(0.655192797454);
+			// corrVec.push_back(0.672116965034);
+			// corrVec.push_back(0.735130001363);
+			// corrVec.push_back(0.814937934144);
+			// corrVec.push_back(0.898663386375);
+			// corrVec.push_back(0.978877942795);
+			// corrVec.push_back(1.05080225636);
+			// corrVec.push_back(1.1068970932);
+			// corrVec.push_back(1.12798370143);
+
+			// ht3500toInf - calculation (data, normal bins)
+			corrVec.push_back(1.56566465499);
+			corrVec.push_back(0.649711110644);
+			corrVec.push_back(0.717285197451);
+			corrVec.push_back(0.792007490115);
+			corrVec.push_back(0.856618312948);
+			corrVec.push_back(0.910501512562);
+			corrVec.push_back(0.954650218367);
+			corrVec.push_back(0.988535899332);
+			corrVec.push_back(1.0081258921);
+			corrVec.push_back(1.00411045607);
+
 
 			if (binIndex > 0 && binIndex < corrVec.size() + 1 ) return corrVec[binIndex - 1];
 			else{
