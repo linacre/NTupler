@@ -344,20 +344,21 @@ int main(int argc, char** argv){
 
                     else if(sampleString.BeginsWith("TTJets")) {
                         double PDGhadBF = 67.41/100.;
-                        if(sampleString=="TTJets2L" || sampleString=="TTJetsALL") plotEntry.AddInput((treepath+"TTToHadronic_TuneCP5_13TeV-powheg-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 831.76*PDGhadBF*PDGhadBF, SF_weight.c_str());
+                        if(sampleString=="TTJets0L" || sampleString=="TTJetsALL") plotEntry.AddInput((treepath+"TTToHadronic_TuneCP5_13TeV-powheg-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 831.76*PDGhadBF*PDGhadBF, SF_weight.c_str());
                         if(sampleString=="TTJets1L" || sampleString=="TTJetsALL") plotEntry.AddInput((treepath+"TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 831.76*PDGhadBF*(1.-PDGhadBF)*2., SF_weight.c_str());
-                        if(sampleString=="TTJets0L" || sampleString=="TTJetsALL") plotEntry.AddInput((treepath+"TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 831.76*(1.-PDGhadBF)*(1.-PDGhadBF), SF_weight.c_str());
+                        if(sampleString=="TTJets2L" || sampleString=="TTJetsALL") plotEntry.AddInput((treepath+"TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 831.76*(1.-PDGhadBF)*(1.-PDGhadBF), SF_weight.c_str());
                     }
 
                     else if(sampleString=="WJets") {
-                        plotEntry.AddInput((treepath+"WJetsToQQ_HT-800toInf_qc19_3j_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 16, SF_weight.c_str());
+                        plotEntry.AddInput((treepath+"WJetsToQQ_HT-800toInf_qc19_3j_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 34.00, SF_weight.c_str());
                     }
 
                     else if(sampleString=="ZJets") {
-                        plotEntry.AddInput((treepath+"ZJetsToQQ_HT-800toInf_qc19_4j_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 7, SF_weight.c_str());
+                        plotEntry.AddInput((treepath+"ZJetsToQQ_HT-800toInf_qc19_4j_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 18.69, SF_weight.c_str());
                     }
 
 
+                    // SIGNAL 2018
                     else if(sampleString=="mH70_mSusy1200") {
                         plotEntry.AddInput((treepath+"nmssmSignalCascadeV05_mH70p0_mSusy1200/flatTree.root").c_str(), cutToApply.c_str(), 0.4951000*0.840*0.840, SF_weight.c_str());
                     }
@@ -368,6 +369,25 @@ int main(int argc, char** argv){
                         plotEntry.AddInput((treepath+"nmssmSignalCascadeV05_mH70p0_mSusy2800/flatTree.root").c_str(), cutToApply.c_str(), 0.0002753*0.840*0.840, SF_weight.c_str());
                     }
 
+/*
+                    // SIGNAL 2017 as 2018
+                    std::string SF_weight_copy = SF_weight;
+                    SF_weight_copy += "*( nPU > 80 ? 0.944603013 : 1.007035333 - nPU*0.000780404 )";
+                    std::cout<<"SF_weight_copy: "<<SF_weight_copy<<std::endl;
+
+
+                    if(sampleString=="mH70_mSusy1200") {
+                        plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.4951000*0.840*0.840, SF_weight_copy.c_str());
+                    }
+                    else if(sampleString=="mH70_mSusy2000") {
+                        plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.0091050*0.840*0.840, SF_weight_copy.c_str());
+                    }
+                    else if(sampleString=="mH70_mSusy2800") {
+                        plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy2800p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.0002753*0.840*0.840, SF_weight_copy.c_str());
+                    }
+
+                    //plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight_copy.c_str());
+*/
 
                     // 2018 GOLDEN JSON DATASET
                     else if(sampleString=="data") {
