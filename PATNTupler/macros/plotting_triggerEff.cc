@@ -25,13 +25,14 @@ int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // ONE: save info
-    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_04_16/2016_80X/triggerStudiesV2/singleMuon2016/normalBinning_muonMaxPtLessThan100/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_04_16/2016_80X/triggerStudiesV2/singleMuon2016/normalBinning_muonMaxPtLessThan100/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "TrigEff"; // where we are going to save the output plots (should include the samples name, and any important features)
 
     // TWO: plot histogram settings
     // TH1D hTemplate("hTemplate", ";offline H_{T} (GeV);efficiency", 100, 0, 5000);
     std::vector<double> customBinning;
     // customBinning = {0, 1500, 10000};
-    for(double binLowerEdge=  0.0; binLowerEdge< 1500.0; binLowerEdge+= 50.0) customBinning.push_back(binLowerEdge);
+    for(double binLowerEdge=  500.0; binLowerEdge< 1500.0; binLowerEdge+= 50.0) customBinning.push_back(binLowerEdge);
     // for(double binLowerEdge=  1200.0; binLowerEdge< 1500.0; binLowerEdge+= 50.0) customBinning.push_back(binLowerEdge);
     for(double binLowerEdge=  1500.0; binLowerEdge< 2000.0; binLowerEdge+= 100.0) customBinning.push_back(binLowerEdge);
     for(double binLowerEdge=  2000.0; binLowerEdge< 2800.0; binLowerEdge+= 200.0) customBinning.push_back(binLowerEdge);
@@ -40,8 +41,9 @@ int main(int argc, char** argv){
     TH1D hTemplate("hTemplate", ";offline H_{T} (GeV);efficiency", customBinning.size()-1, &(customBinning)[0]);
 
     // THREE: luminosity (if you need it)
-    const double luminosity = 35.867; // 2016 DATASET
-    // const double luminosity = 41.370; // 2017 DATASET
+    // const double luminosity = 35.922; // 2016 DATASET
+    const double luminosity = 41.529; // 2017 DATASET
+    // const double luminosity = 59.740565202; // 2018 DATASET
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,9 +60,9 @@ int main(int argc, char** argv){
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
     // THREE: make effiencies
-    PlotEntry plot_ratio1 = PlotEntry("Run2016", hTemplate, "ht");
-    plot_ratio1.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/data/SingleMuon2016TOTAL/flatTree.root", "muon_maxPt < 100.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
-    plotVec.push_back(plot_ratio1);
+    // PlotEntry plot_ratio1 = PlotEntry("Run2016", hTemplate, "ht");
+    // plot_ratio1.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/SingleMuon_Run2016TOTAL/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    // plotVec.push_back(plot_ratio1);
 
     // PlotEntry plot_ratio2 = PlotEntry("Run2016H", hTemplate, "ht");
     // plot_ratio2.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/data/SingleMuon_Run2016H-03Feb2017_bothVersionsCombined/flatTree.root", "", "trgDecision==1");
@@ -80,9 +82,17 @@ int main(int argc, char** argv){
 
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
 
-    // PlotEntry plot_ratio6 = PlotEntry("Run2017", hTemplate, "ht");
-    // plot_ratio6.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/data17/SingleMuon_Run2017TOTAL/flatTree.root", "muon_maxPt < 100.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
-    // plotVec.push_back(plot_ratio6);
+
+    PlotEntry plot_ratio6 = PlotEntry("Run2017", hTemplate, "ht");
+    plot_ratio6.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/SingleMuon_Run2017TOTAL/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    plotVec.push_back(plot_ratio6);
+
+    // PlotEntry plot_ratio7 = PlotEntry("Run2018", hTemplate, "ht");
+    // plot_ratio7.AddInputEfficiency("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/SingleMuon_RunA/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    // plot_ratio7.AddInputEfficiency("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/SingleMuon_RunB/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    // plot_ratio7.AddInputEfficiency("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/SingleMuon_RunC/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    // plot_ratio7.AddInputEfficiency("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/SingleMuon_RunD/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    // plotVec.push_back(plot_ratio7);
 
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
