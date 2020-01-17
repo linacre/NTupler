@@ -1017,6 +1017,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	double initialMin = 0.0;
 
 	// max = 2.1; // HACK maxima
+	// max = 1.82; // HACK maxima
 	double graphMaxLin = 1.12 * max;
 	double graphMaxLog = log10(max/min) * max;
 	double graphMinLin = 0.0;
