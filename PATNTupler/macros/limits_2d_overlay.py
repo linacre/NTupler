@@ -32,17 +32,21 @@ import argparse as a
 
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600, 2800]
 mHiggsVec = [30, 35, 40, 50, 70, 90, 110, 125]
-inputDirStandard = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/"
-inputDirComparison = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/noIsrReweight/"
-outputDir = inputDirComparison + "/a_limit_plot_comparison_intp1_noObs/"
+#inputDirStandard = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/"
+#inputDirComparison = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/noIsrReweight/"
+inputDirStandard = "combinedDataCards_xsec_correlated_jec_uncorrelated_2017as2018_0.98_processed"
+inputDirComparison = "combinedDataCards_xsec_correlated_jec_uncorrelated_2017as2018_0.98_processed/expected"
+outputDir = "limits_2d_overlay"
+# outputDir = inputDirComparison + "/a_limit_plot_comparison_intp1_noObs/"
 # outputDir = inputDirComparison + "/a_limit_plot_comparison_intp1_withObs/"
 
 standardLabel = ""
-comparsionLabel = "(No ISR Sys)"
+#comparsionLabel = "(No ISR Sys)"
+comparsionLabel = "(noFitAsimov)"
 legendTextSize = 13.0
 
-plotObserved = False
-plotTitle = '77.5 fb$^{-1}$ (13 TeV)'
+plotObserved = True
+plotTitle = '137.2 fb$^{-1}$ (13 TeV)'
 # maximally squeeze the z-axis
 minMu = -2.10
 maxMu = 1.35
