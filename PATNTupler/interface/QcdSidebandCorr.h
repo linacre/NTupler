@@ -145,6 +145,18 @@ namespace QcdSidebandCorr{
 
 			std::vector<double> corrVec;
 
+			// ht1500to2500 - normal method
+			// corrVec.push_back(1.6616815612);
+			// corrVec.push_back(0.7705114255);
+			// corrVec.push_back(0.8005140654);
+			// corrVec.push_back(0.8899382492);
+			// corrVec.push_back(1.0556079171);
+			// corrVec.push_back(1.1144646925);
+			// corrVec.push_back(1.1893203883);
+			// corrVec.push_back(1.1813493769);
+			// corrVec.push_back(1.1496488385);
+			// corrVec.push_back(1.0994397759);
+
 			// ht1500to2500 - calculation (data)
 			corrVec.push_back(1.53428987043);
 			corrVec.push_back(0.768011954491);
@@ -353,16 +365,16 @@ namespace QcdSidebandCorr{
 			std::vector<double> corrErrVec;
 
 			// ht1500to2500 - normal method
-			// corrErrVec.push_back(0.0345542152);
-			// corrErrVec.push_back(0.0147509712);
-			// corrErrVec.push_back(0.0176379321);
-			// corrErrVec.push_back(0.0191728313);
-			// corrErrVec.push_back(0.0248291208);
-			// corrErrVec.push_back(0.0295094637);
-			// corrErrVec.push_back(0.0332982690);
-			// corrErrVec.push_back(0.0386168015);
-			// corrErrVec.push_back(0.0399156117);
-			// corrErrVec.push_back(0.0458386330);
+			// corrErrVec.push_back(0.0284016012);
+			// corrErrVec.push_back(0.0121837549);
+			// corrErrVec.push_back(0.0143463255);
+			// corrErrVec.push_back(0.0174777547);
+			// corrErrVec.push_back(0.0226117290);
+			// corrErrVec.push_back(0.0259033612);
+			// corrErrVec.push_back(0.0300473700);
+			// corrErrVec.push_back(0.0332777229);
+			// corrErrVec.push_back(0.0365395465);
+			// corrErrVec.push_back(0.0402043763);
 
 			// ht1500to2500 - calculation (data)
 			corrErrVec.push_back(0.15);
