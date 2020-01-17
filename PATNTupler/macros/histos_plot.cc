@@ -39,8 +39,8 @@ int main(){
     const std::string outputDir = "./histos_plot_2018/"; // where we are going to save the output plots (should include the samples name, and any important features)
     //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/oneDimensionRepresentation/DATA/control/predNew_calcForHighestTwoHtBins/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
-    // const double luminosity = 35.867; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
-    // const double luminosity = 41.370; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
+    // const double luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
+    // const double luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
     const double luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
   
 
@@ -110,7 +110,7 @@ int main(){
 
 
     // TWO: make plot aesthetics and saving
-    
+
     std::vector<TH1D*> indiHistoVec = {h16_["S_control_data"], h16_["predNew_control_data"]};
     // std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_ZJets"], h16_["S_tag_TTJets"], h16_["S_tag_QCD"]};
 
