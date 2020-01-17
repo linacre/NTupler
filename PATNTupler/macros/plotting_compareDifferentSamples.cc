@@ -70,9 +70,9 @@ int main(int argc, char** argv){
     // TH1D hTemplate("hTemplate", ";fatJetA doubleBtagDiscriminator;fraction of events / bin", 20, -1, 1);
     TH1D hTemplate("hTemplate", ";fatJetA SoftDropMass (GeV);events / bin", 40, 0, 200);
     // TH1D hTemplate("hTemplate", ";fatJetA SoftDropMass (GeV);fraction of events / bin", 40, 0, 200);
-    // TH1D hTemplate("hTemplate", ";H_{T} (GeV);fraction of events / bin", 90, 0, 9000);
-    // TH1D hTemplate("hTemplate", ";fatJetA p_{T} (GeV);fraction of events / bin", 60, 0, 3000);
-    // TH1D hTemplate("hTemplate", ";leadingAK4Jet p_{T} (GeV);fraction of events / bin", 60, 0, 3000);
+    // TH1D hTemplate("hTemplate", ";fatJetA p_{T} (GeV);events / bin", 60, 0, 3000);
+    // TH1D hTemplate("hTemplate", ";leadingAK4Jet p_{T} (GeV);events / bin", 60, 0, 3000);
+    // TH1D hTemplate("hTemplate", ";H_{T} (GeV);events / bin", 90, 0, 9000);
     // TH1D hTemplate("hTemplate", ";nPU;fraction of events / bin", 90, 0, 90);
     // TH1D hTemplate("hTemplate", ";nGluino;fraction of events / bin", 3, 0, 3);
     // TH1D hTemplate("hTemplate", ";subleadingAK4Jet #eta;events / bin", 70, -3.5, 3.5);
