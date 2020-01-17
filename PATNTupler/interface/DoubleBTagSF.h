@@ -644,7 +644,7 @@ namespace DoubleBTagSF{
 	}
 
 	// ----------------------------------------------------------//
-	// TODO: these are not yet available. Set to unity for now. But should not be necessary, since we use data-driven ttbar estimate. //
+	// TODO: these are not yet available. Set to unity for now. But effect will be negligible compared to the 50% ttbar xsec uncertainty. //
 	// ----------------------------------------------------------//
 
 	double getLooseScaleFactor_ttbar_2018(const double& fatJet_pt)
