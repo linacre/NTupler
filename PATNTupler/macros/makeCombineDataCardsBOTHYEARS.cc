@@ -59,7 +59,8 @@ int main(){
 
     // ONE: save info (signal specific directories beneath this)
     //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
-    const std::string outputDirGeneral = "combinedDataCards";
+    // const std::string outputDirGeneral = "combinedDataCards_final_2018";
+    const std::string outputDirGeneral = "combinedDataCards_final_2017as2018_0.98_allSig";
   
 
 
@@ -90,18 +91,19 @@ int main(){
                                             "mH30_mSusy2400", "mH35_mSusy2400", "mH40_mSusy2400", "mH50_mSusy2400", "mH70_mSusy2400", "mH90_mSusy2400", "mH110_mSusy2400", "mH125_mSusy2400",
                                             "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH70_mSusy2600", "mH90_mSusy2600", "mH110_mSusy2600", "mH125_mSusy2600", 
                                             "mH30_mSusy2800", "mH35_mSusy2800", "mH40_mSusy2800", "mH50_mSusy2800", "mH70_mSusy2800", "mH90_mSusy2800", "mH110_mSusy2800", "mH125_mSusy2800", 
-                                        };
+//                                        };
+//    }
+//     std::vector<std::string> signalVec = { // the different signal samples you wish to use: SQUARK PRODUCTION ONLY
+//                                             // "mH30_mSquark800",                                       "mH50_mSquark800",  "mH70_mSquark800",  "mH90_mSquark800",  "mH110_mSquark800",  "mH125_mSquark800",
+                                             "mH30_mSquark1200", "mH35_mSquark1200", "mH40_mSquark1200", "mH50_mSquark1200", "mH70_mSquark1200", "mH90_mSquark1200", "mH110_mSquark1200", "mH125_mSquark1200",
+                                             "mH30_mSquark1600", "mH35_mSquark1600", "mH40_mSquark1600", "mH50_mSquark1600", "mH70_mSquark1600", "mH90_mSquark1600", "mH110_mSquark1600", "mH125_mSquark1600",
+                                             "mH30_mSquark2000", "mH35_mSquark2000", "mH40_mSquark2000", "mH50_mSquark2000", "mH70_mSquark2000", "mH90_mSquark2000", "mH110_mSquark2000", "mH125_mSquark2000",
+                                             "mH30_mSquark2200", "mH35_mSquark2200", "mH40_mSquark2200", "mH50_mSquark2200", "mH70_mSquark2200", "mH90_mSquark2200", "mH110_mSquark2200", "mH125_mSquark2200",
+                                             "mH30_mSquark2400", "mH35_mSquark2400", "mH40_mSquark2400", "mH50_mSquark2400", "mH70_mSquark2400", "mH90_mSquark2400", "mH110_mSquark2400", "mH125_mSquark2400",
+                                             "mH30_mSquark2600", "mH35_mSquark2600", "mH40_mSquark2600", "mH50_mSquark2600", "mH70_mSquark2600", "mH90_mSquark2600", "mH110_mSquark2600", "mH125_mSquark2600", 
+                                             "mH30_mSquark2800", "mH35_mSquark2800", "mH40_mSquark2800", "mH50_mSquark2800", "mH70_mSquark2800", "mH90_mSquark2800", "mH110_mSquark2800", "mH125_mSquark2800", 
+                                         };                                        
     }
-    // std::vector<std::string> signalVec = { // the different signal samples you wish to use: SQUARK PRODUCTION ONLY
-    //                                         // "mH30_mSquark800",                                       "mH50_mSquark800",  "mH70_mSquark800",  "mH90_mSquark800",  "mH110_mSquark800",  "mH125_mSquark800",
-    //                                         "mH30_mSquark1200", "mH35_mSquark1200", "mH40_mSquark1200", "mH50_mSquark1200", "mH70_mSquark1200", "mH90_mSquark1200", "mH110_mSquark1200", "mH125_mSquark1200",
-    //                                         "mH30_mSquark1600", "mH35_mSquark1600", "mH40_mSquark1600", "mH50_mSquark1600", "mH70_mSquark1600", "mH90_mSquark1600", "mH110_mSquark1600", "mH125_mSquark1600",
-    //                                         "mH30_mSquark2000", "mH35_mSquark2000", "mH40_mSquark2000", "mH50_mSquark2000", "mH70_mSquark2000", "mH90_mSquark2000", "mH110_mSquark2000", "mH125_mSquark2000",
-    //                                         "mH30_mSquark2200", "mH35_mSquark2200", "mH40_mSquark2200", "mH50_mSquark2200", "mH70_mSquark2200", "mH90_mSquark2200", "mH110_mSquark2200", "mH125_mSquark2200",
-    //                                         "mH30_mSquark2400", "mH35_mSquark2400", "mH40_mSquark2400", "mH50_mSquark2400", "mH70_mSquark2400", "mH90_mSquark2400", "mH110_mSquark2400", "mH125_mSquark2400",
-    //                                         "mH30_mSquark2600", "mH35_mSquark2600", "mH40_mSquark2600", "mH50_mSquark2600", "mH70_mSquark2600", "mH90_mSquark2600", "mH110_mSquark2600", "mH125_mSquark2600", 
-    //                                         "mH30_mSquark2800", "mH35_mSquark2800", "mH40_mSquark2800", "mH50_mSquark2800", "mH70_mSquark2800", "mH90_mSquark2800", "mH110_mSquark2800", "mH125_mSquark2800", 
-    //                                     };                                        
     std::map<unsigned int, std::vector<std::string>> mcbkVec;
     mcbkVec[2016] = {"TTJets", "ZJets", "WJets"}; // the 2016 MC background samples
     mcbkVec[2017] = {"TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}; // the 2017 MC background samples
@@ -458,6 +460,7 @@ int main(){
                 double corrRatioError = QcdSidebandCorr::GetCorrErr(iBin, yearOfRun);
                 WriteBlock(Form("ch%d_F", binLabel), otherColSize, dataCard);
                 dataCard << "param " << std::to_string(corrRatio) << " " << std::to_string(corrRatioError) << "\n";
+                // TODO: re-add the 10% extra here? 
                 // WriteBlock(Form("ch%d_abcdErr", binLabel), otherColSize, dataCard);
                 // dataCard << "param 1.000000 0.100000\n";
                 WriteBlock(Form("ch%d_alpha", binLabel), otherColSize, dataCard);

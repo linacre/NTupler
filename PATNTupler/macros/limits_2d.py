@@ -41,6 +41,8 @@ outputDir = "limits_2d"
 
 plotObserved = True
 plotTitle = '137.2 fb$^{-1}$ (13 TeV)'
+# plotTitle = '77.5 fb$^{-1}$ (13 TeV)'
+# plotTitle = '59.7 fb$^{-1}$ (13 TeV)'
 # maximally squeeze the z-axis
 minMu = -2.10
 maxMu = 1.35
@@ -64,6 +66,7 @@ for mSusy in mSusyVec:
     for mHiggs in mHiggsVec:
 
         rootFile = "higgsCombineTest.AsymptoticLimits.mH" + str(mHiggs) + ".mSusy" + str(mSusy) + ".root"
+        #rootFile = "higgsCombineTest.AsymptoticLimits.mH" + str(mHiggs) + ".mSquark" + str(mSusy) + ".root"
         rootFile = os.path.join(inputDir, rootFile)
         if os.path.isfile(rootFile) == False:
             print ""
@@ -239,3 +242,4 @@ plt.legend(loc='upper left')
 
 plt.show()
 plt.savefig("%s/limit_plot.pdf" % outputDir)
+#plt.savefig("%s/limit_plot_squark.pdf" % outputDir)
