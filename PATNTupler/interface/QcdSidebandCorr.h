@@ -145,7 +145,7 @@ namespace QcdSidebandCorr{
 
 			std::vector<double> corrVec;
 
-			// ht1500to2500 - normal method
+			// ht1500to2500 - normal method // old numbers
 			// corrVec.push_back(1.6616815612);
 			// corrVec.push_back(0.7705114255);
 			// corrVec.push_back(0.8005140654);
@@ -158,30 +158,30 @@ namespace QcdSidebandCorr{
 			// corrVec.push_back(1.0994397759);
 
 			// ht1500to2500 - calculation (data)
-			corrVec.push_back(1.53428987043);
-			corrVec.push_back(0.768011954491);
-			corrVec.push_back(0.874103679037);
-			corrVec.push_back(0.941439829979);
-			corrVec.push_back(0.99046956522);
-			corrVec.push_back(1.03390640814);
-			corrVec.push_back(1.0790902241);
-			corrVec.push_back(1.13073048745);
-			corrVec.push_back(1.19061412987);
-			corrVec.push_back(1.25165417934);
+			corrVec.push_back(1.53495664724);
+			corrVec.push_back(0.767780874);
+			corrVec.push_back(0.873208676934);
+			corrVec.push_back(0.9400173019);
+			corrVec.push_back(0.988626023141);
+			corrVec.push_back(1.03156834113);
+			corrVec.push_back(1.07601880112);
+			corrVec.push_back(1.12650434353);
+			corrVec.push_back(1.18463262656);
+			corrVec.push_back(1.24346002494);
 
 			// ht2500to3500 - calculation (data)
-			corrVec.push_back(1.42830684039);
-			corrVec.push_back(0.670927376897);
-			corrVec.push_back(0.793705440783);
-			corrVec.push_back(0.882686886776);
-			corrVec.push_back(0.944992064498);
-			corrVec.push_back(0.991526669366);
-			corrVec.push_back(1.02832056413);
-			corrVec.push_back(1.05609842908);
-			corrVec.push_back(1.06910715931);
-			corrVec.push_back(1.05273356677);
+			corrVec.push_back(1.4384092221);
+			corrVec.push_back(0.675903235154);
+			corrVec.push_back(0.795128249044);
+			corrVec.push_back(0.880664486917);
+			corrVec.push_back(0.940808471888);
+			corrVec.push_back(0.986044340116);
+			corrVec.push_back(1.02201595243);
+			corrVec.push_back(1.04938927876);
+			corrVec.push_back(1.06283519632);
+			corrVec.push_back(1.0488302415);
 
-			// ht3500toInf - calculation (mc, wide bins)
+			// ht3500toInf - calculation (mc, wide bins) // old numbers
 			// corrVec.push_back(1.68721755451);
 			// corrVec.push_back(0.655192797454);
 			// corrVec.push_back(0.672116965034);
@@ -194,17 +194,16 @@ namespace QcdSidebandCorr{
 			// corrVec.push_back(1.12798370143);
 
 			// ht3500toInf - calculation (data, normal bins)
-			corrVec.push_back(1.56566465499);
-			corrVec.push_back(0.649711110644);
-			corrVec.push_back(0.717285197451);
-			corrVec.push_back(0.792007490115);
-			corrVec.push_back(0.856618312948);
-			corrVec.push_back(0.910501512562);
-			corrVec.push_back(0.954650218367);
-			corrVec.push_back(0.988535899332);
-			corrVec.push_back(1.0081258921);
-			corrVec.push_back(1.00411045607);
-
+			corrVec.push_back(1.54338252847);
+			corrVec.push_back(0.638023080523);
+			corrVec.push_back(0.711137631263);
+			corrVec.push_back(0.792151570886);
+			corrVec.push_back(0.861705324027);
+			corrVec.push_back(0.918924397065);
+			corrVec.push_back(0.965100262833);
+			corrVec.push_back(0.999898919691);
+			corrVec.push_back(1.01900984127);
+			corrVec.push_back(1.01216641175);
 
 			if (binIndex > 0 && binIndex < corrVec.size() + 1 ) return corrVec[binIndex - 1];
 			else{
