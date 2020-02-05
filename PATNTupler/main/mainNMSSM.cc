@@ -999,7 +999,7 @@ int main(int argc, char** argv){
 				if (muon.pt() > muon_maxPt) muon_maxPt = muon.pt();
 			}
 
-			// HT calculation: Only consider jets with |eta| < 3.0, pt > 40.0
+			// HT calculation: Only consider jets with |eta| < 2.4, pt > 40.0
 			double ht = 0.0;
 			double ht_jecAK4UncUp = 0.0;
 			double ht_jecAK4UncDown = 0.0;
@@ -1011,10 +1011,10 @@ int main(int argc, char** argv){
 				if (isJetLooseID(jet)==false)
 					continue;
 
-				if ( jet.pt()*(jet.chargedEmEnergyFraction()+jet.neutralEmEnergyFraction()) > 30.0 && fabs(jet.eta()) > 2.25 && fabs(jet.eta()) < 3.00)
+				if ( jet.pt()*(jet.chargedEmEnergyFraction()+jet.neutralEmEnergyFraction()) > 30.0 && fabs(jet.eta()) > 2.25 && fabs(jet.eta()) < 2.40)
 					nPrefireCandidates++;
 
-				if ( fabs(jet.eta()) <= 3.0 ){
+				if ( fabs(jet.eta()) <= 2.4 ){
 
 					if ( jet.pt() >= 40.0 ) ht += jet.pt();
 					if ( jet.pt() * ( 1.0 + jet.jecUncertainty() ) >= 40.0 ) ht_jecAK4UncUp += jet.pt() * ( 1.0 + jet.jecUncertainty() );
