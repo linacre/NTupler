@@ -31,7 +31,7 @@ for i in range (0, len(keys)):
     os.system("sed -i 's:987654321.0:%s:g' histos_create.cc" % squarkSamples[keys[i]][0])
     # os.system("cat histos_create.cc") # for testing
     os.system("gmake histos_create")
-    os.system("./histos_create batch")
+    os.system("./histos_create batch signal")
     print
     print
     print

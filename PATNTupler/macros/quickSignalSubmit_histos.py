@@ -39,7 +39,7 @@ if sys.argv[1] == "2016":
         os.system("sed -i 's:987654321.0:%s:g' histos_create.cc" % signalSamples16[keys[i]][0])
         # os.system("cat histos_create.cc") # for testing
         os.system("gmake histos_create")
-        os.system("./histos_create batch")
+        os.system("./histos_create batch signal")
         print
         print
         print
@@ -69,7 +69,7 @@ elif sys.argv[1] == "2017":
         os.system("sed -i 's:987654321.0:%s:g' histos_create.cc" % signalSamples17[keys[i]][0])
         # os.system("cat histos_create.cc") # for testing
         os.system("gmake histos_create")
-        os.system("./histos_create batch")
+        os.system("./histos_create batch signal")
         print
         print
         print
