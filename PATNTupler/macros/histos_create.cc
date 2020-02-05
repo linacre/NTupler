@@ -70,8 +70,9 @@ int main(int argc, char** argv){
     TString sampleString(argv[2]?argv[2]:"QCD");
 
     // ONE: save info
-    //std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2016/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
-    std::string outputDir = "histos_"+std::string(sampleString); // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir;
+    if (sampleString == "signal") outputDir = "/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/histos_2020_02_05/run2018/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    else outputDir = "histos_"+std::string(sampleString); // where we are going to save the output plots (should include the samples name + binning maybe)
     std::cout<<"Using outputDir "<<outputDir<<std::endl;
 
 
@@ -127,6 +128,7 @@ int main(int argc, char** argv){
 
     std::vector<std::string> systematicNameVec_temp;
     if(sampleString=="data" || sampleString=="QCD") systematicNameVec_temp = systematicNameVec_nosys;
+    else if(sampleString=="signal") systematicNameVec_temp = systematicNameVec_centralsignal;
     else if(sampleString.BeginsWith("TTJets")) systematicNameVec_temp = systematicNameVec_ttjets;
     else if(sampleString.EndsWith("Jets")) systematicNameVec_temp = systematicNameVec_vjets;
     else if(sampleString.Contains("mH")) systematicNameVec_temp = systematicNameVec_centralsignal;
@@ -334,7 +336,7 @@ int main(int argc, char** argv){
 
                     // 2018 (10_2X)
 
-                    std::string treepath = "/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/";
+                    std::string treepath = "/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht/";
 
                     if(sampleString=="QCD") {
                         plotEntry.AddInput((treepath+"QCD_HT1000to1500_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 1005, SF_weight.c_str());
@@ -396,6 +398,14 @@ int main(int argc, char** argv){
                         plotEntry.AddInput((treepath+"JetHT_RunC/flatTree.root").c_str(), cutToApply.c_str());
                         plotEntry.AddInput((treepath+"JetHT_RunD/flatTree.root").c_str(), cutToApply.c_str());
                     }
+
+
+                    // SIGNAL 2018 for batch submission
+                    else if(sampleString=="signal") {
+                        plotEntry.AddInput("/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/NAMEXYZ/tmp/flatTree_0.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
+                    }
+
+
                     else {
                         std::cout << "No such sample "<<std::endl;
                     }
