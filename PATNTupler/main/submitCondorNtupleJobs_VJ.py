@@ -20,12 +20,12 @@ baseDir = os.environ['CMSSW_BASE']
 
 executable = "nTupAnaNMSSM" # wrt 'main' directory
 code = "mainNMSSM.cc" # wrt 'main' directory
-inputFileListPath = baseDir + "/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_wSys/NAMEXYZ.list"
-outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/NAMEXYZ/" # has to be the full path
+inputFileListPath = baseDir + "/src/NTupler/PATNTupler/fileLists/10_2_12/NAMEXYZ.list"
+outputDirectory = "/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/NAMEXYZ/" # has to be the full path
 sampleType = "SIGNAL" # choose from SIGNAL, DATA, TTJETS, OTHER_MC
-yearOfRun = 2016
+yearOfRun = 2018
 filesPerJob = 30
-logDirectoryBase = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
+logDirectoryBase = "/opt/ppd/scratch/xxt18833/jobLogs/flatTrees/"
 
 ###########################################################################################################
 ###########################################################################################################
@@ -39,7 +39,7 @@ if (sampleType != "SIGNAL" and sampleType != "DATA" and sampleType != "TTJETS" a
     print "you have not provided a valid sample type bro, exiting..."
     sys.exit()
 
-if (yearOfRun != 2016 and yearOfRun != 2017):
+if (yearOfRun != 2016 and yearOfRun != 2017 and yearOfRun != 2018):
     print "you have not provided a valid year of run pal, exiting..."
     sys.exit()
 
