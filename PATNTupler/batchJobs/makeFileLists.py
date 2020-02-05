@@ -60,7 +60,7 @@ getAllRootFilesBeneathPaths(motherDirs, rootFiles)
 f = open("%s" % outputFileList, 'w')
 for i in range(0, len(rootFiles)):
 	if (i != (len(rootFiles)-1) ):
-		f.write("dcap://dcap.pp.rl.ac.uk:22125/%s\n" % rootFiles[i])
+		f.write("%s\n" % rootFiles[i])
 	else:
-		f.write("dcap://dcap.pp.rl.ac.uk:22125/%s" % rootFiles[i])
+		f.write("%s" % rootFiles[i])
 f.close()
