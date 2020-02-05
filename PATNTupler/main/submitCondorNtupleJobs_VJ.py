@@ -25,7 +25,7 @@ outputDirectory = "/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/flatTree
 sampleType = "SIGNAL" # choose from SIGNAL, DATA, TTJETS, OTHER_MC
 yearOfRun = 2018
 filesPerJob = 30
-logDirectoryBase = "/opt/ppd/scratch/xxt18833/jobLogs/flatTrees/"
+#logDirectoryBase = "/opt/ppd/scratch/xxt18833/jobLogs/flatTrees/"
 
 ###########################################################################################################
 ###########################################################################################################
@@ -52,7 +52,7 @@ for iChar in range (len(outputDirectory)-1, 0, -1):
         dataname = outputDirectory[iChar+1:]
         break
 dataname = dataname + "_" + '{:%Y_%m_%d-%H_%M_%S}'.format(datetime.datetime.now())
-logDirectory = os.path.join(logDirectoryBase,dataname)
+#logDirectory = os.path.join(logDirectoryBase,dataname)
 
 if len(baseDir) == 0:
     print "You are not in a CMSSW environment"
@@ -76,6 +76,8 @@ if os.path.exists(inputFileListPath) == False:
     print "The fileList, " + inputFileListPath + " doesn't exist"
     print "Exiting..."
     sys.exit()
+
+logDirectory = os.path.join(outputDirectory,"tmp")
 
 # Make the new directory(s)
 os.system("mkdir -p %s" % outputDirectory)
