@@ -181,17 +181,17 @@ namespace QcdSidebandCorr{
 			corrVec.push_back(1.06283519632);
 			corrVec.push_back(1.0488302415);
 
-			// ht3500toInf - calculation (mc, wide bins) // old numbers
-			// corrVec.push_back(1.68721755451);
-			// corrVec.push_back(0.655192797454);
-			// corrVec.push_back(0.672116965034);
-			// corrVec.push_back(0.735130001363);
-			// corrVec.push_back(0.814937934144);
-			// corrVec.push_back(0.898663386375);
-			// corrVec.push_back(0.978877942795);
-			// corrVec.push_back(1.05080225636);
-			// corrVec.push_back(1.1068970932);
-			// corrVec.push_back(1.12798370143);
+			// ht3500toInf - calculation (mc, wide bins)
+			// corrVec.push_back(1.69162900558);
+			// corrVec.push_back(0.65339635843);
+			// corrVec.push_back(0.668094189916);
+			// corrVec.push_back(0.730958163827);
+			// corrVec.push_back(0.811876492716);
+			// corrVec.push_back(0.897194487237);
+			// corrVec.push_back(0.978906155434);
+			// corrVec.push_back(1.05194233704);
+			// corrVec.push_back(1.10863586286);
+			// corrVec.push_back(1.1296495168);
 
 			// ht3500toInf - calculation (data, normal bins)
 			corrVec.push_back(1.54338252847);

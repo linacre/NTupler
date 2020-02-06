@@ -324,6 +324,7 @@ def f1d_fullCutsData_anti_ht2500to3500_2018(x):
   return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
 function_1d["fullCutsData_anti_ht2500to3500_2018"] = f1d_fullCutsData_anti_ht2500to3500_2018
 
+#narrow bins data
 def f1d_fullCutsMC_anti_ht3500toInf_2018(x):
   p0  =  4.53475e-03
   p1  = -1.42360e-02
@@ -345,6 +346,27 @@ def f1d_fullCutsMC_anti_ht3500toInf_2018(x):
   return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
 function_1d["fullCutsMC_anti_ht3500toInf_2018"] = f1d_fullCutsMC_anti_ht3500toInf_2018
 
+##wide bins MC
+#def f1d_fullCutsMC_anti_ht3500toInf_2018(x):
+#  p0  =  1.22445e-02
+#  p1  = -1.08756e+00
+#  p2  = -4.19233e+01
+#  p3  =  4.61975e+01
+#  p4  = -5.35809e+00
+#  p5  =  5.09756e+02
+#  p6  = -2.52354e+00
+#  p7  = -9.51996e+03
+#  p8  = -2.23197e+00
+#  p9  =  4.49563e-05
+#  p10 =  2.30835e+01
+#  p11 = -5.60272e-07
+#  p12 =  7.32697e+01
+#  p13 = -1.94386e-09
+#  p14 = -2.23562e+01
+#  p15 =  1.49999e-11
+#  p16 =  1.72742e+01
+#  return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
+#function_1d["fullCutsMC_anti_ht3500toInf_2018"] = f1d_fullCutsMC_anti_ht3500toInf_2018
 
 
 ####################
