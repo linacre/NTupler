@@ -32,11 +32,14 @@ namespace MacrosOnCondor{
 		condorFile << Form("Log                    = %s/job.log\n", logDir.c_str());
 		condorFile << Form("Output                 = %s/job.out\n", logDir.c_str());
 		condorFile << Form("Error                  = %s/job.err\n", logDir.c_str());
-		condorFile << "Request_memory         = 1 GB\n";
+		condorFile << "Request_memory         = 4 GB\n";
 		condorFile << "Transfer_input_files   = job.sh, " << pathToTmpExe << "\n";
 		condorFile << "\n";
 		condorFile << "should_transfer_files	= YES\n";
 		condorFile << "when_to_transfer_output	= ON_EXIT_OR_EVICT\n";
+		condorFile << "periodic_hold           = (CurrentTime - EnteredCurrentStatus > 12000)\n";
+		condorFile << "periodic_release        = (CurrentTime - EnteredCurrentStatus > 30)\n";
+		condorFile << "periodic_remove         = False\n";
 		condorFile << "\n";
 		condorFile << "Getenv                 = True\n";
 		condorFile << "Queue\n";

@@ -176,7 +176,7 @@ int main(int argc, char** argv){
         std::string makeDirCommand = "mkdir -p " + outputDir;
         if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
         std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/histos_create.cc %s/%s__histos_create.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
-        MacrosOnCondor::SubmitJob(outputDir.c_str(), "histos_create", "/opt/ppd/scratch/xxt18833/jobLogs/macros/");
+        MacrosOnCondor::SubmitJob(outputDir.c_str(), "histos_create", outputDir.c_str());
         return 0;
     }
     else if (runInstructionString == "batchRUN"){
