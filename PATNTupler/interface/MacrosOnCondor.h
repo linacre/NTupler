@@ -35,7 +35,7 @@ namespace MacrosOnCondor{
 		condorFile << "Request_memory         = 2 GB\n";
 		condorFile << "Transfer_input_files   = job.sh, " << pathToTmpExe << "\n";
 		condorFile << "\n";
-		condorFile << "should_transfer_files	= NO\n";
+		condorFile << "should_transfer_files	= YES\n";
 		condorFile << "when_to_transfer_output	= ON_EXIT_OR_EVICT\n";
 		condorFile << "Rank                    = kflops\n";
 		condorFile << "periodic_hold           = (CurrentTime - EnteredCurrentStatus > 12000)\n";
