@@ -43,7 +43,7 @@ int main(){
     // const double luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot.
     // const double luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot.
     // const double luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
-    const double luminosity = 35.922 + 41.529 + 59.740565202;
+    const double luminosity = 35.922 + 41.529 + 59.740565202; // WARNING: an approximate combination is performed, adding the fitted errors in quadrature
 
     // TWO: the main settings
     const std::string massType = "S"; // S type mass regions
@@ -52,7 +52,7 @@ int main(){
     // unsigned int yearOfRun = 2016;
     // unsigned int yearOfRun = 2017;
     // unsigned int yearOfRun = 2018;
-    unsigned int yearOfRun = 0;
+    unsigned int yearOfRun = 0; // WARNING: an approximate combination is performed, adding the fitted errors in quadrature
     
     // const std::string fitType = "prefit";
     const std::string fitType = "fit_b";
@@ -78,7 +78,7 @@ int main(){
     TH1D * h_backgroundError = new TH1D("h_backgroundError", ";Search Region Bin Number;Events", 30, 0, 30);
     TH1D * h_data = new TH1D("h_data", ";Search Region Bin Number;Events", 30, 0, 30);
 
-    h_backgroundError->Sumw2();
+    h_backgroundError->Sumw2(); // to avoid bug with AddBinContent adding an error for the first bin
 
     unsigned int iBinMin = 1;
     unsigned int iBinMax = 30;
@@ -137,9 +137,7 @@ int main(){
             if (h_WJets_dummy != NULL) h_WJets->AddBinContent(iBin, h_WJets_dummy->GetBinContent(1));
 
             TH1D * h_backgroundError_dummy = (TH1D*)f->Get(Form("%stotal_background", directory.c_str()));
-            //std::cout<<"b: "<<h_backgroundError->GetBinError(iBin)<<std::endl;
             h_backgroundError->AddBinContent(iBin, h_backgroundError_dummy->GetBinContent(1));
-            //std::cout<<"a: "<<h_backgroundError->GetBinError(iBin)<<" "<<h_backgroundError_dummy->GetBinContent(1)<<std::endl;
             h_backgroundError->SetBinError(iBin, sqrt( h_backgroundError->GetBinError(iBin)*h_backgroundError->GetBinError(iBin) + h_backgroundError_dummy->GetBinError(1)*h_backgroundError_dummy->GetBinError(1) ) );
 
             TGraphAsymmErrors * h_data_dummy = (TGraphAsymmErrors*)f->Get(Form("%sdata", directory.c_str()));
