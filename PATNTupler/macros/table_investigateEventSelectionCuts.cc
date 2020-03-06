@@ -18,6 +18,7 @@
 #include "DoubleBTagWPs.h"
 #include "TimeStamp.h"
 #include "MacrosOnCondor.h"
+#include "MassRegionCuts.hh"
 
 // MAKE CUT FLOW TABLES
 
@@ -29,7 +30,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "cutFlowTables_201718_SM/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "cutFlowTables_201718_Signal_ht_mass_separate/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
@@ -45,6 +46,34 @@ int main(int argc, char** argv){
     // THREE: lumi settings
     double luminosity = 41.529; // 2016 DATASET
 
+
+
+    // FOUR: set the mass regions (use a KEYNAME and keep track of what means what!!!!)
+    double S1_Node1 = 40.0;
+    double S1_Node2 = 17.6;
+    double SMAX_Node1 = 170.7;
+    double SMAX_Node2 = 113.7;
+    std::vector<double> SN_Nodes = {51.9, 65.1, 78.3, 91.5, 104.7, 117.9, 131.1, 144.3, 157.5};
+    MassRegionCuts MassCutsObject = MassRegionCuts("MassCutsV09", S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes);
+    //const double sideBandScaleFactor = 0.5;
+    const std::string massCutObjectName = "MassCutsV09";
+
+    //std::string fatJetA_mass_name = "fatJetA_softDropMassPuppi";
+    //std::string fatJetB_mass_name = "fatJetB_softDropMassPuppi";
+
+    const unsigned int numberOfSegments = SN_Nodes.size() + 1;
+
+    //MassRegionCuts MassCutsObject = MassRegionCuts(massCutObjectName.c_str(), S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes, fatJetA_mass_name, fatJetB_mass_name, sideBandScaleFactor);
+
+    std::string MassRegionCuts = "( ";
+
+    for (size_t iMassRegion = 0; iMassRegion!=numberOfSegments; ++iMassRegion){
+        MassRegionCuts += "( " + MassCutsObject.GetAllCuts()[iMassRegion] + " )";
+        if(iMassRegion != numberOfSegments - 1) MassRegionCuts += " || ";
+        else MassRegionCuts += " )";
+    }
+
+    //std::cout << MassRegionCuts << std::endl;
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,16 +139,23 @@ int main(int argc, char** argv){
         cutToApplyVec.push_back(Form("weight_isr * (fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
         cutToApplyVec.push_back(Form("weight_isr * (fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
         cutToApplyVec.push_back(Form("weight_isr * weight_dbtTag * (%s && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", dbtCut.c_str(), cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
+        cutToApplyVec.push_back(Form("weight_isr * weight_dbtTag * (%s && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d && %s )", dbtCut.c_str(), cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1], MassRegionCuts.c_str() ));
+
+        for (size_t iMassRegion = 0; iMassRegion!=numberOfSegments; ++iMassRegion){
+            cutToApplyVec.push_back(Form("weight_isr * weight_dbtTag * (%s && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d && ( %s ) )", dbtCut.c_str(), cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1], MassCutsObject.GetAllCuts()[iMassRegion].c_str() ));
+        }
+
         // get the required count info for the table
         std::vector<std::vector<PlotEntry>> cutFlowObject; // all cut stages, for all samples
-        for (int iC = 0; iC != 5; ++iC){
+        for (unsigned int iC = 0; iC != cutToApplyVec.size(); ++iC){
+
 
             std::vector<PlotEntry> givenCutObject; // single cut stage, for all samples
 
-
             // FOUR: SAMPLE INFO
+
 /*
-            //2017 signal
+            // original 2017 MC with slim jet eta cut of 3.0 instead of 2.4
             givenCutObject.push_back( PlotEntry("mH70_mSusy1200", hTemplate, varToPlot.c_str(), luminosity) );
             givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.4951000*0.840*0.840);
 
@@ -128,10 +164,21 @@ int main(int argc, char** argv){
 
             givenCutObject.push_back( PlotEntry("mH70_mSusy2800", hTemplate, varToPlot.c_str(), luminosity) );
             givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy2800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0002753*0.840*0.840);
+*/
+
+            //reprocessed 2017 MC as 2018 in nTupAnaNMSSM
+            givenCutObject.push_back( PlotEntry("mH70_mSusy1200", hTemplate, varToPlot.c_str(), luminosity) );
+            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/mH70p0_mSusy1200p0_ratio0p99_splitting0p1/tmp/flatTree_0.root", cutToApplyVec[iC].c_str(), 0.4951000*0.840*0.840);
+
+            givenCutObject.push_back( PlotEntry("mH70_mSusy2000", hTemplate, varToPlot.c_str(), luminosity) );
+            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/tmp/flatTree_0.root", cutToApplyVec[iC].c_str(), 0.0091050*0.840*0.840);
+
+            givenCutObject.push_back( PlotEntry("mH70_mSusy2800", hTemplate, varToPlot.c_str(), luminosity) );
+            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/mH70p0_mSusy2800p0_ratio0p99_splitting0p1/tmp/flatTree_0.root", cutToApplyVec[iC].c_str(), 0.0002753*0.840*0.840);
 
 
             //2018 signal
-            std::string treepath = "/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/";
+            std::string treepath = "/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht/";
 
             givenCutObject.push_back( PlotEntry("mH70_mSusy1200", hTemplate, varToPlot.c_str(), luminosity) );
             givenCutObject[givenCutObject.size()-1].AddInput((treepath+"nmssmSignalCascadeV05_mH70p0_mSusy1200/flatTree.root").c_str(), cutToApplyVec[iC].c_str(), 0.4951000*0.840*0.840);
@@ -141,9 +188,9 @@ int main(int argc, char** argv){
 
             givenCutObject.push_back( PlotEntry("mH70_mSusy2800", hTemplate, varToPlot.c_str(), luminosity) );
             givenCutObject[givenCutObject.size()-1].AddInput((treepath+"nmssmSignalCascadeV05_mH70p0_mSusy2800/flatTree.root").c_str(), cutToApplyVec[iC].c_str(), 0.0002753*0.840*0.840);
-*/
 
 
+/*
             // ********************
             // ********************
             // ********************
@@ -167,7 +214,7 @@ int main(int argc, char** argv){
 
 
             //2018 background
-            std::string treepath = "/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/";
+            std::string treepath = "/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht/";
 
             givenCutObject.push_back( PlotEntry("QCD HT>1000", hTemplate, varToPlot.c_str(), luminosity) );
             givenCutObject[givenCutObject.size()-1].AddInput((treepath+"QCD_HT1000to1500_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApplyVec[iC].c_str(), 1005);
@@ -184,7 +231,7 @@ int main(int argc, char** argv){
 
             givenCutObject.push_back( PlotEntry("W+Jets HT>800", hTemplate, varToPlot.c_str(), luminosity) );
             givenCutObject[givenCutObject.size()-1].AddInput((treepath+"WJetsToQQ_HT-800toInf_qc19_3j_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApplyVec[iC].c_str(), 34.00);
-
+*/
 
             cutFlowObject.push_back(givenCutObject);
         }
@@ -207,6 +254,7 @@ int main(int argc, char** argv){
         table << ",";
         for (size_t i = 0; i < cutFlowObject[0].size(); ++i) table << cutFlowObject[0][i].GetPlotEntryName().c_str() << ",,,";
         std::vector<double> holdValueVec(cutFlowObject[0].size(), 0.0);
+        std::vector<double> holdValueVec2(cutFlowObject[0].size(), 0.0);
 
         table << "\nPreCuts:,";
         for (size_t i = 0; i < cutFlowObject[0].size(); ++i){
@@ -254,9 +302,32 @@ int main(int argc, char** argv){
             else table << cutFlowObject[4][i].GetNumberOfEventsAfterCuts() / holdValueVec[i] << ",,";
             holdValueVec[i] = cutFlowObject[4][i].GetNumberOfEventsAfterCuts();
         }
-        
+
+        table << "\nAll mass regions:,";
+        for (size_t i = 0; i < cutFlowObject[0].size(); ++i){
+            table << std::setprecision(6) << cutFlowObject[5][i].GetNumberOfEventsAfterCuts() << ",";
+            if (cutFlowObject[5][i].GetNumberOfEventsAfterCuts() < 0.00000001) table << "0,,";
+            else table << cutFlowObject[5][i].GetNumberOfEventsAfterCuts() / holdValueVec[i] << ",,";
+            holdValueVec2[i] = cutFlowObject[5][i].GetNumberOfEventsAfterCuts();
+        }
+
+
         table << "\n,,";
         for (size_t i = 0; i < cutFlowObject[0].size(); ++i) table << holdValueVec[i] / cutFlowObject[0][i].GetNumberOfEventsBeforeCuts() << ",,,";
+        table << "\n,,";
+        for (size_t i = 0; i < cutFlowObject[0].size(); ++i) table << holdValueVec2[i] / cutFlowObject[0][i].GetNumberOfEventsBeforeCuts() << ",,,";
+
+        for (size_t iMassRegion = 0; iMassRegion!=numberOfSegments; ++iMassRegion){
+            table << "\nMass region " << iMassRegion << " :,";
+            for (size_t i = 0; i < cutFlowObject[0].size(); ++i){
+                table << std::setprecision(6) << cutFlowObject[6+iMassRegion][i].GetNumberOfEventsAfterCuts() << ",";
+                if (cutFlowObject[6+iMassRegion][i].GetNumberOfEventsAfterCuts() < 0.00000001) table << "0,,";
+                else table << cutFlowObject[6+iMassRegion][i].GetNumberOfEventsAfterCuts() / holdValueVec[i] << ",,";
+                holdValueVec2[i] = cutFlowObject[6+iMassRegion][i].GetNumberOfEventsAfterCuts();
+            }
+            table << "\n,,";
+            for (size_t i = 0; i < cutFlowObject[0].size(); ++i) table << holdValueVec2[i] / cutFlowObject[0][i].GetNumberOfEventsBeforeCuts() << ",,,";
+        }
 
         table.close();
     } // closes loop through different table configurations

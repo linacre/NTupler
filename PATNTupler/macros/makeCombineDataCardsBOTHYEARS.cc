@@ -22,7 +22,7 @@
 
 // MAKE DATACARDS TO USE WITH COMBINED
 
-bool use2017as2018 = false;
+bool use2017as2018 = true;
 
 
 void GetHistograms(std::map<std::string,TH1D*>&, const unsigned int&); // NEED TO CHANGE THE FILE PATH IN THIS FUNCTION WHEN USING NEW HISTOGRAMS
@@ -60,7 +60,7 @@ int main(){
     // ONE: save info (signal specific directories beneath this)
     //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
     // const std::string outputDirGeneral = "combinedDataCards_final_2018";
-    const std::string outputDirGeneral = "combinedDataCards_ht_XSjmsryear_3points";
+    const std::string outputDirGeneral = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig";
   
 
 
@@ -274,8 +274,8 @@ int main(){
                 double rate_signal_S, rate_signal_UnD;
                 const unsigned int data_obs_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
                 if(use2017as2018) {
-                    rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin)*(yearOfRun == 2018 ? 0.98*59.740565202/41.370 : 1.);
-                    rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin)*(yearOfRun == 2018 ? 0.98*59.740565202/41.370 : 1.);
+                    rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin)*(yearOfRun == 2018 ? 0.98 : 1.);
+                    rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin)*(yearOfRun == 2018 ? 0.98 : 1.);
                 }
                 else {
                     rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);
@@ -514,7 +514,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     std::string postamble = "";
 
     if (yearOfRun == 2016){
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2016/";
+        preamble = "/mercury/data2/linacre/NMSSM/2016/Joe/run2016/";
         postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
     }
     else if (yearOfRun == 2017){

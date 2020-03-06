@@ -187,7 +187,7 @@ int main(int argc, char** argv){
 
       
                     // FOUR: samples to use
-                    std::string treepath = "/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/";
+                    std::string treepath = "/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht/";
 
 
                     PlotEntry mH70_mSusy1200_2018 = PlotEntry("mH70_mSusy1200_2018", hTemplate, varToPlot.c_str(), luminosity);
@@ -206,24 +206,24 @@ int main(int argc, char** argv){
                     plotEntryVec2.push_back(mH70_mSusy2800_2018);
 
 
-/*
+                    //reprocessed 2017 MC as 2018 in nTupAnaNMSSM
                     PlotEntry mH70_mSusy1200_2017 = PlotEntry("mH70_mSusy1200_2017", hTemplate, varToPlot.c_str(), luminosity);
-                    mH70_mSusy1200_2017.AddInput((treepath+"nmssmSignalCascadeV05_mH70p0_mSusy1200_2017/flatTree.root").c_str(), cutToApply.c_str(), 1, "weight_combined");
+                    mH70_mSusy1200_2017.AddInput("/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/mH70p0_mSusy1200p0_ratio0p99_splitting0p1/tmp/flatTree_0.root", cutToApply.c_str(), 1, "weight_combined");
                     mH70_mSusy1200_2017.NormalisePlot();
                     plotEntryVec2.push_back(mH70_mSusy1200_2017);
 
                     PlotEntry mH70_mSusy2000_2017 = PlotEntry("mH70_mSusy2000_2017", hTemplate, varToPlot.c_str(), luminosity);
-                    mH70_mSusy2000_2017.AddInput((treepath+"nmssmSignalCascadeV05_mH70p0_mSusy2000_2017/flatTree.root").c_str(), cutToApply.c_str(), 1, "weight_combined");
+                    mH70_mSusy2000_2017.AddInput("/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/tmp/flatTree_0.root", cutToApply.c_str(), 1, "weight_combined");
                     mH70_mSusy2000_2017.NormalisePlot();
                     plotEntryVec2.push_back(mH70_mSusy2000_2017);
 
                     PlotEntry mH70_mSusy2800_2017 = PlotEntry("mH70_mSusy2800_2017", hTemplate, varToPlot.c_str(), luminosity);
-                    mH70_mSusy2800_2017.AddInput((treepath+"nmssmSignalCascadeV05_mH70p0_mSusy2800_2017/flatTree.root").c_str(), cutToApply.c_str(), 1, "weight_combined");
+                    mH70_mSusy2800_2017.AddInput("/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/mH70p0_mSusy2800p0_ratio0p99_splitting0p1/tmp/flatTree_0.root", cutToApply.c_str(), 1, "weight_combined");
                     mH70_mSusy2800_2017.NormalisePlot();
                     plotEntryVec2.push_back(mH70_mSusy2800_2017);
 
 
-*/
+/*
                     //original 2017 MC with slim jet eta cut of 3.0 instead of 2.4
                     PlotEntry mH70_mSusy1200_2017 = PlotEntry("mH70_mSusy1200_2017", hTemplate, varToPlot.c_str(), luminosity);
                     mH70_mSusy1200_2017.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 1, "weight_combined");
@@ -239,7 +239,7 @@ int main(int argc, char** argv){
                     mH70_mSusy2800_2017.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy2800p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 1, "weight_combined");
                     mH70_mSusy2800_2017.NormalisePlot();
                     plotEntryVec2.push_back(mH70_mSusy2800_2017);
-
+*/
 
 
 
@@ -261,21 +261,21 @@ int main(int argc, char** argv){
                     plotEntryNumerator.push_back(Numerator_mH70_mSusy2800_2018);
 
 
-/*
+                    //reprocessed 2017 MC as 2018 in nTupAnaNMSSM
                     PlotEntry Numerator_mH70_mSusy1200_2017 = PlotEntry("mH70_mSusy1200_2017", hNumerator, varToPlot_SReff.c_str(), luminosity);
-                    Numerator_mH70_mSusy1200_2017.AddInputEfficiency((treepath+"nmssmSignalCascadeV05_mH70p0_mSusy1200_2017/flatTree.root").c_str(), cutToApply_Numerator.c_str(), dbtCut_SR.c_str(), true);
+                    Numerator_mH70_mSusy1200_2017.AddInputEfficiency("/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/mH70p0_mSusy1200p0_ratio0p99_splitting0p1/tmp/flatTree_0.root", cutToApply_Numerator.c_str(), dbtCut_SR.c_str(), true);
                     plotEntryNumerator.push_back(Numerator_mH70_mSusy1200_2017);
 
                     PlotEntry Numerator_mH70_mSusy2000_2017 = PlotEntry("mH70_mSusy2000_2017", hNumerator, varToPlot_SReff.c_str(), luminosity);
-                    Numerator_mH70_mSusy2000_2017.AddInputEfficiency((treepath+"nmssmSignalCascadeV05_mH70p0_mSusy2000_2017/flatTree.root").c_str(), cutToApply_Numerator.c_str(), dbtCut_SR.c_str(), true);
+                    Numerator_mH70_mSusy2000_2017.AddInputEfficiency("/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/tmp/flatTree_0.root", cutToApply_Numerator.c_str(), dbtCut_SR.c_str(), true);
                     plotEntryNumerator.push_back(Numerator_mH70_mSusy2000_2017);
 
                     PlotEntry Numerator_mH70_mSusy2800_2017 = PlotEntry("mH70_mSusy2800_2017", hNumerator, varToPlot_SReff.c_str(), luminosity);
-                    Numerator_mH70_mSusy2800_2017.AddInputEfficiency((treepath+"nmssmSignalCascadeV05_mH70p0_mSusy2800_2017/flatTree.root").c_str(), cutToApply_Numerator.c_str(), dbtCut_SR.c_str(), true);
+                    Numerator_mH70_mSusy2800_2017.AddInputEfficiency("/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/mH70p0_mSusy2800p0_ratio0p99_splitting0p1/tmp/flatTree_0.root", cutToApply_Numerator.c_str(), dbtCut_SR.c_str(), true);
                     plotEntryNumerator.push_back(Numerator_mH70_mSusy2800_2017);
-*/
 
 
+/*
                     //original 2017 MC with slim jet eta cut of 3.0 instead of 2.4
                     PlotEntry Numerator_mH70_mSusy1200_2017 = PlotEntry("mH70_mSusy1200_2017", hNumerator, varToPlot_SReff.c_str(), luminosity);
                     Numerator_mH70_mSusy1200_2017.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApply_Numerator.c_str(), dbtCut_SR.c_str(), true);
@@ -288,7 +288,7 @@ int main(int argc, char** argv){
                     PlotEntry Numerator_mH70_mSusy2800_2017 = PlotEntry("mH70_mSusy2800_2017", hNumerator, varToPlot_SReff.c_str(), luminosity);
                     Numerator_mH70_mSusy2800_2017.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy2800p0_ratio0p99_splitting0p1/flatTree.root", cutToApply_Numerator.c_str(), dbtCut_SR.c_str(), true);
                     plotEntryNumerator.push_back(Numerator_mH70_mSusy2800_2017);
-
+*/
 
 
 
