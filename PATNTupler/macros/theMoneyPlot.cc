@@ -42,17 +42,18 @@ int main(){
     const std::string outputDir = "MoneyPlot";
     // const double luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot.
     // const double luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot.
-    // const double luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
-    const double luminosity = 35.922 + 41.529 + 59.740565202; // WARNING: an approximate combination is performed, adding the fitted errors in quadrature
+    const double luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
+    // const double luminosity = 35.922 + 41.529 + 59.740565202; // WARNING: an approximate combination is performed, adding the fitted errors in quadrature. This is reasonable because the bkg nuisance parameters are all uncorrelated between years.
 
     // TWO: the main settings
-    const std::string massType = "S"; // S type mass regions
-    // const std::string massType = "UnD"; // U+D type mass regions
+    std::string massType = "S"; // S type mass regions
+    // std::string massType = "UnD"; // U+D type mass regions
+    // std::string massType = "both"; // U+D type mass regions
     
     // unsigned int yearOfRun = 2016;
     // unsigned int yearOfRun = 2017;
-    // unsigned int yearOfRun = 2018;
-    unsigned int yearOfRun = 0; // WARNING: an approximate combination is performed, adding the fitted errors in quadrature
+    unsigned int yearOfRun = 2018;
+    // unsigned int yearOfRun = 0; // WARNING: an approximate combination is performed, adding the fitted errors in quadrature. This is reasonable because the bkg nuisance parameters are all uncorrelated between years.
     
     // const std::string fitType = "prefit";
     const std::string fitType = "fit_b";
@@ -83,6 +84,13 @@ int main(){
     unsigned int iBinMin = 1;
     unsigned int iBinMax = 30;
 
+
+    std::vector<std::string> massTypes;
+    if(massType == "both") {
+        massTypes.push_back("S");
+        massTypes.push_back("UnD");
+    }
+
     std::vector<int> yearsOfRun;
     if(yearOfRun == 0) {
         yearsOfRun.push_back(2016);
@@ -90,8 +98,13 @@ int main(){
         yearsOfRun.push_back(2018);
     }
 
+    for (unsigned int iM = 0; iM < (massTypes.size() ? massTypes.size() : 1); ++iM) {
+
     for (unsigned int iY = 0; iY < (yearsOfRun.size() ? yearsOfRun.size() : 1); ++iY)
     {
+
+        if( massTypes.size() ) massType = massTypes.at(iM);
+
         if( yearsOfRun.size() ) yearOfRun = yearsOfRun.at(iY);
 
         for (unsigned int iBin=iBinMin; iBin<=iBinMax; iBin++){
@@ -144,7 +157,9 @@ int main(){
             h_data->AddBinContent(iBin, h_data_dummy->Eval(1));
         }
 
-    }
+    } //iY
+
+    } //iM
 
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
@@ -165,10 +180,10 @@ int main(){
     plot.AddRatioBox(0.0, 2.7, "data / pred", true);
 
     std::vector<std::string> stringVec = {" HT1500-2500 GeV", " HT2500-3500 GeV", " HT3500+ GeV"};
-    std::string plotName = "linear_"+( yearsOfRun.size() ? "combined" : std::to_string(yearOfRun) )+"_"+massType+"_"+fitType;
+    std::string plotName = "linear_"+( yearsOfRun.size() ? "combined" : std::to_string(yearOfRun) )+"_"+( massTypes.size() ? "both" : massType )+"_"+fitType;
     plot.SaveSpec02(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
     
-    plotName = "log_"+( yearsOfRun.size() ? "combined" : std::to_string(yearOfRun) )+"_"+massType+"_"+fitType;
+    plotName = "log_"+( yearsOfRun.size() ? "combined" : std::to_string(yearOfRun) )+"_"+( massTypes.size() ? "both" : massType )+"_"+fitType;
     plot.SetLogY();
     plot.SetYValueMin(0.13); // REMEMBER THIS PARAM! (only for log)
     plot.SaveSpec02(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
