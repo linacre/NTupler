@@ -42,8 +42,8 @@ int main(int argc, char** argv){
 
     // THREE: luminosity (if you need it)
     // const double luminosity = 35.922; // 2016 DATASET
-    const double luminosity = 41.529; // 2017 DATASET
-    // const double luminosity = 59.740565202; // 2018 DATASET
+    // const double luminosity = 41.529; // 2017 DATASET
+    const double luminosity = 59.740565202; // 2018 DATASET
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,16 +83,17 @@ int main(int argc, char** argv){
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
 
 
-    PlotEntry plot_ratio6 = PlotEntry("Run2017", hTemplate, "ht");
-    plot_ratio6.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/SingleMuon_Run2017TOTAL/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
-    plotVec.push_back(plot_ratio6);
+    // PlotEntry plot_ratio6 = PlotEntry("Run2017", hTemplate, "ht");
+    // plot_ratio6.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/SingleMuon_Run2017TOTAL/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    // plotVec.push_back(plot_ratio6);
 
-    // PlotEntry plot_ratio7 = PlotEntry("Run2018", hTemplate, "ht");
-    // plot_ratio7.AddInputEfficiency("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/SingleMuon_RunA/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
-    // plot_ratio7.AddInputEfficiency("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/SingleMuon_RunB/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
-    // plot_ratio7.AddInputEfficiency("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/SingleMuon_RunC/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
-    // plot_ratio7.AddInputEfficiency("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/SingleMuon_RunD/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
-    // plotVec.push_back(plot_ratio7);
+    PlotEntry plot_ratio7 = PlotEntry("Run2018", hTemplate, "ht");
+    plot_ratio7.AddInputEfficiency("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht/SingleMuon_ALL/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    //plot_ratio7.AddInputEfficiency("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht/SingleMuon_RunA/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    //plot_ratio7.AddInputEfficiency("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht/SingleMuon_RunB/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    //plot_ratio7.AddInputEfficiency("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht/SingleMuon_RunC/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    //plot_ratio7.AddInputEfficiency("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht/SingleMuon_RunD/flatTree.root", "muon_maxPt < 200.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    plotVec.push_back(plot_ratio7);
 
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
