@@ -158,28 +158,28 @@ namespace QcdSidebandCorr{
 			// corrVec.push_back(1.0994397759);
 
 			// ht1500to2500 - calculation (data)
-			corrVec.push_back(1.53495664724);
-			corrVec.push_back(0.767780874);
-			corrVec.push_back(0.873208676934);
-			corrVec.push_back(0.9400173019);
-			corrVec.push_back(0.988626023141);
-			corrVec.push_back(1.03156834113);
-			corrVec.push_back(1.07601880112);
-			corrVec.push_back(1.12650434353);
-			corrVec.push_back(1.18463262656);
-			corrVec.push_back(1.24346002494);
+			corrVec.push_back(1.53494206206);
+			corrVec.push_back(0.767776423619);
+			corrVec.push_back(0.873204709599);
+			corrVec.push_back(0.940009897414);
+			corrVec.push_back(0.988615698703);
+			corrVec.push_back(1.0315551881);
+			corrVec.push_back(1.07600218792);
+			corrVec.push_back(1.12648308733);
+			corrVec.push_back(1.18460569677);
+			corrVec.push_back(1.24342958462);
 
 			// ht2500to3500 - calculation (data)
-			corrVec.push_back(1.4384092221);
-			corrVec.push_back(0.675903235154);
-			corrVec.push_back(0.795128249044);
-			corrVec.push_back(0.880664486917);
-			corrVec.push_back(0.940808471888);
-			corrVec.push_back(0.986044340116);
-			corrVec.push_back(1.02201595243);
-			corrVec.push_back(1.04938927876);
-			corrVec.push_back(1.06283519632);
-			corrVec.push_back(1.0488302415);
+			corrVec.push_back(1.43848182587);
+			corrVec.push_back(0.675911514281);
+			corrVec.push_back(0.795102172034);
+			corrVec.push_back(0.88061610674);
+			corrVec.push_back(0.940747885167);
+			corrVec.push_back(0.985975760342);
+			corrVec.push_back(1.02194058242);
+			corrVec.push_back(1.04930909487);
+			corrVec.push_back(1.06275871459);
+			corrVec.push_back(1.04878149265);
 
 			// ht3500toInf - calculation (mc, wide bins)
 			// corrVec.push_back(1.69162900558);

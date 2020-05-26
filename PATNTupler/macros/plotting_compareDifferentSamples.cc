@@ -30,7 +30,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "plotting_compare_samples_2018"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "plotting_compare_samples_2018_slimjet30_CR_ecalfilter"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
@@ -56,27 +56,27 @@ int main(int argc, char** argv){
     double luminosity = 59.740565202; // 2018 DATASET
     
     // std::string varToPlot = "fatJetA_doubleBtagDiscrim";
-    std::string varToPlot = "fatJetA_softDropMassPuppi";
+    // std::string varToPlot = "fatJetA_softDropMassPuppi";
     // std::string varToPlot = "fatJetA_p4.Pt()";
     // std::string varToPlot = "slimJetA_p4.Pt()";
     // std::string varToPlot = "ht";
     // std::string varToPlot = "nPU";
     // std::string varToPlot = "slimJetB_p4.Eta()";
-    // std::string varToPlot = "slimJetA_p4.Eta()";
+    std::string varToPlot = "slimJetA_p4.Eta()";
 
     // std::vector<double> customBinning = {-1.0, 0.3, 1.0};
     // TH1D hTemplate("hTemplate", ";fatJetA doubleBtagDiscriminator;fraction of events / bin", customBinning.size()-1, &(customBinning)[0]);
     // TH1D hTemplate("hTemplate", ";fatJetA doubleBtagDiscriminator;events / bin", 20, -1, 1);
     // TH1D hTemplate("hTemplate", ";fatJetA doubleBtagDiscriminator;fraction of events / bin", 20, -1, 1);
-    TH1D hTemplate("hTemplate", ";fatJetA SoftDropMass (GeV);events / bin", 40, 0, 200);
+    // TH1D hTemplate("hTemplate", ";fatJetA SoftDropMass (GeV);events / bin", 40, 0, 200);
     // TH1D hTemplate("hTemplate", ";fatJetA SoftDropMass (GeV);fraction of events / bin", 40, 0, 200);
-    // TH1D hTemplate("hTemplate", ";fatJetA p_{T} (GeV);events / bin", 60, 0, 3000);
-    // TH1D hTemplate("hTemplate", ";leadingAK4Jet p_{T} (GeV);events / bin", 60, 0, 3000);
-    // TH1D hTemplate("hTemplate", ";H_{T} (GeV);events / bin", 90, 0, 9000);
+    // TH1D hTemplate("hTemplate", ";H_{T} (GeV);fraction of events / bin", 90, 0, 9000);
+    // TH1D hTemplate("hTemplate", ";fatJetA p_{T} (GeV);fraction of events / bin", 60, 0, 3000);
+    // TH1D hTemplate("hTemplate", ";leadingAK4Jet p_{T} (GeV);fraction of events / bin", 60, 0, 3000);
     // TH1D hTemplate("hTemplate", ";nPU;fraction of events / bin", 90, 0, 90);
     // TH1D hTemplate("hTemplate", ";nGluino;fraction of events / bin", 3, 0, 3);
     // TH1D hTemplate("hTemplate", ";subleadingAK4Jet #eta;events / bin", 70, -3.5, 3.5);
-    // TH1D hTemplate("hTemplate", ";leadingAK4Jet #eta;events / bin", 70, -3.5, 3.5);
+    TH1D hTemplate("hTemplate", ";leadingAK4Jet #eta;events / bin", 70, -3.5, 3.5);
 
 
 
@@ -134,7 +134,7 @@ int main(int argc, char** argv){
                         dbtCut = Form("fatJetA_doubleBtagDiscrim >= (-1.0 * fatJetB_doubleBtagDiscrim + 1.0 + %f) ", DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]) );
                     if (cut2_ak8Dbt[iCut2].size() == 4)
                         dbtCut = Form("fatJetA_doubleBtagDiscrim>=%f && fatJetA_doubleBtagDiscrim<%f && fatJetB_doubleBtagDiscrim>=%f && fatJetB_doubleBtagDiscrim<%f ", DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][0]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][2]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][3]) );
-                    std::string cutToApply = Form("%s && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d", dbtCut.c_str(), cut3_ak8Pt[iCut3], cut3_ak8Pt[iCut3], cut4_ht[iCut4][0], cut4_ht[iCut4][1], cut5_ak4Pt[iCut5][0], cut5_ak4Pt[iCut5][1]);
+                    std::string cutToApply = Form("%s && trgDecision==1 && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d", dbtCut.c_str(), cut3_ak8Pt[iCut3], cut3_ak8Pt[iCut3], cut4_ht[iCut4][0], cut4_ht[iCut4][1], cut5_ak4Pt[iCut5][0], cut5_ak4Pt[iCut5][1]);
 
 
 
@@ -233,7 +233,7 @@ int main(int argc, char** argv){
 
 
 
-                    std::string treepath = "/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24/";
+                    std::string treepath = "/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet30/";
 
                     PlotEntry WJets = PlotEntry("WJets", hTemplate, varToPlot.c_str(), luminosity);
                     WJets.AddInput((treepath+"WJetsToQQ_HT-800toInf_qc19_3j_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 34.00, "weight_combined");
@@ -285,11 +285,12 @@ int main(int argc, char** argv){
                     // DATA
                     PlotEntry plotElement_Data = PlotEntry("Data", hTemplate, varToPlot.c_str()); // NO LUMI
                     // PlotEntry plotElement_Data = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str()); // NO LUMI
-                    
-                    plotElement_Data.AddInput((treepath+"JetHT_RunA/flatTree.root").c_str(), cutToApply.c_str());
-                    plotElement_Data.AddInput((treepath+"JetHT_RunB/flatTree.root").c_str(), cutToApply.c_str());
-                    plotElement_Data.AddInput((treepath+"JetHT_RunC/flatTree.root").c_str(), cutToApply.c_str());
-                    plotElement_Data.AddInput((treepath+"JetHT_RunD/flatTree.root").c_str(), cutToApply.c_str());
+                    plotElement_Data.AddInput((treepath+"JetHT_ALL_ecalBadCalibFilter/flatTree.root").c_str(), cutToApply.c_str());                    
+
+                    //plotElement_Data.AddInput((treepath+"JetHT_RunA/flatTree.root").c_str(), cutToApply.c_str());
+                    //plotElement_Data.AddInput((treepath+"JetHT_RunB/flatTree.root").c_str(), cutToApply.c_str());
+                    //plotElement_Data.AddInput((treepath+"JetHT_RunC/flatTree.root").c_str(), cutToApply.c_str());
+                    //plotElement_Data.AddInput((treepath+"JetHT_RunD/flatTree.root").c_str(), cutToApply.c_str());
                     plotEntryVec2.push_back(plotElement_Data);
 
 

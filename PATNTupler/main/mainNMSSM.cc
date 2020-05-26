@@ -877,6 +877,55 @@ int main(int argc, char** argv){
         std::system(Form("cp %s %s",listFilename.c_str(),outputDirectory.c_str()));
     }
 
+
+
+	  // ecalBadCalibFilter
+	  std::vector<TString> ecalBadCalibList;
+	  std::vector<long long int> ecalBadCalibNumbers;
+	  Int_t necalBadCalib = 0;
+	  Int_t badrun, badlumi;
+	  long int badevent;
+	  Int_t ncols, nlines;
+	  nlines = 0;
+	  FILE *fp = fopen("Run2018_JetHT.txt", "r");
+	  while (1)
+	  {
+	    ncols = fscanf(fp, "%d%*c %d%*c %ld", &badrun, &badlumi, &badevent);
+	    if (ncols < 0) break;
+
+	    if(ncols==3) {
+
+	    	TString eventID = "";
+	    	eventID += (badrun);
+	    	eventID += ":";
+	    	eventID += (badlumi);
+	    	eventID += ":";
+	    	eventID += (badevent);
+
+	    	long long int evtID = badevent + badlumi*10000000000 + (badrun-315256)*10000000000*10000;
+
+	    	ecalBadCalibList.push_back(eventID);
+	    	ecalBadCalibNumbers.push_back(evtID);
+
+	      // //if (nlines < 1000000000) {
+	      // if (badevent > 4000000000) {
+	      // 	//printf(" ecalBadCalibFilter: %d:%d:%d \n", badrun, badlumi, badevent);
+	      // 	std::cout<<eventID<<" "<<evtID<<std::endl;
+	      // 	//std::cout<<eventID<<std::endl;
+	      // }
+
+	      nlines++;
+
+	    }
+
+	  }
+	  fclose (fp);
+
+	  std::cout<<"ecalBadCalibList size: "<<ecalBadCalibList.size()<<" "<<ecalBadCalibNumbers.size()<<std::endl;
+	  std::cout<<"ecalBadCalibList first and last: "<<ecalBadCalibList.at(0)<<" "<<ecalBadCalibList.at(ecalBadCalibList.size()-1)<<std::endl;
+	  std::cout<<"ecalBadCalibNumbers first and last: "<<ecalBadCalibNumbers.at(0)<<" "<<ecalBadCalibNumbers.at(ecalBadCalibNumbers.size()-1)<<std::endl;
+
+
     // find number of files that we are running over
 	ifstream totalFileCount(argv[2]);
 	unsigned int numberOfFiles = 0;
@@ -974,6 +1023,38 @@ int main(int argc, char** argv){
 					break;
 				}
 			}
+
+
+    	TString eventID = "";
+    	eventID += (evtInfo->runNum);
+    	eventID += ":";
+    	eventID += (evtInfo->lumiSec);
+    	eventID += ":";
+    	eventID += (evtInfo->evtNum);
+
+    	long long int evtID = evtInfo->evtNum + evtInfo->lumiSec*10000000000 + (evtInfo->runNum-315256)*10000000000*10000;
+
+    	bool failed_ecalBadCalib = false;
+
+    	for (unsigned int i_list = 0; i_list < ecalBadCalibNumbers.size(); ++i_list)
+    	{
+    		if (evtID == ecalBadCalibNumbers.at(i_list)) {
+
+	    		failed_ecalBadCalib = true;
+	    		++necalBadCalib;
+
+	      	printf(" event failed ecalBadCalibFilter: %d:%d:%u  Total: %d\n", evtInfo->runNum, evtInfo->lumiSec, evtInfo->evtNum, necalBadCalib);
+	      	if (eventID != ecalBadCalibList.at(i_list)) {
+	      		std::cout<<"ERROR: "<<evtID<<" "<<ecalBadCalibNumbers.at(i_list)<<" "<<eventID<<" "<<ecalBadCalibList.at(i_list)<<std::endl;
+	      	}
+
+	      	continue;
+
+    		}
+    	}
+
+    	if(failed_ecalBadCalib) doesEventPassTrigger = false;
+
 
 			const int nPU = *nPU_tree;
 			const float nTrueInt = *nTrueInt_tree;

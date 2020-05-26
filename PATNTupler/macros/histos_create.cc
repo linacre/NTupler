@@ -267,6 +267,8 @@ int main(int argc, char** argv){
                         dbtCut = Form("%s>=%f && %s<%f && %s>=%f && %s<%f ", fatJetA_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][0]), fatJetA_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][2]), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][3]) );
                     std::string cutToApply = Form("%s && %s>%d && %s>%d && %s>=%d && %s<%d && %s>%d && %s>%d", dbtCut.c_str(), fatJetA_pt_name.c_str(), cut3_ak8Pt, fatJetB_pt_name.c_str(), cut3_ak8Pt, ht_name.c_str(), cut4_ht[iCut4][0], ht_name.c_str(), cut4_ht[iCut4][1], slimJetA_pt_name.c_str(), cut5_ak4Pt[0], slimJetB_pt_name.c_str(), cut5_ak4Pt[1]);
 
+                    if(sampleString=="data") cutToApply += " && trgDecision==1";
+
                     cutToApply += " && " + MassCutsObject.GetAllCuts()[iMassRegion];
                     // TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 600, 0, 300, 600, 0, 300);
                     TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 100, 0, 200, 100, 0, 200);
@@ -393,10 +395,11 @@ int main(int argc, char** argv){
 
                     // 2018 GOLDEN JSON DATASET
                     else if(sampleString=="data") {
-                        plotEntry.AddInput((treepath+"JetHT_RunA/flatTree.root").c_str(), cutToApply.c_str());
-                        plotEntry.AddInput((treepath+"JetHT_RunB/flatTree.root").c_str(), cutToApply.c_str());
-                        plotEntry.AddInput((treepath+"JetHT_RunC/flatTree.root").c_str(), cutToApply.c_str());
-                        plotEntry.AddInput((treepath+"JetHT_RunD/flatTree.root").c_str(), cutToApply.c_str());
+                        plotEntry.AddInput((treepath+"JetHT_ALL/flatTree.root").c_str(), cutToApply.c_str());
+                        //plotEntry.AddInput((treepath+"JetHT_RunA/flatTree.root").c_str(), cutToApply.c_str());
+                        //plotEntry.AddInput((treepath+"JetHT_RunB/flatTree.root").c_str(), cutToApply.c_str());
+                        //plotEntry.AddInput((treepath+"JetHT_RunC/flatTree.root").c_str(), cutToApply.c_str());
+                        //plotEntry.AddInput((treepath+"JetHT_RunD/flatTree.root").c_str(), cutToApply.c_str());
                     }
 
 
