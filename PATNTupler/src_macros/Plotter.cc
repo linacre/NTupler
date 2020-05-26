@@ -774,7 +774,7 @@ void Plotter::Save(const std::string& saveName){
 				iIndi->GetTEff()->SetLineWidth(2);
 				// iIndi->GetTEff()->SetMarkerStyle(1);
 				iIndi->GetHistogram()->Draw("same P");
-				if( TString(saveName).EndsWith("SReff_doubleRatio.pdf") && iIndi - histoIndi.begin() < int(histoIndi.size())/2 ) {
+				if( TString(saveName).EndsWith("_doubleRatio.pdf") && iIndi - histoIndi.begin() < int(histoIndi.size())/2 ) {
 					iIndi->GetHistogram()->Fit("pol1");
 					iIndi->GetHistogram()->GetFunction("pol1")->SetLineColor(iIndi->GetHistogram()->GetLineColor()+1);
 					iIndi->GetHistogram()->GetFunction("pol1")->SetLineWidth(2);
