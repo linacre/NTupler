@@ -36,7 +36,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "./histos_plot_2018/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "./histos_plot_2018_ht/"; // where we are going to save the output plots (should include the samples name, and any important features)
     //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/oneDimensionRepresentation/DATA/control/predNew_calcForHighestTwoHtBins/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
     // const double luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
@@ -235,7 +235,7 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
         // 2. tag, anti, control --> refers to 2*DBT space
         // 3. sample name on the end
 
-        if (histoToUse != "data") h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
+        h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
         h_[Form("U_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtDiagUpLoose_NOSYS");
         h_[Form("D_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtDiagUpLoose_NOSYS");
 
@@ -399,7 +399,7 @@ void GetHistograms2017(std::map<std::string,TH1D*>& h_)
         // 2. tag, anti, control --> refers to 2*DBT space
         // 3. sample name on the end
 
-        if (histoToUse != "data") h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
+        h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
         h_[Form("U_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtDiagUpLoose_NOSYS");
         h_[Form("D_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtDiagUpLoose_NOSYS");
 
@@ -494,7 +494,7 @@ void GetHistograms2017(std::map<std::string,TH1D*>& h_)
 void GetHistograms2018(std::map<std::string,TH1D*>& h_)
 {
     // histos locations
-    std::string preamble = "/home/ppd/xxt18833/NMSSM/PATNTupler_18/macros/2018_histos";
+    std::string preamble = "/home/ppd/xxt18833/NMSSM/PATNTupler_18/macros/2018_histos_ht";
 
     std::string postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi60.root";
     std::vector<std::string> histoNameVec;
@@ -568,7 +568,7 @@ void GetHistograms2018(std::map<std::string,TH1D*>& h_)
         // 3. sample name on the end
 
 
-        if (histoToUse != "data") h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
+        h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
         h_[Form("U_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtDiagUpLoose_NOSYS");
         h_[Form("D_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtDiagUpLoose_NOSYS");
 
