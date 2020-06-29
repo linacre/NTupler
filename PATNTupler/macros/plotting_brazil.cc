@@ -31,11 +31,12 @@ int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // ONE: input directory (where the combined root files are)
-    const std::string inputDir = "processed/combinedDataCards_xsec_correlated_jec_uncorrelated_2017as2018_0.98_allSig_processed";
+    const std::string inputDir = "/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20200527/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
+    // const std::string inputDir = "/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20200120/combinedDataCards_final_2018_2017as2018_0.98_allSigs";
     // const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
 
     // TWO: plot output directory
-    const std::string outputDir = "brazilplots";
+    const std::string outputDir = "brazilplots_new";
     // const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/brazilplots/mSusy2400/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)

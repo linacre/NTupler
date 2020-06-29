@@ -37,23 +37,23 @@ int main(){
     //const std::string inputFile = "/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20200120/combinedDataCards_final_201617_allSig/fitDiagnostics/mH70_mSusy2800/fitDiagnostics.root";
     //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/fitDiagnostics/mH30_mSusy2800/testing03/";
     
-    const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5/mH70_mSusy2800/fitDiagnostics.root";
+    const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_/mH70_mSusy2800/fitDiagnostics.root";
 
     const std::string outputDir = "MoneyPlot";
     // const double luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot.
     // const double luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot.
     const double luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
-    // const double luminosity = 35.922 + 41.529 + 59.740565202; // WARNING: an approximate combination is performed, adding the fitted errors in quadrature. This is reasonable because the bkg nuisance parameters are all uncorrelated between years.
+    // const double luminosity = 35.922 + 41.529 + 59.740565202; // WARNING: an approximate combination is performed, adding the fitted errors in quadrature. This is reasonable because the bkg nuisance parameters are not strongly correlated between years.
 
     // TWO: the main settings
     std::string massType = "S"; // S type mass regions
     // std::string massType = "UnD"; // U+D type mass regions
-    // std::string massType = "both"; // U+D type mass regions
+    // std::string massType = "both"; // WARNING: only to be used for central values (not error bars), as the combination is performed by adding the fitted errors in quadrature. There are non-negligible correlations between the "S" and "UnD" predicted yields.
     
     // unsigned int yearOfRun = 2016;
     // unsigned int yearOfRun = 2017;
     unsigned int yearOfRun = 2018;
-    // unsigned int yearOfRun = 0; // WARNING: an approximate combination is performed, adding the fitted errors in quadrature. This is reasonable because the bkg nuisance parameters are all uncorrelated between years.
+    // unsigned int yearOfRun = 0; // WARNING: an approximate combination is performed, adding the fitted errors in quadrature. This is reasonable because the bkg nuisance parameters are not strongly correlated between years.
     
     // const std::string fitType = "prefit";
     const std::string fitType = "fit_b";
