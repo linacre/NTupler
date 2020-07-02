@@ -24,9 +24,8 @@
 
 // MAKES PLOTS USING HISTOGRAMS
 
-void GetHistograms2016(std::map<std::string,TH1D*>&);
-void GetHistograms2017(std::map<std::string,TH1D*>&);
-void GetHistograms2018(std::map<std::string,TH1D*>&);
+void GetHistograms(std::map<std::string,TH1D*>&, int year);
+
 int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +35,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "./histos_plot_2018_ht/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "./histos_plot_combined/"; // where we are going to save the output plots (should include the samples name, and any important features)
     //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/oneDimensionRepresentation/DATA/control/predNew_calcForHighestTwoHtBins/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
     // const double luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
@@ -55,9 +54,9 @@ int main(){
     std::map<std::string, TH1D*> h16_;
     std::map<std::string, TH1D*> h17_;
     std::map<std::string, TH1D*> h18_;
-    //GetHistograms2016(h16_);
-    //GetHistograms2017(h16_);
-    GetHistograms2018(h16_);
+    //GetHistograms(h16_, 2016);
+    //GetHistograms(h16_, 2017);
+    GetHistograms(h16_, 2018);
     // explanation of terminology
     // 1. S, U, D --> refers to mass space. pred(Old)(New) is the prediction of S. UnD is the sum U+D.
     // 2. tag, anti, control --> refers to 2*DBT space
@@ -112,7 +111,12 @@ int main(){
     // TWO: make plot aesthetics and saving
 
     std::vector<TH1D*> indiHistoVec = {h16_["S_control_data"], h16_["predNew_control_data"]};
-    // std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_ZJets"], h16_["S_tag_TTJets"], h16_["S_tag_QCD"]};
+    // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_data"], h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"]};
+    //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"], h16_["S_tag_2017as2018/mH70_mSusy1200"], h16_["S_tag_2017as2018/mH70_mSusy2000"], h16_["S_tag_2017as2018/mH70_mSusy2800"]};
+    // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"], h16_["S_tag_jmsD_mH70_mSusy1200"], h16_["S_tag_jmsD_mH70_mSusy2000"], h16_["S_tag_jmsD_mH70_mSusy2800"], h16_["S_tag_jmsU_mH70_mSusy1200"], h16_["S_tag_jmsU_mH70_mSusy2000"], h16_["S_tag_jmsU_mH70_mSusy2800"]};
+    //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"], h16_["S_tag_jmsD_mH70_mSusy1200"], h16_["S_tag_jmsD_mH70_mSusy2000"], h16_["S_tag_jmsD_mH70_mSusy2800"], h16_["S_tag_2017as2018/mH70_mSusy1200"], h16_["S_tag_2017as2018/mH70_mSusy2000"], h16_["S_tag_2017as2018/mH70_mSusy2800"]};
+    // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"], h16_["S_tag_jmrU_mH70_mSusy1200"], h16_["S_tag_jmrU_mH70_mSusy2000"], h16_["S_tag_jmrU_mH70_mSusy2800"], h16_["S_tag_2017as2018/mH70_mSusy1200"], h16_["S_tag_2017as2018/mH70_mSusy2000"], h16_["S_tag_2017as2018/mH70_mSusy2800"]};
+    // std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_ZJets"], h16_["S_tag_TTJetsALL"], h16_["S_tag_QCD"]};
 
     Plotter plot = Plotter(indiHistoVec);
     // Plotter plot = Plotter({}, stackHistoVec);
@@ -163,349 +167,67 @@ int main(){
 }
 
 
-
-
-
-void GetHistograms2016(std::map<std::string,TH1D*>& h_)
+void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
 {
     // histos locations
-    std::string preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2016/";
-    
-    std::string postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
+
+    std::string preamble;
+    std::string postamble;
     std::vector<std::string> histoNameVec;
-    histoNameVec.push_back("data");
-    histoNameVec.push_back("QCD");
-    histoNameVec.push_back("TTJets");
-    histoNameVec.push_back("ZJets");
-    histoNameVec.push_back("WJets");
-    histoNameVec.push_back("mH30_mSusy800");
-    histoNameVec.push_back("mH50_mSusy800");
-    histoNameVec.push_back("mH70_mSusy800");
-    histoNameVec.push_back("mH90_mSusy800");
-    histoNameVec.push_back("mH125_mSusy800");
-    histoNameVec.push_back("mH30_mSusy1200");
-    histoNameVec.push_back("mH50_mSusy1200");
-    histoNameVec.push_back("mH70_mSusy1200");
-    histoNameVec.push_back("mH90_mSusy1200");
-    histoNameVec.push_back("mH125_mSusy1200");
-    histoNameVec.push_back("mH30_mSusy1600");
-    histoNameVec.push_back("mH50_mSusy1600");
-    histoNameVec.push_back("mH70_mSusy1600");
-    histoNameVec.push_back("mH90_mSusy1600");
-    histoNameVec.push_back("mH125_mSusy1600");
-    histoNameVec.push_back("mH30_mSusy2000");
-    histoNameVec.push_back("mH50_mSusy2000");
-    histoNameVec.push_back("mH70_mSusy2000");
-    histoNameVec.push_back("mH90_mSusy2000");
-    histoNameVec.push_back("mH125_mSusy2000");
-    histoNameVec.push_back("mH30_mSusy2200");
-    histoNameVec.push_back("mH50_mSusy2200");
-    histoNameVec.push_back("mH70_mSusy2200");
-    histoNameVec.push_back("mH90_mSusy2200");
-    histoNameVec.push_back("mH125_mSusy2200");
-    histoNameVec.push_back("mH30_mSusy2400");
-    histoNameVec.push_back("mH50_mSusy2400");
-    histoNameVec.push_back("mH70_mSusy2400");
-    histoNameVec.push_back("mH90_mSusy2400");
-    histoNameVec.push_back("mH125_mSusy2400");
-    histoNameVec.push_back("mH30_mSusy2600");
-    histoNameVec.push_back("mH50_mSusy2600");
-    histoNameVec.push_back("mH70_mSusy2600");
-    histoNameVec.push_back("mH90_mSusy2600");
-    histoNameVec.push_back("mH125_mSusy2600");
-    histoNameVec.push_back("mH30_mSusy2800");
-    histoNameVec.push_back("mH50_mSusy2800");
-    histoNameVec.push_back("mH70_mSusy2800");
-    histoNameVec.push_back("mH90_mSusy2800");
-    histoNameVec.push_back("mH125_mSusy2800");
-    histoNameVec.push_back("CPS_h70s1200");
-    histoNameVec.push_back("CPS_h70s2000");
-    histoNameVec.push_back("CPS_h70s2600");
-    // histoNameVec.push_back("mH70_mSusy2000_nPuIs23orLess");
-    // histoNameVec.push_back("mH70_mSusy2000_nPuIs24orMore");
-    // histoNameVec.push_back("mH70_mSusy2200_nPuIs23orLess");
-    // histoNameVec.push_back("mH70_mSusy2200_nPuIs24orMore");
 
-    for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
+    if(year==2016) {
 
-        const std::string histoToUse = histoNameVec[iH];
-        TFile * f = new TFile(Form("%s/%s/%s", preamble.c_str(), histoToUse.c_str(), postamble.c_str()));
-        // explanation of terminology
-        // 1. S, U, D --> refers to mass space. pred is the prediction of S. UnD is the sum U+D.
-        // 2. tag, anti, control --> refers to 2*DBT space
-        // 3. sample name on the end
+        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2016/";
+        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
 
-        h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
-        h_[Form("U_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtDiagUpLoose_NOSYS");
-        h_[Form("D_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtDiagUpLoose_NOSYS");
+        histoNameVec.push_back("data");
+        histoNameVec.push_back("QCD");
+        histoNameVec.push_back("TTJets");
+        histoNameVec.push_back("ZJets");
+        histoNameVec.push_back("WJets");
 
-        h_[Form("S_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtOffLooseAndOffLoose_NOSYS");
-        h_[Form("U_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtOffLooseAndOffLoose_NOSYS");
-        h_[Form("D_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtOffLooseAndOffLoose_NOSYS");
+        // histoNameVec.push_back("mH70_mSusy2000_nPuIs23orLess");
+        // histoNameVec.push_back("mH70_mSusy2000_nPuIs24orMore");
+        // histoNameVec.push_back("mH70_mSusy2200_nPuIs23orLess");
+        // histoNameVec.push_back("mH70_mSusy2200_nPuIs24orMore");
 
-        h_[Form("S_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtLooseMed2AndOffIDBTCv23_NOSYS");
-        h_[Form("U_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtLooseMed2AndOffIDBTCv23_NOSYS");
-        h_[Form("D_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtLooseMed2AndOffIDBTCv23_NOSYS");
-        h_[Form("S_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("S_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
-        h_[Form("U_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("U_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
-        h_[Form("D_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("D_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
+    }
 
-        h_[Form("UnD_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_tag_%s", histoToUse.c_str())]->Clone();
-        h_[Form("UnD_tag_%s", histoToUse.c_str())]->Add(h_[Form("D_tag_%s", histoToUse.c_str())]);
+    if(year==2017) {
 
-        h_[Form("UnD_anti_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_anti_%s", histoToUse.c_str())]->Clone();
-        h_[Form("UnD_anti_%s", histoToUse.c_str())]->Add(h_[Form("D_anti_%s", histoToUse.c_str())]);
+        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2017/";
+        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
 
-        h_[Form("UnD_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_control_%s", histoToUse.c_str())]->Clone();
-        h_[Form("UnD_control_%s", histoToUse.c_str())]->Add(h_[Form("D_control_%s", histoToUse.c_str())]);
-   
-        // NEW METHOD OF PREDICTION
-        h_[Form("predNew_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
-        for (int iBin = 1; iBin < h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
-            double corrValue = QcdSidebandCorr::GetCorr(iBin, 2016);
-            double corrError = QcdSidebandCorr::GetCorrErr(iBin, 2016);
-            double UnDValue = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinContent(iBin);
-            double UnDError = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinError(iBin);
-            double predValue = corrValue * UnDValue;
-            double predError = 0.0;
-            if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
-            h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
-            h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
-        }
-
-        h_[Form("predNew_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
-        for (int iBin = 1; iBin < h_[Form("predNew_control_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
-            double corrValue = QcdSidebandCorr::GetCorr(iBin, 2016);
-            double corrError = QcdSidebandCorr::GetCorrErr(iBin, 2016);
-            double UnDValue = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinContent(iBin);
-            double UnDError = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinError(iBin);
-            double predValue = corrValue * UnDValue;
-            double predError = 0.0;
-            if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
-            h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
-            h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
-        }
-
-        // OLD METHOD OF PREDICTION
-        h_[Form("predOld_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
-        h_[Form("predOld_tag_%s", histoToUse.c_str())]->Multiply(h_[Form("S_anti_%s", histoToUse.c_str())]);
-        h_[Form("predOld_tag_%s", histoToUse.c_str())]->Divide(h_[Form("UnD_anti_%s", histoToUse.c_str())]);
-
-        h_[Form("predOld_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
-        h_[Form("predOld_control_%s", histoToUse.c_str())]->Multiply(h_[Form("S_anti_%s", histoToUse.c_str())]);
-        h_[Form("predOld_control_%s", histoToUse.c_str())]->Divide(h_[Form("UnD_anti_%s", histoToUse.c_str())]);
-
-        // SYSTEMATIC VARIATIONS (for TAG histograms)
-        std::vector<std::string> nonTrivialSysVec;
-        nonTrivialSysVec.push_back("jecAK4UncUp");
-        nonTrivialSysVec.push_back("jecAK4UncDown");
-        nonTrivialSysVec.push_back("jerAK4UncUp");
-        nonTrivialSysVec.push_back("jerAK4UncDown");
-        nonTrivialSysVec.push_back("jecAK8UncUp");
-        nonTrivialSysVec.push_back("jecAK8UncDown");
-        nonTrivialSysVec.push_back("jerAK8UncUp");
-        nonTrivialSysVec.push_back("jerAK8UncDown");
-        nonTrivialSysVec.push_back("jmsUncUp");
-        nonTrivialSysVec.push_back("jmsUncDown");
-        nonTrivialSysVec.push_back("jmrUncUp");
-        nonTrivialSysVec.push_back("jmrUncDown");
-        nonTrivialSysVec.push_back("dbtTagUp");
-        nonTrivialSysVec.push_back("dbtTagDown");
-        nonTrivialSysVec.push_back("isrUp");
-        nonTrivialSysVec.push_back("isrDown");
-
-        for (auto nonTrivialSys : nonTrivialSysVec){
-
-            if ( (TH1D*)f->Get(Form("S_dbtDiagUpLoose_%s", nonTrivialSys.c_str())) == NULL ) continue;
-            h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("S_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
-            h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("U_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
-            h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Add((TH1D*)f->Get(Form("D_dbtDiagUpLoose_%s", nonTrivialSys.c_str())));
-
-        } // closes loop through nonTrivialSysVec
-
-    } // closes loop through histoNameVec
-}
+        histoNameVec.push_back("data");
+        histoNameVec.push_back("QCD");
+        histoNameVec.push_back("TTJetsALL");
+        histoNameVec.push_back("TTJets0L");
+        histoNameVec.push_back("TTJets1L");
+        histoNameVec.push_back("TTJets2L");
+        histoNameVec.push_back("ZJets");
+        histoNameVec.push_back("WJets");
 
 
+    }
 
+    if(year==2018) {
 
+        preamble = "/home/ppd/xxt18833/NMSSM/PATNTupler_18/macros/2018_histos_ht";
+        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi60.root";
 
+        histoNameVec.push_back("data");
+        histoNameVec.push_back("QCD");
+        histoNameVec.push_back("TTJetsALL");
+        histoNameVec.push_back("TTJets0L");
+        histoNameVec.push_back("TTJets1L");
+        histoNameVec.push_back("TTJets2L");
+        histoNameVec.push_back("ZJets");
+        histoNameVec.push_back("WJets");
 
-void GetHistograms2017(std::map<std::string,TH1D*>& h_)
-{
-    // histos locations
-    std::string preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2017/";
-    
-    std::string postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
-    std::vector<std::string> histoNameVec;
-    histoNameVec.push_back("data");
-    histoNameVec.push_back("QCD");
-    histoNameVec.push_back("TTJetsALL");
-    histoNameVec.push_back("TTJets0L");
-    histoNameVec.push_back("TTJets1L");
-    histoNameVec.push_back("TTJets2L");
-    histoNameVec.push_back("ZJets");
-    histoNameVec.push_back("WJets");
-    histoNameVec.push_back("mH30_mSusy800");
-    histoNameVec.push_back("mH50_mSusy800");
-    histoNameVec.push_back("mH70_mSusy800");
-    histoNameVec.push_back("mH90_mSusy800");
-    histoNameVec.push_back("mH125_mSusy800");
-    histoNameVec.push_back("mH30_mSusy1200");
-    histoNameVec.push_back("mH50_mSusy1200");
-    histoNameVec.push_back("mH70_mSusy1200");
-    histoNameVec.push_back("mH90_mSusy1200");
-    histoNameVec.push_back("mH125_mSusy1200");
-    histoNameVec.push_back("mH30_mSusy1600");
-    histoNameVec.push_back("mH50_mSusy1600");
-    histoNameVec.push_back("mH70_mSusy1600");
-    histoNameVec.push_back("mH90_mSusy1600");
-    histoNameVec.push_back("mH125_mSusy1600");
-    histoNameVec.push_back("mH30_mSusy2000");
-    histoNameVec.push_back("mH50_mSusy2000");
-    histoNameVec.push_back("mH70_mSusy2000");
-    histoNameVec.push_back("mH90_mSusy2000");
-    histoNameVec.push_back("mH125_mSusy2000");
-    histoNameVec.push_back("mH30_mSusy2200");
-    histoNameVec.push_back("mH50_mSusy2200");
-    histoNameVec.push_back("mH70_mSusy2200");
-    histoNameVec.push_back("mH90_mSusy2200");
-    histoNameVec.push_back("mH125_mSusy2200");
-    histoNameVec.push_back("mH30_mSusy2400");
-    histoNameVec.push_back("mH50_mSusy2400");
-    histoNameVec.push_back("mH70_mSusy2400");
-    histoNameVec.push_back("mH90_mSusy2400");
-    histoNameVec.push_back("mH125_mSusy2400");
-    histoNameVec.push_back("mH30_mSusy2600");
-    histoNameVec.push_back("mH50_mSusy2600");
-    histoNameVec.push_back("mH70_mSusy2600");
-    histoNameVec.push_back("mH90_mSusy2600");
-    histoNameVec.push_back("mH125_mSusy2600");
-    histoNameVec.push_back("mH30_mSusy2800");
-    histoNameVec.push_back("mH50_mSusy2800");
-    histoNameVec.push_back("mH70_mSusy2800");
-    histoNameVec.push_back("mH90_mSusy2800");
-    histoNameVec.push_back("mH125_mSusy2800");
-    histoNameVec.push_back("CPS_h70s1200");
-    histoNameVec.push_back("CPS_h70s2000");
-    histoNameVec.push_back("CPS_h70s2600");
-
-    for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
-
-        const std::string histoToUse = histoNameVec[iH];
-        TFile * f = new TFile(Form("%s/%s/%s", preamble.c_str(), histoToUse.c_str(), postamble.c_str()));
-        // explanation of terminology
-        // 1. S, U, D --> refers to mass space. pred is the prediction of S. UnD is the sum U+D.
-        // 2. tag, anti, control --> refers to 2*DBT space
-        // 3. sample name on the end
-
-        h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
-        h_[Form("U_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtDiagUpLoose_NOSYS");
-        h_[Form("D_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtDiagUpLoose_NOSYS");
-
-        h_[Form("S_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtOffLooseAndOffLoose_NOSYS");
-        h_[Form("U_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtOffLooseAndOffLoose_NOSYS");
-        h_[Form("D_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtOffLooseAndOffLoose_NOSYS");
-
-        h_[Form("S_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtLooseMed2AndOffIDBTCv23_NOSYS");
-        h_[Form("U_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtLooseMed2AndOffIDBTCv23_NOSYS");
-        h_[Form("D_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtLooseMed2AndOffIDBTCv23_NOSYS");
-        h_[Form("S_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("S_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
-        h_[Form("U_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("U_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
-        h_[Form("D_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("D_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
-
-        h_[Form("UnD_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_tag_%s", histoToUse.c_str())]->Clone();
-        h_[Form("UnD_tag_%s", histoToUse.c_str())]->Add(h_[Form("D_tag_%s", histoToUse.c_str())]);
-
-        h_[Form("UnD_anti_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_anti_%s", histoToUse.c_str())]->Clone();
-        h_[Form("UnD_anti_%s", histoToUse.c_str())]->Add(h_[Form("D_anti_%s", histoToUse.c_str())]);
-
-        h_[Form("UnD_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_control_%s", histoToUse.c_str())]->Clone();
-        h_[Form("UnD_control_%s", histoToUse.c_str())]->Add(h_[Form("D_control_%s", histoToUse.c_str())]);
-   
-        // NEW METHOD OF PREDICTION
-        h_[Form("predNew_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
-        for (int iBin = 1; iBin < h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
-            double corrValue = QcdSidebandCorr::GetCorr(iBin, 2017);
-            double corrError = QcdSidebandCorr::GetCorrErr(iBin, 2017);
-            double UnDValue = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinContent(iBin);
-            double UnDError = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinError(iBin);
-            double predValue = corrValue * UnDValue;
-            double predError = 0.0;
-            if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
-            h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
-            h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
-        }
-
-        h_[Form("predNew_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
-        for (int iBin = 1; iBin < h_[Form("predNew_control_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
-            double corrValue = QcdSidebandCorr::GetCorr(iBin, 2017);
-            double corrError = QcdSidebandCorr::GetCorrErr(iBin, 2017);
-            double UnDValue = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinContent(iBin);
-            double UnDError = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinError(iBin);
-            double predValue = corrValue * UnDValue;
-            double predError = 0.0;
-            if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
-            h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
-            h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
-        }
-
-        // OLD METHOD OF PREDICTION
-        h_[Form("predOld_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
-        h_[Form("predOld_tag_%s", histoToUse.c_str())]->Multiply(h_[Form("S_anti_%s", histoToUse.c_str())]);
-        h_[Form("predOld_tag_%s", histoToUse.c_str())]->Divide(h_[Form("UnD_anti_%s", histoToUse.c_str())]);
-
-        h_[Form("predOld_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
-        h_[Form("predOld_control_%s", histoToUse.c_str())]->Multiply(h_[Form("S_anti_%s", histoToUse.c_str())]);
-        h_[Form("predOld_control_%s", histoToUse.c_str())]->Divide(h_[Form("UnD_anti_%s", histoToUse.c_str())]);
-
-        // SYSTEMATIC VARIATIONS (for TAG histograms)
-        std::vector<std::string> nonTrivialSysVec;
-        nonTrivialSysVec.push_back("jecAK4UncUp");
-        nonTrivialSysVec.push_back("jecAK4UncDown");
-        nonTrivialSysVec.push_back("jerAK4UncUp");
-        nonTrivialSysVec.push_back("jerAK4UncDown");
-        nonTrivialSysVec.push_back("jecAK8UncUp");
-        nonTrivialSysVec.push_back("jecAK8UncDown");
-        nonTrivialSysVec.push_back("jerAK8UncUp");
-        nonTrivialSysVec.push_back("jerAK8UncDown");
-        nonTrivialSysVec.push_back("jmsUncUp");
-        nonTrivialSysVec.push_back("jmsUncDown");
-        nonTrivialSysVec.push_back("jmrUncUp");
-        nonTrivialSysVec.push_back("jmrUncDown");
-        nonTrivialSysVec.push_back("dbtTagUp");
-        nonTrivialSysVec.push_back("dbtTagDown");
-        nonTrivialSysVec.push_back("isrUp");
-        nonTrivialSysVec.push_back("isrDown");
-
-        for (auto nonTrivialSys : nonTrivialSysVec){
-
-            if ( (TH1D*)f->Get(Form("S_dbtDiagUpLoose_%s", nonTrivialSys.c_str())) == NULL ) continue;
-            h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("S_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
-            h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("U_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
-            h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Add((TH1D*)f->Get(Form("D_dbtDiagUpLoose_%s", nonTrivialSys.c_str())));
-
-        } // closes loop through nonTrivialSysVec
-
-    } // closes loop through histoNameVec
-}
-
-
-void GetHistograms2018(std::map<std::string,TH1D*>& h_)
-{
-    // histos locations
-    std::string preamble = "/home/ppd/xxt18833/NMSSM/PATNTupler_18/macros/2018_histos_ht";
-
-    std::string postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi60.root";
-    std::vector<std::string> histoNameVec;
-    histoNameVec.push_back("data");
-    histoNameVec.push_back("QCD");
-    histoNameVec.push_back("TTJetsALL");
-    histoNameVec.push_back("TTJets0L");
-    histoNameVec.push_back("TTJets1L");
-    histoNameVec.push_back("TTJets2L");
-    histoNameVec.push_back("ZJets");
-    histoNameVec.push_back("WJets");
+        // histoNameVec.push_back("2017as2018/mH70_mSusy1200");
+        // histoNameVec.push_back("2017as2018/mH70_mSusy2000");
+        // histoNameVec.push_back("2017as2018/mH70_mSusy2800");
+    }
 
     histoNameVec.push_back("mH70_mSusy1200");
     histoNameVec.push_back("mH70_mSusy2000");
@@ -567,7 +289,6 @@ void GetHistograms2018(std::map<std::string,TH1D*>& h_)
         // 2. tag, anti, control --> refers to 2*DBT space
         // 3. sample name on the end
 
-
         h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
         h_[Form("U_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtDiagUpLoose_NOSYS");
         h_[Form("D_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtDiagUpLoose_NOSYS");
@@ -595,8 +316,8 @@ void GetHistograms2018(std::map<std::string,TH1D*>& h_)
         // NEW METHOD OF PREDICTION
         h_[Form("predNew_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
         for (int iBin = 1; iBin < h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
-            double corrValue = QcdSidebandCorr::GetCorr(iBin, 2018);
-            double corrError = QcdSidebandCorr::GetCorrErr(iBin, 2018);
+            double corrValue = QcdSidebandCorr::GetCorr(iBin, year);
+            double corrError = QcdSidebandCorr::GetCorrErr(iBin, year);
             double UnDValue = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinContent(iBin);
             double UnDError = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinError(iBin);
             double predValue = corrValue * UnDValue;
@@ -608,8 +329,8 @@ void GetHistograms2018(std::map<std::string,TH1D*>& h_)
 
         h_[Form("predNew_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
         for (int iBin = 1; iBin < h_[Form("predNew_control_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
-            double corrValue = QcdSidebandCorr::GetCorr(iBin, 2018);
-            double corrError = QcdSidebandCorr::GetCorrErr(iBin, 2018);
+            double corrValue = QcdSidebandCorr::GetCorr(iBin, year);
+            double corrError = QcdSidebandCorr::GetCorrErr(iBin, year);
             double UnDValue = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinContent(iBin);
             double UnDError = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinError(iBin);
             double predValue = corrValue * UnDValue;
@@ -654,3 +375,4 @@ void GetHistograms2018(std::map<std::string,TH1D*>& h_)
 
     } // closes loop through histoNameVec
 }
+
