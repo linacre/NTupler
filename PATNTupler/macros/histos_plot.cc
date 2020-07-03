@@ -25,6 +25,7 @@
 // MAKES PLOTS USING HISTOGRAMS
 
 void GetHistograms(std::map<std::string,TH1D*>&, int year);
+void CombineHistograms(std::map<std::string,TH1D*>&, std::map<std::string,TH1D*>&, std::map<std::string,TH1D*>&);
 
 int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,7 +57,11 @@ int main(){
     std::map<std::string, TH1D*> h18_;
     //GetHistograms(h16_, 2016);
     //GetHistograms(h16_, 2017);
-    GetHistograms(h16_, 2018);
+    //GetHistograms(h16_, 2018);
+
+    CombineHistograms(h16_, h17_, h18_);
+
+
     // explanation of terminology
     // 1. S, U, D --> refers to mass space. pred(Old)(New) is the prediction of S. UnD is the sum U+D.
     // 2. tag, anti, control --> refers to 2*DBT space
@@ -322,14 +327,11 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
         if(histoToUse == "data") {
                 h_[Form("S_tag_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("S_tag_%s", histoToUse.c_str())]->Clone();
                 h_[Form("UnD_tag_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
-                h_[Form("UnD_tag_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
 
                 h_[Form("S_anti_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("S_anti_%s", histoToUse.c_str())]->Clone();
                 h_[Form("UnD_anti_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_anti_%s", histoToUse.c_str())]->Clone();
-                h_[Form("UnD_anti_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_anti_%s", histoToUse.c_str())]->Clone();
 
                 h_[Form("S_control_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("S_control_%s", histoToUse.c_str())]->Clone();
-                h_[Form("UnD_control_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
                 h_[Form("UnD_control_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
 
 
@@ -338,14 +340,11 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
 
                 h_[Form("S_tag_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("S_tag_%s", bgToUse.c_str())], -1);
                 h_[Form("UnD_tag_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("UnD_tag_%s", bgToUse.c_str())], -1);
-                h_[Form("UnD_tag_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("UnD_tag_%s", bgToUse.c_str())], -1);
 
                 h_[Form("S_anti_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("S_anti_%s", bgToUse.c_str())], -1);
                 h_[Form("UnD_anti_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("UnD_anti_%s", bgToUse.c_str())], -1);
-                h_[Form("UnD_anti_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("UnD_anti_%s", bgToUse.c_str())], -1);
 
                 h_[Form("S_control_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("S_control_%s", bgToUse.c_str())], -1);
-                h_[Form("UnD_control_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("UnD_control_%s", bgToUse.c_str())], -1);
                 h_[Form("UnD_control_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("UnD_control_%s", bgToUse.c_str())], -1);
 
             }
@@ -353,6 +352,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
 
         // NEW METHOD OF PREDICTION
         bool subBkg = true;
+        //TODO: save both data and databkgsub, and sum over years
 
         h_[Form("predNew_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
         for (int iBin = 1; iBin < h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
@@ -438,3 +438,37 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
     } // closes loop through histoNameVec
 }
 
+
+
+void CombineHistograms(std::map<std::string,TH1D*>& h16_, std::map<std::string,TH1D*>& h17_, std::map<std::string,TH1D*>& h18_)
+{
+    GetHistograms(h16_, 2016);
+    GetHistograms(h17_, 2017);
+    GetHistograms(h18_, 2018);
+
+    for (auto const& x : h16_)
+    {
+        std::cout << x.first  // string (key)
+                  << ':' 
+                  << x.second->Integral() // string's value 
+                  << std::endl ;
+
+        TString hist = x.first;
+        // if ( hist.EndsWith("TTJets") ) hist += "ALL";
+        hist.ReplaceAll("TTJets","TTJetsALL");
+
+        // std::cout << " 2018: "<< h18_[hist.Data()]->Integral();
+        // std::cout << " 2017: "<< h17_[hist.Data()]->Integral();
+
+        // TODO: 2017 TTJetsALL is missing systematics, so use subcomponents instead if this is ever needed
+
+        x.second->Add( h17_[hist.Data()] );
+        x.second->Add( h18_[hist.Data()] );
+
+        std::cout << hist  // string (key)
+                  << ':' 
+                  << x.second->Integral() // string's value 
+                  << std::endl ;
+    }
+
+}
