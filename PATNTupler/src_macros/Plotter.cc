@@ -201,6 +201,53 @@ tdrStyle(TDRStyle())
 }
 
 
+Plotter::Plotter(std::vector<TH1D*> th1IndiDummy, std::vector<TH1D*> th1StackDummy, TH1D dataDummy) :
+addRatioBox(false),
+addRatioBoxUnityLine(false),
+leg(0),
+leg2Cols(0),
+addLatex(false),
+useLogY(false),
+useLogZ(false),
+plotWithErrorsIndi(false),
+plotWithErrorsStack(false),
+setYValueMin(false),
+yValueMin(0.0),
+useObservedPlot(false),
+tdrStyle(TDRStyle())
+{
+	if (th1IndiDummy.empty()) std::cout << "Plotter Message: first constructor argument std::vector<TH1D*> is empty" << std::endl;
+	else th1Indi = th1IndiDummy;
+	if (th1StackDummy.empty()) std::cout << "Plotter Message: first constructor argument std::vector<TH1D*> is empty" << std::endl;
+	else th1Stack = th1StackDummy;
+
+	for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I){
+		th1Indi[iTh1I]->SetLineColor(SetColor_stark(iTh1I));
+		th1Indi[iTh1I]->SetLineWidth(2);
+		th1Indi[iTh1I]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
+		th1Indi[iTh1I]->GetXaxis()->SetLabelSize(0.04);
+		th1Indi[iTh1I]->GetYaxis()->SetTitleSize(0.05);
+		th1Indi[iTh1I]->GetYaxis()->SetLabelSize(0.04);
+	}
+	for (size_t iTh1S = 0; iTh1S != th1Stack.size(); ++iTh1S){
+		th1Stack[iTh1S]->SetFillColor(SetColor_mellow(iTh1S, th1Stack.size()));
+		th1Stack[iTh1S]->SetLineWidth(0.0);
+		th1Stack[iTh1S]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
+		th1Stack[iTh1S]->GetXaxis()->SetLabelSize(0.04);
+		th1Stack[iTh1S]->GetYaxis()->SetTitleSize(0.05);
+		th1Stack[iTh1S]->GetYaxis()->SetLabelSize(0.04);
+	}
+
+	hdata = (TH1D*)dataDummy.Clone();
+	hdata->SetMarkerStyle(20);
+	hdata->SetMarkerSize(0.7);
+	hdata->SetLineColor(kBlack);
+	hdata->SetLineWidth(1.5);
+	hdata->SetBinErrorOption(TH1::kPoisson);
+
+}
+
+
 Plotter::Plotter(std::vector<TGraphAsymmErrors*> graphVecDummy, const bool& useObservedPlotDummy) :
 addRatioBox(false),
 addRatioBoxUnityLine(false),
@@ -321,6 +368,12 @@ void Plotter::AddRatioBox(const double& ratioBoxYAxisMin, const double& ratioBox
 	else if (histoIndi.empty() && histoStack.empty() && th1Indi.size() == 1 && th1Stack.size() > 0){
 		addRatioBox = true;
 		addRatioBoxInfo = "typeB";
+		if (drawUnityLine) addRatioBoxUnityLine = true;
+		return;
+	}
+	else if (hdata){
+		addRatioBox = true;
+		addRatioBoxInfo = "typeC";
 		if (drawUnityLine) addRatioBoxUnityLine = true;
 		return;
 	}
@@ -1023,6 +1076,24 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	double graphMinLin = 0.0;
 	double graphMinLog = min/log10(max/min);
 
+	TH1D* hTotalBkg = nullptr;
+
+	if (!th1Stack.empty()) {
+		if (plotWithErrorsStack){
+			hTotalBkg = (TH1D*) th1Stack[0]->Clone();
+			hTotalBkg->SetFillColor(kBlack);
+			hTotalBkg->SetFillStyle(3004);
+			for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) hTotalBkg->Add(th1Stack[iTh1S]);
+
+			// don't subtract negative bkgs (only possible in QCD estimate), to keep the total consistent with the THStack
+			for (int i=1; i != hTotalBkg->GetNbinsX()+1; ++i){
+				double binsum = 0.;
+				for (size_t iTh1S = 0; iTh1S != th1Stack.size(); ++iTh1S) binsum += std::max(0.,th1Stack[iTh1S]->GetBinContent(i));
+				hTotalBkg->SetBinContent(i, binsum);
+			}
+		}
+	}
+
 	if (!th1Indi.empty() && !th1Stack.empty()){
 		initialMax = th1Indi[0]->GetMaximum();
 		initialMin = th1Indi[0]->GetMinimum();
@@ -1041,11 +1112,12 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			if (plotWithErrorsIndi == false) th1Indi[iTh1I]->Draw("HIST, same");
 			else th1Indi[iTh1I]->Draw("same, P");
 		if (plotWithErrorsStack){
-			TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
-			histoStackClone->SetFillColor(kBlack);
-			histoStackClone->SetFillStyle(3004);
-			for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
-			histoStackClone->Draw("same, E2");
+
+			hTotalBkg->Draw("same, E2");
+			//hTotalBkg->Print("all");
+		}
+		if(hdata) {
+			hdata->Draw("E0 same");
 		}
 	}
 
@@ -1089,11 +1161,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		th1Stack[0]->Draw("HIST");
 		hs->Draw("same");
 		if (plotWithErrorsStack){
-			TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
-			histoStackClone->SetFillColor(kBlack);
-			histoStackClone->SetFillStyle(3004);
-			for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
-			histoStackClone->Draw("same, E2");
+			hTotalBkg->Draw("same, E2");
 		}
 	}
 
@@ -1132,7 +1200,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
 	// do ratio box plot if implemented
-	if (addRatioBox){
+	if (addRatioBox && addRatioBoxInfo != "typeC"){
 		c->cd();
 		TPad *padDown = new TPad("padDown","padDown",0,0,1,0.3);
 		padDown->SetTopMargin(0.0);
@@ -1150,6 +1218,11 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
 			for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
 			ratioPlotEntry->Divide(th1Indi[0], histoStackClone);
+		}
+		if (addRatioBoxInfo == "typeC"){
+			TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
+			for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
+			ratioPlotEntry->Divide(hdata, histoStackClone);
 		}
 		ratioPlotEntry->SetMarkerStyle(20);
 		ratioPlotEntry->SetMarkerSize(0.7);
@@ -1184,6 +1257,90 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		}
 	}
 
+
+
+	// copied from SaveSpec02
+	// do ratio box plot if implemented
+	TH1D * ratioPlotEntryBackground = nullptr;
+	TH1D * hStackNoErrors = nullptr;
+
+	if (addRatioBox && addRatioBoxInfo == "typeC" && !th1Stack.empty()){
+		c->cd();
+		TPad *padDown = new TPad("padDown","padDown",0,0,1,0.3);
+		padDown->SetTopMargin(0.0);
+		padDown->SetBottomMargin(0.30);
+		padDown->Draw("same");
+		padDown->cd();
+
+		Int_t nBins = hdata->GetNbinsX();
+		std::vector<double> emptyVec;
+		std::vector<double> searchRegionVec;
+		std::vector<double> ratioNomVec;
+		std::vector<double> ratioUpVec;
+		std::vector<double> ratioDownVec;
+
+		hStackNoErrors = (TH1D*)hTotalBkg->Clone();
+		for (int i=1; i != hStackNoErrors->GetNbinsX()+1; ++i){
+			
+			hStackNoErrors->SetBinError(i, 0.0);
+
+			emptyVec.push_back(0.5);
+			searchRegionVec.push_back(i - 0.5);
+			ratioNomVec.push_back( hdata->GetBinContent(i)/(hStackNoErrors->GetBinContent(i)) );
+			ratioUpVec.push_back( hdata->GetBinErrorUp(i)/(hStackNoErrors->GetBinContent(i)) );
+			ratioDownVec.push_back( hdata->GetBinErrorLow(i)/(hStackNoErrors->GetBinContent(i)) );
+		}
+
+		TGraphAsymmErrors * ratioPlotEntry = new TGraphAsymmErrors(nBins, &(searchRegionVec[0]), &(ratioNomVec[0]), &(emptyVec[0]), &(emptyVec[0]), &(ratioDownVec[0]), &(ratioUpVec[0]) );
+		
+		if (hdata->GetXaxis()->GetXbins()->GetArray() == NULL) ratioPlotEntryBackground = new TH1D("ratioPlotEntryBackground", Form("%s;%s;%s", hdata->GetTitle(), hdata->GetXaxis()->GetTitle(), hdata->GetYaxis()->GetTitle()), nBins, hdata->GetBinLowEdge(1), hdata->GetBinLowEdge(nBins+1));
+		else ratioPlotEntryBackground = new TH1D("hTotal", Form("%s;%s;%s", hdata->GetTitle(), hdata->GetXaxis()->GetTitle(), hdata->GetYaxis()->GetTitle()), nBins, hdata->GetXaxis()->GetXbins()->GetArray());
+
+		ratioPlotEntryBackground->Divide( hTotalBkg, hStackNoErrors);
+
+		ratioPlotEntry->SetMarkerStyle(20);
+		ratioPlotEntry->SetMarkerSize(0.7);
+		ratioPlotEntry->SetMarkerColor(kBlack);
+		ratioPlotEntry->SetLineWidth(1.5);
+
+		ratioPlotEntryBackground->GetXaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntryBackground->GetXaxis()->SetTitleOffset(1.00);
+		ratioPlotEntryBackground->GetXaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntryBackground->GetXaxis()->SetLabelOffset(0.007);
+		ratioPlotEntryBackground->GetXaxis()->SetTickLength(0.03 * 2.5);
+
+		ratioPlotEntryBackground->GetYaxis()->SetTitle(ratioBoxYAxisTitle.c_str());
+		ratioPlotEntryBackground->GetYaxis()->CenterTitle(true);
+		ratioPlotEntryBackground->GetYaxis()->SetNdivisions(505);
+		ratioPlotEntryBackground->GetYaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntryBackground->GetYaxis()->SetTitleOffset(0.4);
+		ratioPlotEntryBackground->GetYaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntryBackground->GetYaxis()->SetLabelOffset(0.007);
+		
+		ratioPlotEntryBackground->Draw();
+		if (ratioBoxYAxisMinMax.size()==2){
+			ratioPlotEntryBackground->SetMinimum(ratioBoxYAxisMinMax[0]);
+			ratioPlotEntryBackground->SetMaximum(ratioBoxYAxisMinMax[1]);
+		}
+		ratioPlotEntryBackground->SetLineWidth(0.0);
+		ratioPlotEntryBackground->SetFillColor(kBlack);
+		ratioPlotEntryBackground->SetFillStyle(3004);
+		ratioPlotEntryBackground->Draw("same, P, E2");
+		gStyle->SetEndErrorSize(0);
+		ratioPlotEntry->Draw("E0, same");
+
+		if (addRatioBoxUnityLine){
+			TLine * lineRatio = new TLine(ratioPlotEntryBackground->GetBinLowEdge(1), 1.0, ratioPlotEntryBackground->GetBinLowEdge(ratioPlotEntryBackground->GetNbinsX()+1), 1.0); // xmin, ymin, xmax, ymax
+			// lineRatio->SetLineStyle(2);
+			lineRatio->SetLineWidth(1);
+			lineRatio->SetLineColor(9);
+			lineRatio->Draw("same");
+			ratioPlotEntryBackground->Draw("same, E2");
+			ratioPlotEntry->Draw("P, same");
+		}
+	}
+
+
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
 	c->SaveAs(saveName.c_str());
@@ -1201,6 +1358,10 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	}
 
 	if (addRatioBox) th1Indi[0]->SetLabelOffset(0.007);
+
+	delete ratioPlotEntryBackground;
+	delete hTotalBkg;
+	delete hStackNoErrors;
 
 	return;
 } // closes function SaveSpec01
@@ -1322,6 +1483,9 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
 	// do ratio box plot if implemented
+	TH1D * ratioPlotEntryBackground = nullptr;
+	TH1D * hStackNoErrors = nullptr;
+
 	if (addRatioBox && addRatioBoxInfo == "typeB"){
 		c->cd();
 		TPad *padDown = new TPad("padDown","padDown",0,0,1,0.3);
@@ -1337,7 +1501,7 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 		std::vector<double> ratioUpVec;
 		std::vector<double> ratioDownVec;
 
-		TH1D * hStackNoErrors = (TH1D*)th1Stack[th1Stack.size()-1]->Clone();
+		hStackNoErrors = (TH1D*)th1Stack[th1Stack.size()-1]->Clone();
 		for (int i=1; i != hStackNoErrors->GetNbinsX()+1; ++i){
 			
 			hStackNoErrors->SetBinError(i, 0.0);
@@ -1351,7 +1515,6 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 
 		TGraphAsymmErrors * ratioPlotEntry = new TGraphAsymmErrors(nBins, &(searchRegionVec[0]), &(ratioNomVec[0]), &(emptyVec[0]), &(emptyVec[0]), &(ratioDownVec[0]), &(ratioUpVec[0]) );
 		
-		TH1D * ratioPlotEntryBackground;
 		if (th1Indi[0]->GetXaxis()->GetXbins()->GetArray() == NULL) ratioPlotEntryBackground = new TH1D("ratioPlotEntryBackground", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetBinLowEdge(1), th1Indi[0]->GetBinLowEdge(nBins+1));
 		else ratioPlotEntryBackground = new TH1D("hTotal", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetXaxis()->GetXbins()->GetArray());
 
@@ -1416,6 +1579,10 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 	}
 
 	if (addRatioBox) th1Indi[0]->SetLabelOffset(0.007);
+
+	delete ratioPlotEntryBackground;
+	delete histoStackClone2;
+	delete hStackNoErrors;
 
 	return;
 } // closes function SaveSpec02
@@ -1807,6 +1974,7 @@ TStyle * Plotter::TDRStyle()
 	tdrStyle->SetTitleXOffset(1.00);//EDITFROM 0.9
 	tdrStyle->SetTitleYOffset(1.25); // original
 	tdrStyle->SetTitleYOffset(1.10); // edit
+	// tdrStyle->SetTitleYOffset(1.04); // edit2
 	// tdrStyle->SetTitleOffset(1.1, "Y"); // Another way to set the Offset
 
 	// For the axis labels:

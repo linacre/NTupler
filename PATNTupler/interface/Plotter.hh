@@ -14,6 +14,7 @@ public:
 	Plotter(std::vector<PlotEntry2D>);
 	Plotter(std::vector<TH1D*>);
 	Plotter(std::vector<TH1D*>, std::vector<TH1D*>);
+	Plotter(std::vector<TH1D*>, std::vector<TH1D*>, TH1D);
 	Plotter(std::vector<TGraphAsymmErrors*>, const bool&); // the vector order goes: observed, expected, 1sigma, 2sigma
 
 	void AddRatioBox(const std::string& = "ratio", const bool& = false);
@@ -45,6 +46,7 @@ private:
 	std::vector<PlotEntry2D> histos2D;
 	std::vector<TH1D*> th1Indi;
 	std::vector<TH1D*> th1Stack;
+	TH1D* hdata = nullptr;
 	std::vector<TGraphAsymmErrors*> graphVec;
 	bool addRatioBox;
 	bool addRatioBoxUnityLine;
