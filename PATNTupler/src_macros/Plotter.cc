@@ -490,6 +490,7 @@ void Plotter::AddLegend2Cols(const unsigned int& numRowsBeforeUsing2Cols,  const
 			else leg2Cols->AddEntry(histoStack[i-histoIndi.size()].GetHistogram(), histoStack[i-histoIndi.size()].GetPlotEntryName().c_str(), "f");
 		}
 	}
+	if(hdata) leg2Cols->AddEntry(hdata, "data", "P");
 	return;
 }
 
@@ -537,6 +538,7 @@ void Plotter::AddLegend2Cols(const unsigned int& numRowsBeforeUsing2Cols, const 
 			else leg2Cols->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
 		}
 	}
+	if(hdata) leg2Cols->AddEntry(hdata, "data", "P");
 	return;
 }
 
@@ -1549,7 +1551,7 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 		ratioPlotEntryBackground->SetFillStyle(3004);
 		ratioPlotEntryBackground->Draw("same, P, E2");
 		gStyle->SetEndErrorSize(0);
-		ratioPlotEntry->Draw("P, same");
+		ratioPlotEntry->Draw("E0, same");
 
 		if (addRatioBoxUnityLine){
 			TLine * lineRatio = new TLine(ratioPlotEntryBackground->GetBinLowEdge(1), 1.0, ratioPlotEntryBackground->GetBinLowEdge(ratioPlotEntryBackground->GetNbinsX()+1), 1.0); // xmin, ymin, xmax, ymax
@@ -1845,8 +1847,8 @@ int Plotter::SetColor_stark(const int& index)
 	// if (index==1) return kGreen+1;
 	// if (index==1) return kMagenta-4;
 	
-	if (index==2) return kGreen+1;
-	// if (index==2) return kMagenta-4;
+	// if (index==2) return kGreen+1;
+	if (index==2) return kMagenta-4;
 
 	if (index==3) return kOrange+1;
 	// if (index==3) return kGreen+3;
