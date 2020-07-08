@@ -109,16 +109,70 @@ int main(){
     // }
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
 
+    bool hackBinSyst = true;
+    if(hackBinSyst) {
+        /*
+        TH1D* h_backgroundError = (TH1D*) h16_["predNew_tag_databkgsub"]->Clone();
+        h_backgroundError->Sumw2(); // to avoid bug with AddBinContent adding an error for the first bin
+        h_backgroundError->Add(h16_["S_tag_WJets"]);
+        h_backgroundError->Add(h16_["S_tag_ZJets"]);
+        h_backgroundError->Add(h16_["S_tag_TTJets"]);
 
+        for (unsigned int iBin=iBinMin; iBin<=iBinMax; iBin++){
+            // h_backgroundError->SetBinError(iBin,
+        }
+        */
 
+        // hack to add bkg systs. Currently for combination only. Numbers from running theMoneyPlot.cc prefit, using input with no gmN nuisances and with F_i syst set to 0.001. (combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_nogmN_epsQCDsyst)
+        double binsyst[31] = {0.};
 
+        binsyst[1] = 13.2859;
+        binsyst[2] = 9.31793;
+        binsyst[3] = 5.83484;
+        binsyst[4] = 10.5405;
+        binsyst[5] = 18.0168;
+        binsyst[6] = 20.2324;
+        binsyst[7] = 19.6461;
+        binsyst[8] = 19.0355;
+        binsyst[9] = 18.3439;
+        binsyst[10] = 20.1528;
+        binsyst[11] = 1.03107;
+        binsyst[12] = 1.54672;
+        binsyst[13] = 1.46996;
+        binsyst[14] = 1.09348;
+        binsyst[15] = 3.70189;
+        binsyst[16] = 3.25264;
+        binsyst[17] = 1.46044;
+        binsyst[18] = 2.1315;
+        binsyst[19] = 2.17547;
+        binsyst[20] = 2.15608;
+        binsyst[21] = 0.0207331;
+        binsyst[22] = 0.249534;
+        binsyst[23] = 0.0949082;
+        binsyst[24] = 0.548751;
+        binsyst[25] = 0.436571;
+        binsyst[26] = 0.533465;
+        binsyst[27] = 0.547433;
+        binsyst[28] = 1.18591;
+        binsyst[29] = 0.42598;
+        binsyst[30] = 0.465595;
+
+        for (unsigned int iBin=1; iBin<=30; iBin++){
+            // std::cout<<binsyst[iBin]/h16_["predNew_tag_databkgsub"]->GetBinError(iBin)<<std::endl;
+            // double bgvar = h16_["S_tag_WJets"]->GetBinError(iBin)*h16_["S_tag_WJets"]->GetBinError(iBin) + h16_["S_tag_ZJets"]->GetBinError(iBin)*h16_["S_tag_ZJets"]->GetBinError(iBin) + h16_["S_tag_TTJets"]->GetBinError(iBin)*h16_["S_tag_TTJets"]->GetBinError(iBin);
+            // std::cout<<sqrt(bgvar)<<" "<<sqrt( binsyst[iBin]*binsyst[iBin] + bgvar )  <<std::endl;
+
+            h16_["S_tag_TTJets"]->SetBinError(iBin, sqrt( h16_["S_tag_TTJets"]->GetBinError(iBin)*h16_["S_tag_TTJets"]->GetBinError(iBin) +  binsyst[iBin]*binsyst[iBin] ) );
+        }
+    }
 
     // TWO: make plot aesthetics and saving
 
     // std::vector<TH1D*> indiHistoVec = {h16_["S_control_databkgsub"], h16_["predNew_control_databkgsub"]};
 
-    //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH110_mSusy2400"], h16_["S_tag_mH110_mSusy1200"], h16_["S_tag_mH110_mSusy2000"]};
-    std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH110_mSusy2400"], h16_["S_tag_mH110_mSusy1600"]};
+    std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH90_mSusy2600"], h16_["S_tag_mH90_mSusy1200"], h16_["S_tag_mH90_mSusy2000"]}; // for pre-fit
+    // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH110_mSusy2400"], h16_["S_tag_mH110_mSusy1600"]};
+    // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH50_mSusy2200"], h16_["S_tag_mH90_mSusy2200"], h16_["S_tag_mH125_mSusy2200"]}; // for post-fit
 
     //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"], h16_["S_tag_2017as2018/mH70_mSusy1200"], h16_["S_tag_2017as2018/mH70_mSusy2000"], h16_["S_tag_2017as2018/mH70_mSusy2800"]};
     // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"], h16_["S_tag_jmsD_mH70_mSusy1200"], h16_["S_tag_jmsD_mH70_mSusy2000"], h16_["S_tag_jmsD_mH70_mSusy2800"], h16_["S_tag_jmsU_mH70_mSusy1200"], h16_["S_tag_jmsU_mH70_mSusy2000"], h16_["S_tag_jmsU_mH70_mSusy2800"]};
@@ -138,6 +192,9 @@ int main(){
     // plot.AddLegend(legendNames, 0.67, 0.88, 0.64, 0.83, 0.028);
     // plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
     // plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
+
+    std::vector<std::string> legendNames = {"m_{S}2600", "m_{S}1200", "m_{S}2000", "WJets", "ZJets", "TTJets", "QCD"};
+    plot.AddLegend2Cols(0, legendNames, 0.67, 0.95, 0.55, 0.80, 0.045);
     
     // plot.AddLatex();
     // plot.AddLatex(luminosity);
@@ -151,7 +208,7 @@ int main(){
     // plot.AddRatioBox(0.1,2.4, "true / pred", true);
     // plot.AddRatioBox(0.84,1.16, "priv / central", true);
 
-    plot.AddRatioBox(0.1,2.4, "data / pred", true);
+    plot.AddRatioBox(0.3,1.8, "data / pred", true);
     
     // plot.SetErrors();
     plot.SetErrors("only_stack");
@@ -164,7 +221,8 @@ int main(){
     plotName = "log";
     plot.SetLogY();
     // plot.SetYValueMin(0.15); // REMEMBER THIS PARAM! (only for log)
-    plot.SetYValueMin(0.50); // REMEMBER THIS PARAM! (only for log)
+    // plot.SetYValueMin(0.50); // REMEMBER THIS PARAM! (only for log)
+    plot.SetYValueMin(0.40); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(1.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(3.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(12.10); // REMEMBER THIS PARAM! (only for log)
@@ -252,48 +310,56 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
 
     // /*
     histoNameVec.push_back("mH30_mSusy800");
+    // histoNameVec.push_back("mH40_mSusy800");
     histoNameVec.push_back("mH50_mSusy800");
     histoNameVec.push_back("mH70_mSusy800");
     histoNameVec.push_back("mH90_mSusy800");
     histoNameVec.push_back("mH110_mSusy800");
     histoNameVec.push_back("mH125_mSusy800");
     histoNameVec.push_back("mH30_mSusy1200");
+    histoNameVec.push_back("mH40_mSusy1200");
     histoNameVec.push_back("mH50_mSusy1200");
     histoNameVec.push_back("mH70_mSusy1200");
     histoNameVec.push_back("mH90_mSusy1200");
     histoNameVec.push_back("mH110_mSusy1200");
     histoNameVec.push_back("mH125_mSusy1200");
     histoNameVec.push_back("mH30_mSusy1600");
+    histoNameVec.push_back("mH40_mSusy1600");
     histoNameVec.push_back("mH50_mSusy1600");
     histoNameVec.push_back("mH70_mSusy1600");
     histoNameVec.push_back("mH90_mSusy1600");
     histoNameVec.push_back("mH110_mSusy1600");
     histoNameVec.push_back("mH125_mSusy1600");
     histoNameVec.push_back("mH30_mSusy2000");
+    histoNameVec.push_back("mH40_mSusy2000");
     histoNameVec.push_back("mH50_mSusy2000");
     histoNameVec.push_back("mH70_mSusy2000");
     histoNameVec.push_back("mH90_mSusy2000");
     histoNameVec.push_back("mH110_mSusy2000");
     histoNameVec.push_back("mH125_mSusy2000");
     histoNameVec.push_back("mH30_mSusy2200");
+    histoNameVec.push_back("mH40_mSusy2200");
     histoNameVec.push_back("mH50_mSusy2200");
     histoNameVec.push_back("mH70_mSusy2200");
     histoNameVec.push_back("mH90_mSusy2200");
     histoNameVec.push_back("mH110_mSusy2200");
     histoNameVec.push_back("mH125_mSusy2200");
     histoNameVec.push_back("mH30_mSusy2400");
+    histoNameVec.push_back("mH40_mSusy2400");
     histoNameVec.push_back("mH50_mSusy2400");
     histoNameVec.push_back("mH70_mSusy2400");
     histoNameVec.push_back("mH90_mSusy2400");
     histoNameVec.push_back("mH110_mSusy2400");
     histoNameVec.push_back("mH125_mSusy2400");
     histoNameVec.push_back("mH30_mSusy2600");
+    histoNameVec.push_back("mH40_mSusy2600");
     histoNameVec.push_back("mH50_mSusy2600");
     histoNameVec.push_back("mH70_mSusy2600");
     histoNameVec.push_back("mH90_mSusy2600");
     histoNameVec.push_back("mH110_mSusy2600");
     histoNameVec.push_back("mH125_mSusy2600");
     histoNameVec.push_back("mH30_mSusy2800");
+    histoNameVec.push_back("mH40_mSusy2800");
     histoNameVec.push_back("mH50_mSusy2800");
     histoNameVec.push_back("mH70_mSusy2800");
     histoNameVec.push_back("mH90_mSusy2800");
