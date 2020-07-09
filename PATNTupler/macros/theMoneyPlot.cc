@@ -28,6 +28,9 @@
 
 // MAKES PLOTS USING COMBINED OUTPUT
 
+void GetHistograms(std::map<std::string,TH1D*>&, int year);
+void CombineHistograms(std::map<std::string,TH1D*>&, std::map<std::string,TH1D*>&, std::map<std::string,TH1D*>&);
+
 int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,7 +242,7 @@ int main(){
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_nogmN_epsQCDsyst/mH70_mSusy2000/fitDiagnostics.root";
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/mH70_mSusy2000/fitDiagnostics.root";
 
-    const std::string outputDir = "MoneyPlot_ecalfilter_mH70_mSusy2000_robustFit_covar_compare_noSig";
+    const std::string outputDir = "MoneyPlot_ecalfilter_mH70_mSusy2000_robustFit_covar_compare_noSig_overlay";
     // const double luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot.
     // const double luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot.
     // const double luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
@@ -272,6 +275,7 @@ int main(){
     if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
     std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/theMoneyPlot.cc %s/%s__theMoneyPlot.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
+
 
     TFile * f = new TFile(inputFile.c_str());
 
@@ -477,12 +481,24 @@ int main(){
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
 
 
+
+    // load signal predictions etc
+    std::map<std::string, TH1D*> h16_;
+    std::map<std::string, TH1D*> h17_;
+    std::map<std::string, TH1D*> h18_;
+
+    if (yearOfRunOrig == 0) CombineHistograms(h16_, h17_, h18_);
+    else GetHistograms(h16_, yearOfRunOrig);
+
+
+
     // THREE: make plot aesthetics and saving
-    std::vector<TH1D*> indiHistoVec = {h_data[iF]};
+    // std::vector<TH1D*> indiHistoVec = {h_data[iF]};
+    std::vector<TH1D*> indiHistoVec = {h_data[iF], h16_[(massTypeOrig+"_tag_mH50_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH90_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH125_mSusy2200").c_str()]}; // for post-fit
     std::vector<TH1D*> stackHistoVec = {h_WJets[iF], h_ZJets[iF], h_TTJets[iF], h_QCD[iF], h_backgroundError[iF]};
     Plotter plot = Plotter(indiHistoVec, stackHistoVec);
-
-    std::vector<std::string> legendNames = {"data", "WJets", "ZJets", "TTJets", "QCD", "unc."};
+ 
+    std::vector<std::string> legendNames = {"data", "mH50", "mH90", "mH125", "WJets", "ZJets", "TTJets", "QCD", "unc."};
     plot.AddLegend2Cols(0, legendNames, 0.67, 0.95, 0.55, 0.80, 0.045);
     
     // plot.AddLatex(luminosity);
@@ -543,4 +559,349 @@ int main(){
     plot.SaveSpec01(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
 
     return 0;
+}
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// everything below is copied from histos_plot.cc
+
+void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
+{
+    // histos locations
+
+    std::string preamble;
+    std::string postamble;
+    std::vector<std::string> histoNameVec;
+    std::vector<std::string> bgNameVec;
+
+    if(year==2016) {
+
+        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2016/";
+        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
+
+        histoNameVec.push_back("QCD");
+        histoNameVec.push_back("TTJets");
+        histoNameVec.push_back("ZJets");
+        histoNameVec.push_back("WJets");
+
+        // histoNameVec.push_back("mH70_mSusy2000_nPuIs23orLess");
+        // histoNameVec.push_back("mH70_mSusy2000_nPuIs24orMore");
+        // histoNameVec.push_back("mH70_mSusy2200_nPuIs23orLess");
+        // histoNameVec.push_back("mH70_mSusy2200_nPuIs24orMore");
+
+        bgNameVec.push_back("TTJets");
+    }
+
+    if(year==2017) {
+
+        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2017/";
+        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
+
+        histoNameVec.push_back("QCD");
+        histoNameVec.push_back("TTJetsALL");
+        // histoNameVec.push_back("TTJets0L");
+        // histoNameVec.push_back("TTJets1L");
+        // histoNameVec.push_back("TTJets2L");
+        histoNameVec.push_back("ZJets");
+        histoNameVec.push_back("WJets");
+
+        bgNameVec.push_back("TTJetsALL");
+    }
+
+    if(year==2018) {
+
+        preamble = "/home/ppd/xxt18833/NMSSM/PATNTupler_18/macros/2018_histos_ht/2017as2018/";
+        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi60.root";
+
+        histoNameVec.push_back("QCD");
+        histoNameVec.push_back("TTJetsALL");
+        // histoNameVec.push_back("TTJets0L");
+        // histoNameVec.push_back("TTJets1L");
+        // histoNameVec.push_back("TTJets2L");
+        histoNameVec.push_back("ZJets");
+        histoNameVec.push_back("WJets");
+
+        // histoNameVec.push_back("2017as2018/mH70_mSusy1200");
+        // histoNameVec.push_back("2017as2018/mH70_mSusy2000");
+        // histoNameVec.push_back("2017as2018/mH70_mSusy2800");
+
+        bgNameVec.push_back("TTJetsALL");
+    }
+
+    bgNameVec.push_back("ZJets");
+    bgNameVec.push_back("WJets");
+
+    /*
+    histoNameVec.push_back("mH70_mSusy1200");
+    histoNameVec.push_back("mH70_mSusy2000");
+    histoNameVec.push_back("mH70_mSusy2800");
+    */
+
+    // /*
+    histoNameVec.push_back("mH30_mSusy800");
+    // histoNameVec.push_back("mH40_mSusy800");
+    histoNameVec.push_back("mH50_mSusy800");
+    histoNameVec.push_back("mH70_mSusy800");
+    histoNameVec.push_back("mH90_mSusy800");
+    histoNameVec.push_back("mH110_mSusy800");
+    histoNameVec.push_back("mH125_mSusy800");
+    histoNameVec.push_back("mH30_mSusy1200");
+    histoNameVec.push_back("mH40_mSusy1200");
+    histoNameVec.push_back("mH50_mSusy1200");
+    histoNameVec.push_back("mH70_mSusy1200");
+    histoNameVec.push_back("mH90_mSusy1200");
+    histoNameVec.push_back("mH110_mSusy1200");
+    histoNameVec.push_back("mH125_mSusy1200");
+    histoNameVec.push_back("mH30_mSusy1600");
+    histoNameVec.push_back("mH40_mSusy1600");
+    histoNameVec.push_back("mH50_mSusy1600");
+    histoNameVec.push_back("mH70_mSusy1600");
+    histoNameVec.push_back("mH90_mSusy1600");
+    histoNameVec.push_back("mH110_mSusy1600");
+    histoNameVec.push_back("mH125_mSusy1600");
+    histoNameVec.push_back("mH30_mSusy2000");
+    histoNameVec.push_back("mH40_mSusy2000");
+    histoNameVec.push_back("mH50_mSusy2000");
+    histoNameVec.push_back("mH70_mSusy2000");
+    histoNameVec.push_back("mH90_mSusy2000");
+    histoNameVec.push_back("mH110_mSusy2000");
+    histoNameVec.push_back("mH125_mSusy2000");
+    histoNameVec.push_back("mH30_mSusy2200");
+    histoNameVec.push_back("mH40_mSusy2200");
+    histoNameVec.push_back("mH50_mSusy2200");
+    histoNameVec.push_back("mH70_mSusy2200");
+    histoNameVec.push_back("mH90_mSusy2200");
+    histoNameVec.push_back("mH110_mSusy2200");
+    histoNameVec.push_back("mH125_mSusy2200");
+    histoNameVec.push_back("mH30_mSusy2400");
+    histoNameVec.push_back("mH40_mSusy2400");
+    histoNameVec.push_back("mH50_mSusy2400");
+    histoNameVec.push_back("mH70_mSusy2400");
+    histoNameVec.push_back("mH90_mSusy2400");
+    histoNameVec.push_back("mH110_mSusy2400");
+    histoNameVec.push_back("mH125_mSusy2400");
+    histoNameVec.push_back("mH30_mSusy2600");
+    histoNameVec.push_back("mH40_mSusy2600");
+    histoNameVec.push_back("mH50_mSusy2600");
+    histoNameVec.push_back("mH70_mSusy2600");
+    histoNameVec.push_back("mH90_mSusy2600");
+    histoNameVec.push_back("mH110_mSusy2600");
+    histoNameVec.push_back("mH125_mSusy2600");
+    histoNameVec.push_back("mH30_mSusy2800");
+    histoNameVec.push_back("mH40_mSusy2800");
+    histoNameVec.push_back("mH50_mSusy2800");
+    histoNameVec.push_back("mH70_mSusy2800");
+    histoNameVec.push_back("mH90_mSusy2800");
+    histoNameVec.push_back("mH110_mSusy2800");
+    histoNameVec.push_back("mH125_mSusy2800");
+    // histoNameVec.push_back("CPS_h70s1200");
+    // histoNameVec.push_back("CPS_h70s2000");
+    // histoNameVec.push_back("CPS_h70s2600");
+    // */
+
+    histoNameVec.push_back("data");
+
+    for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
+
+        const std::string histoToUse = histoNameVec[iH];
+        // std::cout<<histoToUse<<std::endl;
+        TFile * f = new TFile(Form("%s/%s/%s", preamble.c_str(), histoToUse.c_str(), postamble.c_str()));
+        // explanation of terminology
+        // 1. S, U, D --> refers to mass space. pred is the prediction of S. UnD is the sum U+D.
+        // 2. tag, anti, control --> refers to 2*DBT space
+        // 3. sample name on the end
+
+        h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
+        h_[Form("U_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtDiagUpLoose_NOSYS");
+        h_[Form("D_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtDiagUpLoose_NOSYS");
+
+        h_[Form("S_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtOffLooseAndOffLoose_NOSYS");
+        h_[Form("U_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtOffLooseAndOffLoose_NOSYS");
+        h_[Form("D_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtOffLooseAndOffLoose_NOSYS");
+
+        h_[Form("S_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtLooseMed2AndOffIDBTCv23_NOSYS");
+        h_[Form("U_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtLooseMed2AndOffIDBTCv23_NOSYS");
+        h_[Form("D_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtLooseMed2AndOffIDBTCv23_NOSYS");
+        h_[Form("S_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("S_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
+        h_[Form("U_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("U_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
+        h_[Form("D_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("D_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
+
+        h_[Form("UnD_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_tag_%s", histoToUse.c_str())]->Clone();
+        h_[Form("UnD_tag_%s", histoToUse.c_str())]->Add(h_[Form("D_tag_%s", histoToUse.c_str())]);
+
+        h_[Form("UnD_anti_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_anti_%s", histoToUse.c_str())]->Clone();
+        h_[Form("UnD_anti_%s", histoToUse.c_str())]->Add(h_[Form("D_anti_%s", histoToUse.c_str())]);
+
+        h_[Form("UnD_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_control_%s", histoToUse.c_str())]->Clone();
+        h_[Form("UnD_control_%s", histoToUse.c_str())]->Add(h_[Form("D_control_%s", histoToUse.c_str())]);
+   
+        if(histoToUse == "data") {
+                h_[Form("S_tag_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("S_tag_%s", histoToUse.c_str())]->Clone();
+                h_[Form("UnD_tag_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
+
+                h_[Form("S_anti_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("S_anti_%s", histoToUse.c_str())]->Clone();
+                h_[Form("UnD_anti_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_anti_%s", histoToUse.c_str())]->Clone();
+
+                h_[Form("S_control_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("S_control_%s", histoToUse.c_str())]->Clone();
+                h_[Form("UnD_control_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
+
+
+            for (size_t iB = 0; iB < bgNameVec.size(); ++iB){
+                const std::string bgToUse = bgNameVec[iB];
+
+                h_[Form("S_tag_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("S_tag_%s", bgToUse.c_str())], -1);
+                h_[Form("UnD_tag_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("UnD_tag_%s", bgToUse.c_str())], -1);
+
+                h_[Form("S_anti_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("S_anti_%s", bgToUse.c_str())], -1);
+                h_[Form("UnD_anti_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("UnD_anti_%s", bgToUse.c_str())], -1);
+
+                h_[Form("S_control_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("S_control_%s", bgToUse.c_str())], -1);
+                h_[Form("UnD_control_%sbkgsub", histoToUse.c_str())]->Add( h_[Form("UnD_control_%s", bgToUse.c_str())], -1);
+
+            }
+        }
+
+        // NEW METHOD OF PREDICTION
+
+        h_[Form("predNew_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
+        if(histoToUse == "data") h_[Form("predNew_tag_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
+        for (int iBin = 1; iBin < h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
+            double corrValue = QcdSidebandCorr::GetCorr(iBin, year);
+            double corrError = QcdSidebandCorr::GetCorrErr(iBin, year);
+            double UnDValue = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinContent(iBin);
+            double UnDError = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinError(iBin);
+
+            double predValue = corrValue * UnDValue;
+            double predError = 0.0;
+            if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+            h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
+            h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
+
+            if(histoToUse == "data") {
+                UnDError *= UnDError;
+                for (size_t iB = 0; iB < bgNameVec.size(); ++iB){
+                    const std::string bgToUse = bgNameVec[iB];
+                    UnDValue -= h_[Form("UnD_tag_%s", bgToUse.c_str())]->GetBinContent(iBin);
+                    UnDError += h_[Form("UnD_tag_%s", bgToUse.c_str())]->GetBinError(iBin)*h_[Form("UnD_tag_%s", bgToUse.c_str())]->GetBinError(iBin);
+                }
+                // if(UnDValue < 0.) UnDValue = 0.;
+                UnDError = sqrt(UnDError);
+
+                predValue = corrValue * UnDValue;
+                predError = 0.0;
+                if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+                h_[Form("predNew_tag_%sbkgsub", histoToUse.c_str())]->SetBinContent(iBin, predValue);
+                h_[Form("predNew_tag_%sbkgsub", histoToUse.c_str())]->SetBinError(iBin, predError);
+
+            }
+
+        }
+
+        h_[Form("predNew_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
+        if(histoToUse == "data") h_[Form("predNew_control_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
+        for (int iBin = 1; iBin < h_[Form("predNew_control_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
+            double corrValue = QcdSidebandCorr::GetCorr(iBin, year);
+            double corrError = QcdSidebandCorr::GetCorrErr(iBin, year);
+            double UnDValue = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinContent(iBin);
+            double UnDError = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinError(iBin);
+
+            double predValue = corrValue * UnDValue;
+            double predError = 0.0;
+            if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+            h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
+            h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
+
+            if(histoToUse == "data") {
+                UnDError *= UnDError;
+                for (size_t iB = 0; iB < bgNameVec.size(); ++iB){
+                    const std::string bgToUse = bgNameVec[iB];
+                    UnDValue -= h_[Form("UnD_control_%s", bgToUse.c_str())]->GetBinContent(iBin);
+                    UnDError += h_[Form("UnD_control_%s", bgToUse.c_str())]->GetBinError(iBin)*h_[Form("UnD_control_%s", bgToUse.c_str())]->GetBinError(iBin);
+                }
+                // if(UnDValue < 0.) UnDValue = 0.;
+                UnDError = sqrt(UnDError);
+
+                predValue = corrValue * UnDValue;
+                predError = 0.0;
+                if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+                h_[Form("predNew_control_%sbkgsub", histoToUse.c_str())]->SetBinContent(iBin, predValue);
+                h_[Form("predNew_control_%sbkgsub", histoToUse.c_str())]->SetBinError(iBin, predError);
+
+            }
+
+        }
+
+        // OLD METHOD OF PREDICTION (note, no bkgsub implemented)
+        h_[Form("predOld_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
+        h_[Form("predOld_tag_%s", histoToUse.c_str())]->Multiply(h_[Form("S_anti_%s", histoToUse.c_str())]);
+        h_[Form("predOld_tag_%s", histoToUse.c_str())]->Divide(h_[Form("UnD_anti_%s", histoToUse.c_str())]);
+
+        h_[Form("predOld_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
+        h_[Form("predOld_control_%s", histoToUse.c_str())]->Multiply(h_[Form("S_anti_%s", histoToUse.c_str())]);
+        h_[Form("predOld_control_%s", histoToUse.c_str())]->Divide(h_[Form("UnD_anti_%s", histoToUse.c_str())]);
+
+        // SYSTEMATIC VARIATIONS (for TAG histograms)
+        std::vector<std::string> nonTrivialSysVec;
+        nonTrivialSysVec.push_back("jecAKXUncUp");
+        nonTrivialSysVec.push_back("jecAKXUncDown");
+        nonTrivialSysVec.push_back("jerAKXUncUp");
+        nonTrivialSysVec.push_back("jerAKXUncDown");
+        nonTrivialSysVec.push_back("jmsUncUp");
+        nonTrivialSysVec.push_back("jmsUncDown");
+        nonTrivialSysVec.push_back("jmrUncUp");
+        nonTrivialSysVec.push_back("jmrUncDown");
+        nonTrivialSysVec.push_back("dbtTagUp");
+        nonTrivialSysVec.push_back("dbtTagDown");
+        nonTrivialSysVec.push_back("isrUp");
+        nonTrivialSysVec.push_back("isrDown");
+
+        for (auto nonTrivialSys : nonTrivialSysVec){
+
+            if ( (TH1D*)f->Get(Form("S_dbtDiagUpLoose_%s", nonTrivialSys.c_str())) == NULL ) continue;
+            h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("S_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
+            h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("U_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
+            h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Add((TH1D*)f->Get(Form("D_dbtDiagUpLoose_%s", nonTrivialSys.c_str())));
+
+        } // closes loop through nonTrivialSysVec
+
+    } // closes loop through histoNameVec
+}
+
+
+
+void CombineHistograms(std::map<std::string,TH1D*>& h16_, std::map<std::string,TH1D*>& h17_, std::map<std::string,TH1D*>& h18_)
+{
+    GetHistograms(h16_, 2016);
+    GetHistograms(h17_, 2017);
+    GetHistograms(h18_, 2018);
+
+    for (auto const& x : h16_)
+    {
+        // std::cout << x.first  // string (key)
+        //           << ':' 
+        //           << x.second->Integral() // string's value 
+        //           << std::endl ;
+
+        TString hist = x.first;
+        // if ( hist.EndsWith("TTJets") ) hist += "ALL";
+        hist.ReplaceAll("TTJets","TTJetsALL");
+
+        // std::cout << " 2018: "<< h18_[hist.Data()]->Integral();
+        // std::cout << " 2017: "<< h17_[hist.Data()]->Integral();
+
+        // TODO: 2017 TTJetsALL is missing systematics, so use subcomponents instead if this is ever needed
+
+        x.second->Add( h17_[hist.Data()] );
+        x.second->Add( h18_[hist.Data()] );
+
+        // std::cout << hist  // string (key)
+        //           << ':' 
+        //           << x.second->Integral() // string's value 
+        //           << std::endl ;
+    }
+
 }

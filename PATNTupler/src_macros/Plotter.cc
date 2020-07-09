@@ -194,10 +194,10 @@ tdrStyle(TDRStyle())
 		th1Stack[iTh1S]->GetYaxis()->SetLabelSize(0.04);
 	}
 
-	// JOE HACK:::
-	// th1Stack[th1Stack.size()-1]->SetFillColor(kBlack);
-	// th1Stack[th1Stack.size()-1]->SetFillStyle(3004);
-	// th1Stack[th1Stack.size()-1]->Draw("same, E2");
+	// JOE HACK::: (for money plot)
+	th1Stack[th1Stack.size()-1]->SetFillColor(kBlack);
+	th1Stack[th1Stack.size()-1]->SetFillStyle(3004);
+	th1Stack[th1Stack.size()-1]->Draw("same, E2");
 }
 
 
@@ -374,6 +374,12 @@ void Plotter::AddRatioBox(const double& ratioBoxYAxisMin, const double& ratioBox
 	else if (hdata){
 		addRatioBox = true;
 		addRatioBoxInfo = "typeC";
+		if (drawUnityLine) addRatioBoxUnityLine = true;
+		return;
+	}
+	else if (th1Indi.size() > 0 && th1Stack.size() > 0){
+		addRatioBox = true;
+		addRatioBoxInfo = "typeD";
 		if (drawUnityLine) addRatioBoxUnityLine = true;
 		return;
 	}
@@ -1371,8 +1377,8 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 
 void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::string> htBins){
 
-	if (th1Indi.size() != 1){
-		std::cout << "Plotter::SaveSpec02 @@@ Exiting without saving... only want one indi input" << std::endl;
+	if (th1Indi.size() < 1){
+		std::cout << "Plotter::SaveSpec02 @@@ Exiting without saving... need one indi input" << std::endl;
 		return;
 	}
 	th1Indi[0]->SetBinErrorOption(TH1::kPoisson);
@@ -1450,6 +1456,11 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 
 	th1Indi[0]->Draw("same, E0");
 
+	for (size_t iTh1I = 1; iTh1I != th1Indi.size(); ++iTh1I) {
+		if(iTh1I==1) th1Indi[iTh1I]->SetLineColor(SetColor_stark(iTh1I-1));
+		th1Indi[iTh1I]->Draw("HIST, same");
+	}
+
 	if (addLatex) DrawLatex();
 	if (leg != NULL) leg->Draw("same");
 	if (leg2Cols != NULL) leg2Cols->Draw("same");
@@ -1488,7 +1499,7 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 	TH1D * ratioPlotEntryBackground = nullptr;
 	TH1D * hStackNoErrors = nullptr;
 
-	if (addRatioBox && addRatioBoxInfo == "typeB"){
+	if (addRatioBox && (addRatioBoxInfo == "typeB" || addRatioBoxInfo == "typeD") ){
 		c->cd();
 		TPad *padDown = new TPad("padDown","padDown",0,0,1,0.3);
 		padDown->SetTopMargin(0.0);
