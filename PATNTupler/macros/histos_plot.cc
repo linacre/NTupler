@@ -39,12 +39,13 @@ int main(){
     const std::string outputDir = "./histos_plot_combined/"; // where we are going to save the output plots (should include the samples name, and any important features)
     //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/oneDimensionRepresentation/DATA/control/predNew_calcForHighestTwoHtBins/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
-    // const double luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
-    // const double luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
-    // const double luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
-  
-    const double luminosity = 35.922 + 41.529 + 59.740565202;
+    const int year = 0;
+    double luminosity = 0.;
 
+    if(year==2016) luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
+    else if(year==2017)  luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
+    else if(year==2018) luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
+    else luminosity = 35.922 + 41.529 + 59.740565202;
 
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
     std::string dirExistCommand = "test -e " + outputDir;
@@ -55,11 +56,11 @@ int main(){
     std::map<std::string, TH1D*> h16_;
     std::map<std::string, TH1D*> h17_;
     std::map<std::string, TH1D*> h18_;
-    //GetHistograms(h16_, 2016);
-    //GetHistograms(h16_, 2017);
-    //GetHistograms(h16_, 2018);
 
-    CombineHistograms(h16_, h17_, h18_);
+    if(year==2016) GetHistograms(h16_, 2016);
+    else if(year==2017) GetHistograms(h16_, 2017);
+    else if(year==2018) GetHistograms(h16_, 2018);
+    else CombineHistograms(h16_, h17_, h18_);
 
 
     // explanation of terminology
@@ -126,43 +127,144 @@ int main(){
         // hack to add bkg systs. Currently for combination only. Numbers from running theMoneyPlot.cc prefit, using input with no gmN nuisances and with F_i syst set to 0.001. (combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_nogmN_epsQCDsyst)
         double binsyst[31] = {0.};
 
-        binsyst[1] = 13.2859;
-        binsyst[2] = 9.31793;
-        binsyst[3] = 5.83484;
-        binsyst[4] = 10.5405;
-        binsyst[5] = 18.0168;
-        binsyst[6] = 20.2324;
-        binsyst[7] = 19.6461;
-        binsyst[8] = 19.0355;
-        binsyst[9] = 18.3439;
-        binsyst[10] = 20.1528;
-        binsyst[11] = 1.03107;
-        binsyst[12] = 1.54672;
-        binsyst[13] = 1.46996;
-        binsyst[14] = 1.09348;
-        binsyst[15] = 3.70189;
-        binsyst[16] = 3.25264;
-        binsyst[17] = 1.46044;
-        binsyst[18] = 2.1315;
-        binsyst[19] = 2.17547;
-        binsyst[20] = 2.15608;
-        binsyst[21] = 0.0207331;
-        binsyst[22] = 0.249534;
-        binsyst[23] = 0.0949082;
-        binsyst[24] = 0.548751;
-        binsyst[25] = 0.436571;
-        binsyst[26] = 0.533465;
-        binsyst[27] = 0.547433;
-        binsyst[28] = 1.18591;
-        binsyst[29] = 0.42598;
-        binsyst[30] = 0.465595;
+        if(year==2016) {
+            binsyst[1] = 12.9794;
+            binsyst[2] = 8.24222;
+            binsyst[3] = 1.44102;
+            binsyst[4] = 2.98228;
+            binsyst[5] = 7.99931;
+            binsyst[6] = 8.3336;
+            binsyst[7] = 6.43502;
+            binsyst[8] = 6.22131;
+            binsyst[9] = 6.43374;
+            binsyst[10] = 6.12792;
+            binsyst[11] = 0.784928;
+            binsyst[12] = 0.186652;
+            binsyst[13] = 0.890018;
+            binsyst[14] = 0.850534;
+            binsyst[15] = 1.50782;
+            binsyst[16] = 0.810448;
+            binsyst[17] = 0.583139;
+            binsyst[18] = 0.744434;
+            binsyst[19] = 1.33891;
+            binsyst[20] = 1.53306;
+            binsyst[21] = 0.00897116;
+            binsyst[22] = 0.225159;
+            binsyst[23] = 9.53351e-05;
+            binsyst[24] = 0.00314198;
+            binsyst[25] = 0.223477;
+            binsyst[26] = 0.199062;
+            binsyst[27] = 0.000100095;
+            binsyst[28] = 1.18159;
+            binsyst[29] = 0.271708;
+            binsyst[30] = 0.000105277;
+        }
+
+        else if(year==2017) {
+            binsyst[1] = 1.43297;
+            binsyst[2] = 1.4879;
+            binsyst[3] = 2.11821;
+            binsyst[4] = 3.17609;
+            binsyst[5] = 5.60133;
+            binsyst[6] = 6.31703;
+            binsyst[7] = 7.72194;
+            binsyst[8] = 7.65671;
+            binsyst[9] = 7.73159;
+            binsyst[10] = 6.9635;
+            binsyst[11] = 0.236294;
+            binsyst[12] = 0.801837;
+            binsyst[13] = 0.424796;
+            binsyst[14] = 0.513209;
+            binsyst[15] = 2.19642;
+            binsyst[16] = 1.12647;
+            binsyst[17] = 0.803422;
+            binsyst[18] = 1.5277;
+            binsyst[19] = 0.696753;
+            binsyst[20] = 0.579429;
+            binsyst[21] = 0.0179639;
+            binsyst[22] = 0.00257456;
+            binsyst[23] = 0.000743929;
+            binsyst[24] = 0.474111;
+            binsyst[25] = 0.206776;
+            binsyst[26] = 0.179879;
+            binsyst[27] = 9.66867e-05;
+            binsyst[28] = 0.000104281;
+            binsyst[29] = 0.313318;
+            binsyst[30] = 0.465596;
+        }
+
+        else if(year==2018) {
+            binsyst[1] = 1.7946;
+            binsyst[2] = 2.76497;
+            binsyst[3] = 3.71427;
+            binsyst[4] = 6.73973;
+            binsyst[5] = 10.4517;
+            binsyst[6] = 10.9534;
+            binsyst[7] = 11.4674;
+            binsyst[8] = 10.8178;
+            binsyst[9] = 9.70231;
+            binsyst[10] = 13.8218;
+            binsyst[11] = 0.594545;
+            binsyst[12] = 1.02884;
+            binsyst[13] = 0.845175;
+            binsyst[14] = 0.415549;
+            binsyst[15] = 1.14191;
+            binsyst[16] = 2.3712;
+            binsyst[17] = 0.832957;
+            binsyst[18] = 0.902674;
+            binsyst[19] = 0.915287;
+            binsyst[20] = 1.14371;
+            binsyst[21] = 0.000756673;
+            binsyst[22] = 0.109403;
+            binsyst[23] = 0.0948404;
+            binsyst[24] = 0.222716;
+            binsyst[25] = 0.239899;
+            binsyst[26] = 0.447813;
+            binsyst[27] = 0.54743;
+            binsyst[28] = 0.0296198;
+            binsyst[29] = 0.000103;
+            binsyst[30] = 9.53281e-05;
+        }
+
+        else {
+            binsyst[1] = 13.2859;
+            binsyst[2] = 9.31793;
+            binsyst[3] = 5.83484;
+            binsyst[4] = 10.5405;
+            binsyst[5] = 18.0168;
+            binsyst[6] = 20.2324;
+            binsyst[7] = 19.6461;
+            binsyst[8] = 19.0355;
+            binsyst[9] = 18.3439;
+            binsyst[10] = 20.1528;
+            binsyst[11] = 1.03107;
+            binsyst[12] = 1.54672;
+            binsyst[13] = 1.46996;
+            binsyst[14] = 1.09348;
+            binsyst[15] = 3.70189;
+            binsyst[16] = 3.25264;
+            binsyst[17] = 1.46044;
+            binsyst[18] = 2.1315;
+            binsyst[19] = 2.17547;
+            binsyst[20] = 2.15608;
+            binsyst[21] = 0.0207331;
+            binsyst[22] = 0.249534;
+            binsyst[23] = 0.0949082;
+            binsyst[24] = 0.548751;
+            binsyst[25] = 0.436571;
+            binsyst[26] = 0.533465;
+            binsyst[27] = 0.547433;
+            binsyst[28] = 1.18591;
+            binsyst[29] = 0.42598;
+            binsyst[30] = 0.465595;
+        }
 
         for (unsigned int iBin=1; iBin<=30; iBin++){
             // std::cout<<binsyst[iBin]/h16_["predNew_tag_databkgsub"]->GetBinError(iBin)<<std::endl;
             // double bgvar = h16_["S_tag_WJets"]->GetBinError(iBin)*h16_["S_tag_WJets"]->GetBinError(iBin) + h16_["S_tag_ZJets"]->GetBinError(iBin)*h16_["S_tag_ZJets"]->GetBinError(iBin) + h16_["S_tag_TTJets"]->GetBinError(iBin)*h16_["S_tag_TTJets"]->GetBinError(iBin);
             // std::cout<<sqrt(bgvar)<<" "<<sqrt( binsyst[iBin]*binsyst[iBin] + bgvar )  <<std::endl;
 
-            h16_["S_tag_TTJets"]->SetBinError(iBin, sqrt( h16_["S_tag_TTJets"]->GetBinError(iBin)*h16_["S_tag_TTJets"]->GetBinError(iBin) +  binsyst[iBin]*binsyst[iBin] ) );
+            h16_["S_tag_ZJets"]->SetBinError(iBin, sqrt( h16_["S_tag_ZJets"]->GetBinError(iBin)*h16_["S_tag_ZJets"]->GetBinError(iBin) +  binsyst[iBin]*binsyst[iBin] ) );
         }
     }
 
@@ -179,7 +281,7 @@ int main(){
     //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"], h16_["S_tag_jmsD_mH70_mSusy1200"], h16_["S_tag_jmsD_mH70_mSusy2000"], h16_["S_tag_jmsD_mH70_mSusy2800"], h16_["S_tag_2017as2018/mH70_mSusy1200"], h16_["S_tag_2017as2018/mH70_mSusy2000"], h16_["S_tag_2017as2018/mH70_mSusy2800"]};
     // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"], h16_["S_tag_jmrU_mH70_mSusy1200"], h16_["S_tag_jmrU_mH70_mSusy2000"], h16_["S_tag_jmrU_mH70_mSusy2800"], h16_["S_tag_2017as2018/mH70_mSusy1200"], h16_["S_tag_2017as2018/mH70_mSusy2000"], h16_["S_tag_2017as2018/mH70_mSusy2800"]};
     // std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_ZJets"], h16_["S_tag_TTJets"], h16_["S_tag_QCD"]};
-    std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_ZJets"], h16_["S_tag_TTJets"], h16_["predNew_tag_databkgsub"]};
+    std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_ZJets"], h16_[year > 2016 ? "S_tag_TTJetsALL":"S_tag_TTJets"], h16_["predNew_tag_databkgsub"]};
 
     // Plotter plot = Plotter(indiHistoVec);
     // Plotter plot = Plotter({}, stackHistoVec);
@@ -375,7 +477,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
     for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
 
         const std::string histoToUse = histoNameVec[iH];
-        std::cout<<histoToUse<<std::endl;
+        // std::cout<<histoToUse<<std::endl;
         TFile * f = new TFile(Form("%s/%s/%s", preamble.c_str(), histoToUse.c_str(), postamble.c_str()));
         // explanation of terminology
         // 1. S, U, D --> refers to mass space. pred is the prediction of S. UnD is the sum U+D.
