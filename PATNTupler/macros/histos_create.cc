@@ -132,6 +132,7 @@ int main(int argc, char** argv){
     else if(sampleString.BeginsWith("TTJets")) systematicNameVec_temp = systematicNameVec_ttjets;
     else if(sampleString.EndsWith("Jets")) systematicNameVec_temp = systematicNameVec_vjets;
     else if(sampleString.Contains("mH")) systematicNameVec_temp = systematicNameVec_centralsignal;
+    else if(sampleString.Contains("T5qqqqZH")) systematicNameVec_temp = systematicNameVec_centralsignal;
     else systematicNameVec_temp = systematicNameVec_nosys;
 
     const std::vector<std::string> systematicNameVec = systematicNameVec_temp;
@@ -269,6 +270,8 @@ int main(int argc, char** argv){
 
                     if(sampleString=="data") cutToApply += " && trgDecision==1";
 
+                    if(sampleString.Contains("T5qqqqZH")) cutToApply += " && motherMass==1500";  // TODO: also try with no nHiggs cut
+
                     cutToApply += " && " + MassCutsObject.GetAllCuts()[iMassRegion];
                     // TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 600, 0, 300, 600, 0, 300);
                     TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 100, 0, 200, 100, 0, 200);
@@ -359,6 +362,15 @@ int main(int argc, char** argv){
 
                     else if(sampleString=="ZJets") {
                         plotEntry.AddInput((treepath+"ZJetsToQQ_HT-800toInf_qc19_4j_TuneCP5_13TeV-madgraphMLM-pythia8/flatTree.root").c_str(), cutToApply.c_str(), 18.69, SF_weight.c_str());
+                    }
+
+                    // SUSY scan https://github.com/TreeMaker/TreeMaker/blob/c95b539b050f05789e54d6ec5ec8a61132d75077/Production/test/data/dict_xsec_T1_NNLO.txt
+                    // 1000	0.385E+00
+                    // 1500	0.157E-01
+                    // 1600	0.887E-02
+                    // 2200	0.356E-03
+                    else if(sampleString.Contains("T5qqqqZH")) {
+                        plotEntry.AddInputFromGrid("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/T5qqqqZH/T5qqqqZH_2018.root", cutToApply.c_str(), 0.157E-01, SF_weight.c_str());
                     }
 
 

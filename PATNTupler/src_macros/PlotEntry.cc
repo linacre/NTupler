@@ -158,6 +158,73 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	std::cout << std::endl;
 }
 
+
+
+void PlotEntry::AddInputFromGrid(const std::string& flatTreeAddress, const std::string& selectionCut, const double& crossSection, const std::string& scaleFactorWeightStr)
+{
+	TFile * f = TFile::Open(flatTreeAddress.c_str());
+    TTree * evT = (TTree*)f->Get("eventCountTree");
+    Int_t evTEntries = (Int_t)evT->GetEntries();
+	std::map<std::string,UInt_t> *totNumEvtsAnalyzedMotherMass = 0;
+	evT->SetBranchAddress("nEvtsRunOverMotherMass",&totNumEvtsAnalyzedMotherMass);
+    UInt_t nEvtsRunOverForInputTotal = 0;
+    for (Int_t ievT=0; ievT<evTEntries; ++ievT){
+        evT->GetEntry(ievT);
+        nEvtsRunOverForInputTotal += totNumEvtsAnalyzedMotherMass->at("1500");
+    }
+
+    numberOfEventsBeforeCuts += 1000.0 * crossSection * luminosity;
+    double eventWeighting = 1000.0 * crossSection * luminosity / nEvtsRunOverForInputTotal;
+
+	std::cout << "PlotEntry::AddInput, eventWeighting: " << eventWeighting << " nEvtsRunOverForInputTotal: " << nEvtsRunOverForInputTotal << std::endl;
+
+	TTree * T = (TTree*)f->Get("doubleBFatJetPairTree");
+	if (T->GetEntries() != 7502420){
+		std::cout << "ERROR: number of events in doubleBFatJetPairTree of " << flatTreeAddress << " does not equal those in the nEvtsPass count. NOT FILLING." << std::endl;
+		return;
+	}
+	TH1D hContainer = hNull; // make a copy of the empty histogram to fill with TTreeDraw
+	hContainer.SetName("hContainer");
+	std::string drawStringA = Form("%s>>hContainer", variableToPlot.c_str());
+	std::string drawStringB;
+	if (!selectionCut.empty()) drawStringB = Form("%.15f*(%s)", eventWeighting, selectionCut.c_str());
+	else drawStringB = Form("%.15f", eventWeighting);
+	if (!scaleFactorWeightStr.empty()) drawStringB += Form("*(%s)", scaleFactorWeightStr.c_str());
+    std::cout << "Filling for TTree: " << flatTreeAddress << std::endl;
+	std::cout << "Variable used: " << variableToPlot << std::endl;
+	if (!scaleFactorWeightStr.empty()) std::cout << ">>> Using Scale Factor Weights" << std::endl;
+	else std::cout << ">>> NOT Using Scale Factor Weights" << std::endl;
+	if (!selectionCut.empty()) std::cout << "Event Weighting * Cut applied: " << drawStringB << std::endl;
+	else std::cout << "Event Weighting: " << drawStringB << "\nNB: no cut applied." << std::endl;
+	
+	double scaleFactorWeight = 1.0; // need to find average scale factor weight
+	if (!scaleFactorWeightStr.empty()){
+		TH1D * hSFW = new TH1D("hSFW", "", 1, -99999.9, 99999.9);
+		std::string drawStringA_sf = Form("(%s)>>hSFW", scaleFactorWeightStr.c_str());
+		T->Draw(drawStringA_sf.c_str(), selectionCut.c_str(), "");
+		if (hSFW->GetMean() != 0) scaleFactorWeight = hSFW->GetMean();
+		std::cout << "Average Scale Factor Weighting: " << scaleFactorWeight << std::endl;
+	}
+
+	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");
+	for (int iBin = 0; iBin < hContainer.GetNbinsX()+2; ++iBin){
+		hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
+		statErrorSquared[iBin] += hContainer.GetBinContent(iBin) * eventWeighting * scaleFactorWeight;
+		//hTotal->SetBinError(iBin, sqrt(statErrorSquared[iBin]));
+	}
+	delete T;
+	delete evT;
+	delete f;
+	std::cout << std::endl;
+}
+
+
+
+
+
+
+
+
 void PlotEntry::AddInputEfficiency(const std::string& flatTreeAddress, const std::string& commonCut, const std::string& numeratorCut, bool isSigEffCorrectionPlot)
 {
 	TFile * f = TFile::Open(flatTreeAddress.c_str());
