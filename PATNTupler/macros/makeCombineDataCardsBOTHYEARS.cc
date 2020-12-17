@@ -60,7 +60,7 @@ int main(){
     // ONE: save info (signal specific directories beneath this)
     //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
     // const std::string outputDirGeneral = "combinedDataCards_final_2018";
-    const std::string outputDirGeneral = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
+    const std::string outputDirGeneral = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
   
 
 
@@ -525,7 +525,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
         postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
     }
     else if (yearOfRun == 2017){
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2017/";
+        preamble = "/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2017/";
         postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
     }
     else if (yearOfRun == 2018 && use2017as2018 == false){

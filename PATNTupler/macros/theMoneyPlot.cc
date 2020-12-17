@@ -580,7 +580,8 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
 
     if(year==2016) {
 
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2016/";
+        // preamble = "/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2016/";
+        preamble = "/mercury/data2/linacre/NMSSM/2016/Joe/run2016/";
         postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
 
         histoNameVec.push_back("QCD");
@@ -598,7 +599,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
 
     if(year==2017) {
 
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2017/";
+        preamble = "/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2017/";
         postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
 
         histoNameVec.push_back("QCD");

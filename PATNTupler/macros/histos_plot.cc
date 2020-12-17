@@ -285,6 +285,7 @@ int main(){
 
     // Plotter plot = Plotter(indiHistoVec);
     // Plotter plot = Plotter({}, stackHistoVec);
+    // Plotter plot = Plotter(indiHistoVec, stackHistoVec);
     Plotter plot = Plotter(indiHistoVec, stackHistoVec, *h16_["S_tag_data"]);
 
     // std::vector<std::string> legendNames = {"control", "control prediction"};
@@ -295,7 +296,8 @@ int main(){
     // plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
     // plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
 
-    std::vector<std::string> legendNames = {"m_{S}2600", "m_{S}1200", "m_{S}2000", "WJets", "ZJets", "TTJets", "QCD"};
+    std::vector<std::string> legendNames = {"m_{S}2600", "m_{S}1200", "m_{S}2000", "WJets", "ZJets", "TTJets", "QCD"};  // for pre-fit
+    // std::vector<std::string> legendNames = {"m_{H}50", "m_{H}90", "m_{H}125", "WJets", "ZJets", "TTJets", "QCD"};  // for post-fit
     plot.AddLegend2Cols(0, legendNames, 0.67, 0.95, 0.55, 0.80, 0.045);
     
     // plot.AddLatex();
@@ -349,7 +351,8 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
 
     if(year==2016) {
 
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2016/";
+        // preamble = "/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2016/";
+        preamble = "/mercury/data2/linacre/NMSSM/2016/Joe/run2016/";
         postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
 
         histoNameVec.push_back("QCD");
@@ -367,7 +370,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
 
     if(year==2017) {
 
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2017/";
+        preamble = "/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2017/";
         postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
 
         histoNameVec.push_back("QCD");
