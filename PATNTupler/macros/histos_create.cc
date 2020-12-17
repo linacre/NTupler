@@ -71,7 +71,7 @@ int main(int argc, char** argv){
 
     // ONE: save info
     std::string outputDir;
-    if (sampleString == "signal") outputDir = "/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/histos_2020_02_05/run2018/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    if (sampleString == "signal") outputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/histos_2020_12_10/run2018/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
     else outputDir = "histos_"+std::string(sampleString); // where we are going to save the output plots (should include the samples name + binning maybe)
     std::cout<<"Using outputDir "<<outputDir<<std::endl;
 
@@ -272,6 +272,9 @@ int main(int argc, char** argv){
 
                     if(sampleString.Contains("T5qqqqZH")) cutToApply += " && motherMass==1500";  // TODO: also try with no nHiggs cut
 
+                    bool is2018squark = false;
+                    if(is2018squark && sampleString=="signal") cutToApply += " && nGluino==0"; // hack to select nGluino=0 component for 2018 'squark' samples
+
                     cutToApply += " && " + MassCutsObject.GetAllCuts()[iMassRegion];
                     // TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 600, 0, 300, 600, 0, 300);
                     TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 100, 0, 200, 100, 0, 200);
@@ -417,7 +420,9 @@ int main(int argc, char** argv){
 
                     // SIGNAL 2018 for batch submission
                     else if(sampleString=="signal") {
-                        plotEntry.AddInput("/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/NAMEXYZ/tmp/flatTree_0.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
+                        // hack to select nGluino=0 component for 2018 'squark' samples
+                        if(is2018squark) plotEntry.AddInput2018squark("/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/NAMEXYZ/tmp/flatTree_0.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
+                        else plotEntry.AddInput("/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/flatTrees_2020_02_05_CMSSW_10_2_12/mc/NAMEXYZ/tmp/flatTree_0.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
                     }
 
 
