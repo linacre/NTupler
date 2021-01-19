@@ -39,6 +39,7 @@ void CreateHistograms(std::map<std::string,TH1D*>& h_, const std::vector<std::ve
             std::string histogramName = "";
             if (cut2_ak8Dbt[iCut2].size() == 4) histogramName += "dbt" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "And" + cut2_ak8Dbt[iCut2][2] + cut2_ak8Dbt[iCut2][3];
             if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_UP") histogramName += "dbtDiagUp" + cut2_ak8Dbt[iCut2][1];
+            if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_DOWN") histogramName += "dbtDiagDown" + cut2_ak8Dbt[iCut2][1];
             if (systematicName.substr(0,3) == "SF_") histogramName += "_" + systematicName.substr(3);
             else histogramName += "_" + systematicName;
 
@@ -69,24 +70,28 @@ int main(int argc, char** argv){
 
     TString sampleString(argv[2]?argv[2]:"QCD");
 
+    // TWO: do we want to blind the S mass region? (true for data, false for everything else)
+    const bool blind_S_region = false;
+    const bool is2018squark = false; // enable hack to select nGluino=0 component for 2018 'squark' samples
+    const bool disableSys = true;
+
     // ONE: save info
     std::string outputDir;
     if (sampleString == "signal") outputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/histos_2020_12_10/run2018/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
-    else outputDir = "histos_"+std::string(sampleString); // where we are going to save the output plots (should include the samples name + binning maybe)
+    else outputDir = "histos_" + std::string(disableSys ? "noSys_" : "") + std::string(sampleString); // where we are going to save the output plots (should include the samples name + binning maybe)
     std::cout<<"Using outputDir "<<outputDir<<std::endl;
-
-
-    // TWO: do we want to blind the S mass region? (true for data, false for everything else)
-    const bool blind_S_region = false;
-
 
     // THREE: set the cut params.
     std::vector<std::vector<std::string>> cut2_ak8Dbt;
     cut2_ak8Dbt.push_back({"DIAG_UP", "Loose"}); // TAG: Top Diagnol Corner Crossing Axis at...--> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    cut2_ak8Dbt.push_back({"DIAG_DOWN", "Loose"}); // New validation region defined from the bottom half (cut diagonally) of the 'tag' square.
     // cut2_ak8Dbt.push_back({"Loose", "Max", "Loose", "Max"}); // tagPRIME for TTJets special
     cut2_ak8Dbt.push_back({"Off","Loose","Off","Loose"}); // ANTI: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     cut2_ak8Dbt.push_back({"Loose","Med2","Off","IDBTCv23"}); // CONTROL_A: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     cut2_ak8Dbt.push_back({"Off","IDBTCv23","Loose","Med2"}); // CONTROL_B: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    cut2_ak8Dbt.push_back({"Loose","Max","IDBTCv23","Loose"}); // CONTROL_C: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    cut2_ak8Dbt.push_back({"IDBTCv23","Loose","Loose","Max"}); // CONTROL_D: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+
     const int cut3_ak8Pt = 300;
     const std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {2500,3500}, {3500,99999} }; // HT BIN
     // const std::vector<std::vector<int>> cut4_ht = { {1500,99999} }; // HT BIN
@@ -127,7 +132,8 @@ int main(int argc, char** argv){
     const std::vector<std::string> systematicNameVec_centralsignal = {"NOSYS", "jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown", "SF_scaleUp", "SF_scaleDown"}; // >> CENTRAL SIGNAL
 
     std::vector<std::string> systematicNameVec_temp;
-    if(sampleString=="data" || sampleString=="QCD") systematicNameVec_temp = systematicNameVec_nosys;
+    if(disableSys) systematicNameVec_temp = systematicNameVec_nosys;
+    else if(sampleString=="data" || sampleString=="QCD") systematicNameVec_temp = systematicNameVec_nosys;
     else if(sampleString=="signal") systematicNameVec_temp = systematicNameVec_centralsignal;
     else if(sampleString.BeginsWith("TTJets")) systematicNameVec_temp = systematicNameVec_ttjets;
     else if(sampleString.EndsWith("Jets")) systematicNameVec_temp = systematicNameVec_vjets;
@@ -252,6 +258,7 @@ int main(int argc, char** argv){
                 std::string histogramName = "";
                 if (cut2_ak8Dbt[iCut2].size() == 4) histogramName += "dbt" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "And" + cut2_ak8Dbt[iCut2][2] + cut2_ak8Dbt[iCut2][3];
                 if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_UP") histogramName += "dbtDiagUp" + cut2_ak8Dbt[iCut2][1];
+                if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_DOWN") histogramName += "dbtDiagDown" + cut2_ak8Dbt[iCut2][1];
 
                 if (iMassRegion < numberOfSegments) histogramName = "S_" + histogramName;
                 else if (iMassRegion < 2*numberOfSegments) histogramName = "U_" + histogramName;
@@ -264,6 +271,10 @@ int main(int argc, char** argv){
                     std::string dbtCut = "";
                     if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_UP")
                         dbtCut = Form("%s >= (-1.0 * %s + 1.0 + %f) ", fatJetA_dbt_name.c_str(), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]) );
+
+                    if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_DOWN")
+                        dbtCut = Form("%s < (-1.0 * %s + 1.0 + %f) && %s>=%f && %s>=%f", fatJetA_dbt_name.c_str(), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]), fatJetA_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]) );
+
                     if (cut2_ak8Dbt[iCut2].size() == 4)
                         dbtCut = Form("%s>=%f && %s<%f && %s>=%f && %s<%f ", fatJetA_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][0]), fatJetA_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][2]), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][3]) );
                     std::string cutToApply = Form("%s && %s>%d && %s>%d && %s>=%d && %s<%d && %s>%d && %s>%d", dbtCut.c_str(), fatJetA_pt_name.c_str(), cut3_ak8Pt, fatJetB_pt_name.c_str(), cut3_ak8Pt, ht_name.c_str(), cut4_ht[iCut4][0], ht_name.c_str(), cut4_ht[iCut4][1], slimJetA_pt_name.c_str(), cut5_ak4Pt[0], slimJetB_pt_name.c_str(), cut5_ak4Pt[1]);
@@ -272,7 +283,6 @@ int main(int argc, char** argv){
 
                     if(sampleString.Contains("T5qqqqZH")) cutToApply += " && motherMass==1500";  // TODO: also try with no nHiggs cut
 
-                    bool is2018squark = false;
                     if(is2018squark && sampleString=="signal") cutToApply += " && nGluino==0"; // hack to select nGluino=0 component for 2018 'squark' samples
 
                     cutToApply += " && " + MassCutsObject.GetAllCuts()[iMassRegion];
