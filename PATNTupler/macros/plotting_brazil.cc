@@ -171,11 +171,6 @@ std::map<std::string, double> xsecBR{
 
 
 
-bool plotSigma = true;
-bool plotSquark = true;
-bool varyHiggsMass = true;
-
-
 // MAKES BRAZIL PLOTS
 
 int main(){
@@ -185,12 +180,14 @@ int main(){
 
     // ONE: input directory (where the combined root files are)
     // const std::string inputDir = "/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20200527/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
-    const std::string inputDir = "/mercury/data2/linacre/NMSSM/Analysis_boostedNmssmHiggs/combinedDataCards_20200527/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
+    
+    // const std::string inputDir = "/mercury/data2/linacre/NMSSM/Analysis_boostedNmssmHiggs/combinedDataCards_20200527/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
+    const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20201213/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
     // const std::string inputDir = "/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20200120/combinedDataCards_final_2018_2017as2018_0.98_allSigs";
     // const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
 
     // TWO: plot output directory
-    const std::string outputDir = "brazilplots_mS2600_blinded_xsec";
+    std::string outputDir = "brazilplots_blinded_fixedsq_xsec";
     // const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/brazilplots/mSusy2400/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)
@@ -207,6 +204,13 @@ int main(){
     // FIVE: plot observed line ?
     // const bool plotObserved = true;
     const bool plotObserved = false;
+    const bool plotSigma = true;
+    const bool plotSquark = false;
+    const bool varyHiggsMass = true;
+    const bool fixedYRange = false;
+
+    if(fixedYRange) outputDir = outputDir + "_fixedYRange";
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -308,6 +312,11 @@ int main(){
     TGraphAsymmErrors * g_exp = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]));
     TGraphAsymmErrors * g_expErr1Sig = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(yErrDown1Sig_vec[0]), &(yErrUp1Sig_vec[0]));
     TGraphAsymmErrors * g_expErr2Sig = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(yErrDown2Sig_vec[0]), &(yErrUp2Sig_vec[0]));
+
+    if(fixedYRange) {
+        maxLimitValue = 0.05;
+        minLimitValue = 0.0002;
+    }
 
     // the vector order goes: observed, expected, 1sigma, 2sigma
     Plotter brazilPlot = Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig}, plotObserved);
