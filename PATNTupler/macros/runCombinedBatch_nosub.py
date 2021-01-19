@@ -113,7 +113,7 @@ for signalDir in signalDirs:
     f.write("Request_memory          = 1 GB\n")
     f.write("should_transfer_files   = YES\n")
     f.write("when_to_transfer_output = ON_EXIT_OR_EVICT\n")
-    f.write("periodic_hold                   = (CurrentTime - EnteredCurrentStatus > 9000)\n")
+    f.write("periodic_hold                   = (CurrentTime - EnteredCurrentStatus > 10000)\n")
     f.write("periodic_release                = (CurrentTime - EnteredCurrentStatus > 60)\n")
     f.write("periodic_remove                 = False\n")
     f.write("#\n")
@@ -132,10 +132,11 @@ for signalDir in signalDirs:
     else:
         g.write("combine -M AsymptoticLimits --freezeParameter %s --mass %s --keyword-value %s=%s %s\n" % (nuisancesToFreeze, higgsMass, keyword, susyMass, fileToUseROOT) )
     g.write("cd %s\n" % (signalDir) )
-    g.write("combine -M FitDiagnostics --saveShapes --saveWithUncertainties --saveOverallShapes --plots --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, fileToUseTXT) )
+    #g.write("combine -M FitDiagnostics --saveShapes --saveWithUncertainties --saveOverallShapes --plots --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, fileToUseTXT) )
+    g.write("combine -M FitDiagnostics --saveShapes --saveWithUncertainties --saveOverallShapes --preFitValue 0 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, fileToUseTXT) )
     g.write("python /opt/ppd/scratch/xxt18833/CMSSW_10_2_12/src/HiggsAnalysis/CombinedLimit/test/diffNuisances.py -a fitDiagnostics.root -g plots.root &> diffNuisances.log &\n")
+    g.write("combineTool.py -M Impacts -d %s -m %s --doInitialFit --robustFit 1 --setParameterRanges r=-3,3\n" % (fileToUseROOT, higgsMass) )
     g.write("cd ..\n")
-    g.write("combineTool.py -M Impacts -d %s -m %s --doInitialFit --robustFit 1 --keyword-value %s=%s --setParameterRanges r=-3,3\n" % (fileToUseROOT, higgsMass, keyword, susyMass) )
     g.close()
     os.chmod("%s/%s" % (batchDir,jobFileName), 0755)
 

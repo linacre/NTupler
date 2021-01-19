@@ -62,6 +62,7 @@ for signalDir in signalDirs:
     c1 = -1
     c2 = -1
     c3 = len(signalDir)
+    keyword = ""
 
     if (signalDir[-1] != "0"):
         continue
@@ -77,9 +78,11 @@ for signalDir in signalDirs:
     for i in range(c1, len(signalDir)):
         if (signalDir[i:i+6] == "_mSusy"):
             c2 = i + 6
+            keyword = "mSusy"
             break
         if (signalDir[i:i+8] == "_mSquark"):
             c2 = i + 8
+            keyword = "mSquark"
             break
 
     for i in range(c2, len(signalDir)):
@@ -95,7 +98,7 @@ for signalDir in signalDirs:
     fileToUseTXT = os.path.join(inputDir,signalDir,"allbins.txt")
     fileToUseROOT = os.path.join(inputDir,signalDir,"allbins.root")
     
-    print "RUNNING COMBINE FOR mH" + higgsMass + " mSusy" + susyMass
+    print "RUNNING COMBINE FOR mH" + higgsMass + " " + keyword + susyMass
     print "nuisance to freeze: " + nuisancesToFreeze
 
     condorFileName = signalDir + ".condor"
@@ -104,14 +107,14 @@ for signalDir in signalDirs:
     f = open("%s/%s" % (batchDir,condorFileName), 'w')
     f.write("Universe                = vanilla\n")
     f.write("Executable              = %s/%s\n" % (batchDir,jobFileName) )
-    f.write("Log                     = /opt/ppd/scratch/xxt18833/jobLogs/combined/%s__%s.log\n" % (timeStamp,signalDir) )
-    f.write("Output                  = /opt/ppd/scratch/xxt18833/jobLogs/combined/%s__%s.out\n" % (timeStamp,signalDir) )
-    f.write("Error                   = /opt/ppd/scratch/xxt18833/jobLogs/combined/%s__%s.err\n" % (timeStamp,signalDir) )
+    f.write("Log                     = %s/%s.log\n" % (batchDir,signalDir) )
+    f.write("Output                  = %s/%s.out\n" % (batchDir,signalDir) )
+    f.write("Error                   = %s/%s.err\n" % (batchDir,signalDir) )
     f.write("Request_memory          = 1 GB\n")
     f.write("should_transfer_files   = YES\n")
     f.write("when_to_transfer_output = ON_EXIT_OR_EVICT\n")
-    f.write("periodic_hold                   = (CurrentTime - EnteredCurrentStatus > 7200)\n")
-    f.write("periodic_release                = (CurrentTime - EnteredCurrentStatus > 1800)\n")
+    f.write("periodic_hold                   = (CurrentTime - EnteredCurrentStatus > 10000)\n")
+    f.write("periodic_release                = (CurrentTime - EnteredCurrentStatus > 60)\n")
     f.write("periodic_remove                 = False\n")
     f.write("#\n")
     f.write("Getenv                  = True\n")
@@ -125,14 +128,19 @@ for signalDir in signalDirs:
     g.write("cd %s\n" % inputDir)
     g.write("text2workspace.py %s\n" % fileToUseTXT)
     if (len(nuisancesToFreeze) == 0):
-        g.write("combine -M AsymptoticLimits --mass %s --keyword-value mSusy=%s %s\n" % (higgsMass, susyMass, fileToUseROOT) )
+        g.write("combine -M AsymptoticLimits --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, fileToUseROOT) )
     else:
-        g.write("combine -M AsymptoticLimits --freezeParameter %s --mass %s --keyword-value mSusy=%s %s\n" % (nuisancesToFreeze, higgsMass, susyMass, fileToUseROOT) )
-    g.write("combineTool.py -M Impacts -d %s -m %s --doInitialFit --robustFit 1 --keyword-value mSusy=%s --setParameterRanges r=-5,5\n" % (fileToUseROOT, higgsMass, susyMass) )
+        g.write("combine -M AsymptoticLimits --freezeParameter %s --mass %s --keyword-value %s=%s %s\n" % (nuisancesToFreeze, higgsMass, keyword, susyMass, fileToUseROOT) )
+    g.write("cd %s\n" % (signalDir) )
+    #g.write("combine -M FitDiagnostics --saveShapes --saveWithUncertainties --saveOverallShapes --plots --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, fileToUseTXT) )
+    g.write("combine -M FitDiagnostics --saveShapes --saveWithUncertainties --saveOverallShapes --preFitValue 0 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, fileToUseTXT) )
+    g.write("python /opt/ppd/scratch/xxt18833/CMSSW_10_2_12/src/HiggsAnalysis/CombinedLimit/test/diffNuisances.py -a fitDiagnostics.root -g plots.root &> diffNuisances.log &\n")
+    g.write("combineTool.py -M Impacts -d %s -m %s --doInitialFit --robustFit 1 --setParameterRanges r=-3,3\n" % (fileToUseROOT, higgsMass) )
+    g.write("cd ..\n")
     g.close()
     os.chmod("%s/%s" % (batchDir,jobFileName), 0755)
 
-    # print "condor_submit %s/%s" % (batchDir,condorFileName)
+    print "condor_submit %s/%s" % (batchDir,condorFileName)
     os.system("condor_submit %s/%s" % (batchDir,condorFileName) )
     print ""
     print ""
