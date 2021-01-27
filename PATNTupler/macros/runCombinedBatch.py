@@ -134,7 +134,7 @@ for signalDir in signalDirs:
     g.write("cd %s\n" % (signalDir) )
     #g.write("combine -M FitDiagnostics --saveShapes --saveWithUncertainties --saveOverallShapes --plots --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, fileToUseTXT) )
     g.write("combine -M FitDiagnostics --saveShapes --saveWithUncertainties --saveOverallShapes --preFitValue 0 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, fileToUseTXT) )
-    g.write("python /opt/ppd/scratch/xxt18833/CMSSW_10_2_12/src/HiggsAnalysis/CombinedLimit/test/diffNuisances.py -a fitDiagnostics.root -g plots.root &> diffNuisances.log &\n")
+    g.write("python /opt/ppd/scratch-2021/xxt18833/CMSSW_10_2_12/src/HiggsAnalysis/CombinedLimit/test/diffNuisances.py -a fitDiagnostics.root -g plots.root &> diffNuisances.log &\n")
     g.write("combineTool.py -M Impacts -d %s -m %s --doInitialFit --robustFit 1 --setParameterRanges r=-3,3\n" % (fileToUseROOT, higgsMass) )
     g.write("cd ..\n")
     g.close()
