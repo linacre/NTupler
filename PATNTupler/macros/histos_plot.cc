@@ -36,7 +36,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "./histos_plot_combined/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "./histos_plot_combined_unblinded/"; // where we are going to save the output plots (should include the samples name, and any important features)
     //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/oneDimensionRepresentation/DATA/control/predNew_calcForHighestTwoHtBins/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
     const int year = 0;
@@ -296,7 +296,7 @@ int main(){
     // plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
     // plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
 
-    std::vector<std::string> legendNames = {"m_{S}2600", "m_{S}1200", "m_{S}2000", "WJets", "ZJets", "TTJets", "QCD"};  // for pre-fit
+    std::vector<std::string> legendNames = {"S_{90,2600}", "S_{90,1200}", "S_{90,2000}", "WJets", "ZJets", "TTJets", "QCD"};  // for pre-fit
     // std::vector<std::string> legendNames = {"m_{H}50", "m_{H}90", "m_{H}125", "WJets", "ZJets", "TTJets", "QCD"};  // for post-fit
     plot.AddLegend2Cols(0, legendNames, 0.67, 0.95, 0.55, 0.80, 0.045);
     
@@ -318,19 +318,20 @@ int main(){
     plot.SetErrors("only_stack");
     // plot.SetErrors("only_indi");
 
-    std::vector<std::string> stringVec = {"HT1500-2500", "HT2500-3500", "HT3500+"};
+    std::vector<std::string> stringVec = {"1500 < H_{T} < 2500 GeV", "2500 < H_{T} < 3500 GeV", " H_{T} > 3500 GeV"};
     std::string plotName = "linear";
-    plot.SaveSpec01(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
+    plot.SaveSpec01(Form("%s/%s_%s.pdf", outputDir.c_str(), plotName.c_str(), year == 0 ? "combined" : std::to_string(year).c_str()), stringVec);
     
     plotName = "log";
     plot.SetLogY();
     // plot.SetYValueMin(0.15); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(0.50); // REMEMBER THIS PARAM! (only for log)
-    plot.SetYValueMin(0.40); // REMEMBER THIS PARAM! (only for log)
+    plot.SetYValueMin(0.20); // REMEMBER THIS PARAM! (only for log)
+    // plot.SetYValueMin(0.40); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(1.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(3.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(12.10); // REMEMBER THIS PARAM! (only for log)
-    plot.SaveSpec01(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
+    plot.SaveSpec01(Form("%s/%s_%s.pdf", outputDir.c_str(), plotName.c_str(), year == 0 ? "combined" : std::to_string(year).c_str()), stringVec);
 
 
 

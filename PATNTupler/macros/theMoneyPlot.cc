@@ -238,11 +238,13 @@ int main(){
     //const std::string inputFile = "/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20200120/combinedDataCards_final_201617_allSig/fitDiagnostics/mH70_mSusy2800/fitDiagnostics.root";
     //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/fitDiagnostics/mH30_mSusy2800/testing03/";
     
-    const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_/mH70_mSusy2000/FitDiagnostics_noSig/fitDiagnostics.root";
+    // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_/mH70_mSusy2000/FitDiagnostics_noSig/fitDiagnostics.root";
+    const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/mH70_mSusy2000/d/fitDiagnostics.root";
+
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_nogmN_epsQCDsyst/mH70_mSusy2000/fitDiagnostics.root";
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/mH70_mSusy2000/fitDiagnostics.root";
 
-    const std::string outputDir = "MoneyPlot_ecalfilter_mH70_mSusy2000_robustFit_covar_compare_noSig_overlay";
+    const std::string outputDir = "MoneyPlot_unblindedAll_paper";
     // const double luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot.
     // const double luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot.
     // const double luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
@@ -490,15 +492,24 @@ int main(){
     if (yearOfRunOrig == 0) CombineHistograms(h16_, h17_, h18_);
     else GetHistograms(h16_, yearOfRunOrig);
 
-
-
     // THREE: make plot aesthetics and saving
-    // std::vector<TH1D*> indiHistoVec = {h_data[iF]};
-    std::vector<TH1D*> indiHistoVec = {h_data[iF], h16_[(massTypeOrig+"_tag_mH50_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH90_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH125_mSusy2200").c_str()]}; // for post-fit
+    std::vector<TH1D*> indiHistoVec;
+    std::vector<std::string> legendNames;
+
+    if(massTypeOrig == "both") {
+        indiHistoVec = {h_data[iF]};
+        legendNames = {"data", "WJets", "ZJets", "TTJets", "QCD", "unc."};
+    }
+    else {
+        indiHistoVec = {h_data[iF], h16_[(massTypeOrig+"_tag_mH50_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH90_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH125_mSusy2200").c_str()]};
+        legendNames = {"data", "M_{H}=50", "M_{H}=90", "M_{H}=125", "WJets", "ZJets", "TTJets", "QCD", "unc."};
+        // indiHistoVec = {h_data[iF], h16_[(massTypeOrig+"_tag_mH70_mSusy2000").c_str()]};
+        // legendNames = {"data", "2000,70", "WJets", "ZJets", "TTJets", "QCD", "unc."};
+    }
+
     std::vector<TH1D*> stackHistoVec = {h_WJets[iF], h_ZJets[iF], h_TTJets[iF], h_QCD[iF], h_backgroundError[iF]};
     Plotter plot = Plotter(indiHistoVec, stackHistoVec);
- 
-    std::vector<std::string> legendNames = {"data", "mH50", "mH90", "mH125", "WJets", "ZJets", "TTJets", "QCD", "unc."};
+
     plot.AddLegend2Cols(0, legendNames, 0.67, 0.95, 0.55, 0.80, 0.045);
     
     // plot.AddLatex(luminosity);
@@ -506,14 +517,14 @@ int main(){
     // plot.AddRatioBox(0.0, 2.7, "data / pred", true);
     plot.AddRatioBox(0.3, 1.8, "data / pred", true);
 
-    std::vector<std::string> stringVec = {" HT1500-2500 GeV", " HT2500-3500 GeV", " HT3500+ GeV"};
+    std::vector<std::string> stringVec = {"1500 < H_{T} < 2500 GeV", "2500 < H_{T} < 3500 GeV", " H_{T} > 3500 GeV"};
     std::string plotName = "linear_"+( yearsOfRun.size() ? "combined" : std::to_string(yearOfRun) )+"_"+( massTypes.size() ? "both" : massType )+"_"+fitType;
     plot.SaveSpec02(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
     
     plotName = "log_"+( yearsOfRun.size() ? "combined" : std::to_string(yearOfRun) )+"_"+( massTypes.size() ? "both" : massType )+"_"+fitType;
     plot.SetLogY();
-    // plot.SetYValueMin(0.13); // REMEMBER THIS PARAM! (only for log)
-    plot.SetYValueMin(0.4); // REMEMBER THIS PARAM! (only for log)
+    plot.SetYValueMin(0.2); // REMEMBER THIS PARAM! (only for log)
+    // plot.SetYValueMin(0.4); // REMEMBER THIS PARAM! (only for log)
     plot.SaveSpec02(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
 
     } //iF
@@ -549,7 +560,7 @@ int main(){
     plot.AddLatex(luminosity, "#it{Preliminary}");    
     //plot.AddRatioBox(0.0, 2.7, "data / pred", true);
 
-    std::vector<std::string> stringVec = {" HT1500-2500 GeV", " HT2500-3500 GeV", " HT3500+ GeV"};
+    std::vector<std::string> stringVec = {"1500 < H_{T} < 2500 GeV", "2500 < H_{T} < 3500 GeV", " H_{T} > 3500 GeV"};
     std::string plotName = "linear_"+( yearsOfRun.size() ? "combined" : std::to_string(yearOfRun) )+"_"+( massTypes.size() ? "both" : massType )+"_BkgPostPreRatio";
     plot.SaveSpec01(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
     

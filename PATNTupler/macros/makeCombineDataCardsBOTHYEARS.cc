@@ -60,7 +60,7 @@ int main(){
     // ONE: save info (signal specific directories beneath this)
     //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
     // const std::string outputDirGeneral = "combinedDataCards_final_2018";
-    const std::string outputDirGeneral = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
+    const std::string outputDirGeneral = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
   
 
 
@@ -460,7 +460,7 @@ int main(){
                 
                 // unsigned int iHtIndex = floor( (iBin - 1) / (numberOfBins / numberOfHtDivisions) ); 
                 // double qcdUnDLowerBound = qcdUnDLowerBoundInHtDivison[iHtIndex]; // COMPLICATED LOWER BOUND
-                double qcdUnDLowerBound = 0.1; // SIMPLE LOWER BOUND
+                double qcdUnDLowerBound = 0.0; // SIMPLE LOWER BOUND
                 dataCard << "\n# estimate QCD\n";
                 double corrRatio = QcdSidebandCorr::GetCorr(iBin, yearOfRun);
                 double corrRatioError = QcdSidebandCorr::GetCorrErr(iBin, yearOfRun);
@@ -479,7 +479,7 @@ int main(){
                 }
                 double qcdLowerLimit = std::max(qcdUnDLowerBound, qcdInitialEstimate - 5.0 * sqrt(data_obs_UnD) );
                 double qcdUpperLimit = data_obs_UnD + std::max(5.0 * sqrt(data_obs_UnD), 12.0);
-                dataCard << std::to_string(qcdInitialEstimate) << " " << "[" << std::to_string(qcdLowerLimit) << "," << std::to_string(qcdUpperLimit) << "]\n";            
+                dataCard << std::to_string(std::max(qcdInitialEstimate, 1.0)) << " " << "[" << std::to_string(qcdLowerLimit) << "," << std::to_string(qcdUpperLimit) << "]\n";            
                 WriteBlock(Form("ch%d_beta", binLabel), otherColSize, dataCard);
                 // dataCard << "rateParam mass_S " << qcdName << " (@0*@1*@2) ch" << binLabel << "_F,ch" << binLabel << "_abcdErr,ch" << binLabel << "_alpha\n";
                 dataCard << "rateParam mass_S " << qcdName << " (@0*@1) ch" << binLabel << "_F,ch" << binLabel << "_alpha\n";
