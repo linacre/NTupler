@@ -30,12 +30,20 @@ import argparse as a
 #############################
 ### ## # USER INPUTS # ## ###
 
+origXSVec = np.array([0.4951000, 0.0603900, 0.0091050, 0.0036780, 0.0015050, 0.0006167, 0.0002753])
+NNLLXSVec = np.array([0.5794000, 0.0688200, 0.0101300, 0.0040540, 0.0016373, 0.0006666, 0.0002707])
+NNLLXSUncVec = np.array([0.079022196, 0.093790377, 0.113829758, 0.127247992, 0.143077412, 0.160332877, 0.181553335])
+# Shift the theoretical xsec down by its uncertainty to give conservative limits
+NNLLXSVec -= NNLLXSVec * NNLLXSUncVec
+
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600, 2800]
 mHiggsVec = [30, 35, 40, 50, 70, 90, 110, 125]
+# inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/noGluino/allSys/"
 # inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/"
 #inputDir = "combinedDataCards_xsec_correlated_jec_uncorrelated_2017as2018_0.98_processed"
-inputDir = "."
-outputDir = "limits_2d"
+inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/Asymptotic_copy"
+# inputDir = "."
+outputDir = "limits_2d_unblinded_NNLL_1sigdown"
 # outputDir = inputDir + "/a_limitPlot_intp1_noObs/"
 # outputDir = inputDir + "/a_limitPlot_intp1_withObs/"
 
@@ -43,6 +51,9 @@ plotObserved = True
 plotTitle = '137.2 fb$^{-1}$ (13 TeV)'
 # plotTitle = '77.5 fb$^{-1}$ (13 TeV)'
 # plotTitle = '59.7 fb$^{-1}$ (13 TeV)'
+# plotTitle = '41.5 fb$^{-1}$ (13 TeV)'
+# plotTitle = '35.9 fb$^{-1}$ (13 TeV)'
+
 # maximally squeeze the z-axis
 minMu = -2.10
 maxMu = 1.35
@@ -62,7 +73,7 @@ f_84p0 = open("tmpLimits_84p0.txt", 'w')
 f_97p5 = open("tmpLimits_97p5.txt", 'w')
 f_obs = open("tmpLimits_obs.txt", 'w')
 
-for mSusy in mSusyVec:
+for iS,mSusy in enumerate(mSusyVec):
     for mHiggs in mHiggsVec:
 
         rootFile = "higgsCombineTest.AsymptoticLimits.mH" + str(mHiggs) + ".mSusy" + str(mSusy) + ".root"
@@ -77,22 +88,22 @@ for mSusy in mSusyVec:
         T = f.Get("limit")
 
         T.GetEntry(0)
-        f_2p5.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+        f_2p5.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVec[iS]))
 
         T.GetEntry(1)
-        f_16p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+        f_16p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVec[iS]))
 
         T.GetEntry(2)
-        f_50p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+        f_50p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVec[iS]))
 
         T.GetEntry(3)
-        f_84p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+        f_84p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVec[iS]))
 
         T.GetEntry(4)
-        f_97p5.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+        f_97p5.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVec[iS]))
         
         T.GetEntry(5)
-        f_obs.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+        f_obs.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVec[iS]))
 
 f_2p5.close()
 f_16p0.close()

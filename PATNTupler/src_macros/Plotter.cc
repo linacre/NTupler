@@ -263,7 +263,7 @@ yValueMin(0.0),
 useObservedPlot(useObservedPlotDummy),
 tdrStyle(TDRStyle())
 {
-	if (graphVecDummy.size() != 4){
+	if (graphVecDummy.size() < 4){
 		std::cout << std::endl;
 		std::cout << "WARNING: you have not provided a four element std::vector<TGraphAsymmErrors*>" << std::endl;
 		std::cout << "Not using the object in the Plotter" << std::endl;
@@ -271,7 +271,7 @@ tdrStyle(TDRStyle())
 	}
 
 	else {
-		// the vector order goes: observed, expected, 1sigma, 2sigma
+		// the vector order goes: observed, expected, 1sigma, 2sigma, th, 1sigma
 		graphVec = graphVecDummy;
 
 		graphVec[0]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
@@ -295,6 +295,19 @@ tdrStyle(TDRStyle())
 	    graphVec[3]->SetLineWidth(0);
 	    graphVec[3]->SetFillColor(kGreen);
 	    graphVec[3]->SetFillStyle(1001);
+
+	    graphVec[4]->SetLineWidth(2);
+	    graphVec[4]->SetLineStyle(1);
+		graphVec[4]->SetLineColor(kRed);
+		graphVec[4]->SetMarkerColor(kRed);
+	    graphVec[4]->SetMarkerSize(0);
+	    graphVec[4]->SetMarkerStyle(8);
+
+	    graphVec[5]->SetLineWidth(0);
+	    graphVec[5]->SetFillColor(kRed);
+		graphVec[5]->SetMarkerColor(kRed);
+	    // graphVec[5]->SetFillStyle(3144);
+		graphVec[5]->SetFillStyle(3244);
 	}
 }
 
@@ -433,6 +446,8 @@ void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, co
 	   if (iG == 1) leg->AddEntry(graphVec[1], "Expected", "l");
 	   if (iG == 2) leg->AddEntry(graphVec[2], "#pm 1 #sigma", "f");
 	   if (iG == 3) leg->AddEntry(graphVec[3], "#pm 2 #sigma", "f");
+	   if (iG == 4) leg->AddEntry(graphVec[4], "NNLO+NNLL (approx)", "l");
+	   if (iG == 5) leg->AddEntry(graphVec[5], "Theory unc.", "f");
 	}
 
 	return;
@@ -1784,10 +1799,12 @@ void Plotter::SaveBrazil(const std::string& saveName, const double& min, const d
 
 	// the vector order goes: observed, expected, 1sigma, 2sigma
     TMultiGraph * brazil = new TMultiGraph();
-    brazil->Add(graphVec[3]);
+	brazil->Add(graphVec[3]);
     brazil->Add(graphVec[2]);
     brazil->Add(graphVec[1]);
     if (useObservedPlot) brazil->Add(graphVec[0]);
+	if (useObservedPlot) brazil->Add(graphVec[4]);
+	if (useObservedPlot) brazil->Add(graphVec[5]);
 
     brazil->Draw("a3LP");
     brazil->GetYaxis()->SetRangeUser(min, max);
