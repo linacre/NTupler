@@ -1024,6 +1024,7 @@ int main(int argc, char** argv){
 				}
 			}
 
+		if (sampleType == "DATA"){
 
     	TString eventID = "";
     	eventID += (evtInfo->runNum);
@@ -1054,6 +1055,8 @@ int main(int argc, char** argv){
     	}
 
     	if(failed_ecalBadCalib) doesEventPassTrigger = false;
+
+		}
 
 
 			const int nPU = *nPU_tree;
