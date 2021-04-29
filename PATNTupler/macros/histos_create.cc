@@ -386,6 +386,21 @@ int main(int argc, char** argv){
                         plotEntry.AddInputFromGrid("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/T5qqqqZH/T5qqqqZH_2018.root", cutToApply.c_str(), 0.157E-01, SF_weight.c_str());
                     }
 
+                    else if(sampleString.BeginsWith("WWTo4Q_NNPDF31_TuneCP5_13TeV-powheg-pythia8")) {
+                        plotEntry.AddInput("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht_new/WWTo4Q_NNPDF31_TuneCP5_13TeV-powheg-pythia8/flatTree.root", cutToApply.c_str(), 51.723, SF_weight.c_str());
+                    }
+                    else if(sampleString.BeginsWith("WW_TuneCP5_PSweights_13TeV-pythia8")) {
+                        plotEntry.AddInput("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht_new/WW_TuneCP5_PSweights_13TeV-pythia8/flatTree.root", cutToApply.c_str(), 51.723/0.6741/0.6741, SF_weight.c_str());
+                    }
+                    else if(sampleString.BeginsWith("WZ_TuneCP5_PSweights_13TeV-pythia8")) {
+                        plotEntry.AddInput("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht_new/WZ_TuneCP5_PSweights_13TeV-pythia8/flatTree.root", cutToApply.c_str(), 47.13, SF_weight.c_str());
+                    }
+                    else if(sampleString.BeginsWith("ZZTo4bQ01j_5f_amcatNLO_FXFX_pythia8")) {
+                        plotEntry.AddInput("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht_new/ZZTo4bQ01j_5f_amcatNLO_FXFX_pythia8/flatTree.root", cutToApply.c_str(), 16.523*0.1512*0.1512, SF_weight.c_str());
+                    }
+                    else if(sampleString.BeginsWith("ZZ_TuneCP5_13TeV-pythia8")) {
+                        plotEntry.AddInput("/mercury/data2/linacre/NMSSM/CMSSW_10_2_12/src/NTupler/PATNTupler/main/slimjet24ht_new/ZZ_TuneCP5_13TeV-pythia8/flatTree.root", cutToApply.c_str(), 16.523, SF_weight.c_str());
+                    }
 
                     // SIGNAL 2018
                     else if(sampleString=="mH70_mSusy1200") {
