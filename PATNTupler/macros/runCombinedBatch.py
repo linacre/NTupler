@@ -113,7 +113,7 @@ for signalDir in signalDirs:
     f.write("Request_memory          = 1 GB\n")
     f.write("should_transfer_files   = YES\n")
     f.write("when_to_transfer_output = ON_EXIT_OR_EVICT\n")
-    f.write("periodic_hold                   = (CurrentTime - EnteredCurrentStatus > 10000)\n")
+    f.write("periodic_hold                   = (CurrentTime - EnteredCurrentStatus > 18000)\n")
     f.write("periodic_release                = (CurrentTime - EnteredCurrentStatus > 60)\n")
     f.write("periodic_remove                 = False\n")
     f.write("#\n")
