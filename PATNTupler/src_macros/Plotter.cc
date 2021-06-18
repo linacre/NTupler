@@ -126,6 +126,9 @@ tdrStyle(TDRStyle())
 		histos2D[iHistos2D].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
 		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetTitleSize(0.05);
 		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
+		histos2D[iHistos2D].GetHistogram()->GetZaxis()->SetTitle("Fraction of events / bin");
+		histos2D[iHistos2D].GetHistogram()->GetZaxis()->SetTitleSize(0.05);
+		histos2D[iHistos2D].GetHistogram()->GetZaxis()->SetLabelSize(0.04);
 	}
 }
 
@@ -575,7 +578,7 @@ void Plotter::AddLatex(const double& lumiValueDummy, const std::string& lhsStrin
 void Plotter::AddLatex(const std::string& lhsStringAfterCMSDummy)
 {
 	addLatex = true;
-	lumiLabel = "(13 TeV)";
+	lumiLabel = "13 TeV";
 	lhsStringAfterCMS = lhsStringAfterCMSDummy;
 
 	return;
@@ -1629,7 +1632,7 @@ void Plotter::Save2D(const std::string& saveName){
 	double default_CanvasHeight = tdrStyle->GetCanvasDefH();
 	// std::cout << default_PadLeftMargin << " " << default_PadRightMargin << std::endl;
 
-	tdrStyle->SetPadRightMargin(0.13);
+	tdrStyle->SetPadRightMargin(0.17);
 	tdrStyle->SetPadLeftMargin(0.13);
 	tdrStyle->SetCanvasDefH(700);
 
@@ -1641,6 +1644,7 @@ void Plotter::Save2D(const std::string& saveName){
 		iHistos2D->GetHistogram()->SetEntries(1);
 		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
 		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.20);
+		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.20);
 		iHistos2D->GetHistogram()->Draw("colz, same");
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
 	}
@@ -1650,7 +1654,7 @@ void Plotter::Save2D(const std::string& saveName){
 	c->Close();
 	
 	tdrStyle->SetPadRightMargin(default_PadRightMargin);
-	tdrStyle->SetPadRightMargin(default_PadLeftMargin);
+	tdrStyle->SetPadLeftMargin(default_PadLeftMargin);
 	tdrStyle->SetCanvasDefH(default_CanvasHeight);
 	std::cout << std::endl;
 	return;
@@ -1671,7 +1675,7 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	double default_PadLeftMargin = tdrStyle->GetPadLeftMargin();
 	double default_CanvasHeight = tdrStyle->GetCanvasDefH();
 	// std::cout << default_PadLeftMargin << " " << default_PadRightMargin << std::endl;
-	tdrStyle->SetPadRightMargin(0.13);
+	tdrStyle->SetPadRightMargin(0.17);
 	tdrStyle->SetPadLeftMargin(0.13);
 	tdrStyle->SetCanvasDefH(700);
 
@@ -1683,6 +1687,7 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 		iHistos2D->GetHistogram()->SetEntries(1);
 		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
 		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.20);
+		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.20);
 		// iHistos2D->GetHistogram()->Draw("same");
 		iHistos2D->GetHistogram()->Draw("colz, same");
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
@@ -1780,7 +1785,7 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	c->Close();
 	
 	tdrStyle->SetPadRightMargin(default_PadRightMargin);
-	tdrStyle->SetPadRightMargin(default_PadLeftMargin);
+	tdrStyle->SetPadLeftMargin(default_PadLeftMargin);
 	tdrStyle->SetCanvasDefH(default_CanvasHeight);
 	std::cout << std::endl;
 	return;
