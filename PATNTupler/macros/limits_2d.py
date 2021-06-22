@@ -43,12 +43,12 @@ mHiggsVec = [30, 35, 40, 50, 70, 90, 110, 125]
 #inputDir = "combinedDataCards_xsec_correlated_jec_uncorrelated_2017as2018_0.98_processed"
 inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/Asymptotic_copy"
 # inputDir = "."
-outputDir = "limits_2d_unblinded_NNLL_1sigdown"
+outputDir = "limits_2d_unblinded_NNLL_1sigdown_fixedinterpolation"
 # outputDir = inputDir + "/a_limitPlot_intp1_noObs/"
 # outputDir = inputDir + "/a_limitPlot_intp1_withObs/"
 
 plotObserved = True
-plotTitle = '137.2 fb$^{-1}$ (13 TeV)'
+plotTitle = '137 fb$^{-1}$ (13 TeV)'
 # plotTitle = '77.5 fb$^{-1}$ (13 TeV)'
 # plotTitle = '59.7 fb$^{-1}$ (13 TeV)'
 # plotTitle = '41.5 fb$^{-1}$ (13 TeV)'
@@ -133,8 +133,8 @@ def interp(data, method='linear'):
     y = data[:,1]
     z = data[:,2]
     
-    xi = np.linspace(x.min(), x.max(), 100)
-    yi = np.linspace(y.min(), y.max(), 100)
+    xi = np.linspace(x.min(), x.max(), 9)
+    yi = np.linspace(y.min(), y.max(), 20)
     zi = mlab.griddata(x, y, z, xi, yi, interp=method)
     
     return xi, yi, zi
@@ -182,6 +182,8 @@ xj84, yj84, zj84 = interp(exp_84p0, 'linear') # expected line (+1 sigma)
 xk, yk, zk = 0, 0, 0 # observed line
 if (plotObserved):
     xk, yk, zk = interp(obs, 'linear') # observed line
+
+# print xk, yk, zk
 
 # xi, yi, zi = interp2(exp_50p0, 'linear', 1000) # expected grid
 # xj, yj, zj = interp2(exp_50p0, 'linear', 200) # expected line
