@@ -475,6 +475,7 @@ void Plotter::AddLegend(const std::vector<std::string>& legendNames, const doubl
 		if (i < th1Indi.size()) leg->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
 		else leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
 	}
+	if(hdata) leg->AddEntry(hdata, "VR data", "P");
 	return;
 }
 
@@ -569,7 +570,7 @@ void Plotter::AddLegend2Cols(const unsigned int& numRowsBeforeUsing2Cols, const 
 void Plotter::AddLatex(const double& lumiValueDummy, const std::string& lhsStringAfterCMSDummy)
 {
 	addLatex = true;
-	lumiLabel = Form("%.1f fb^{-1} (13 TeV)", lumiValueDummy);
+	lumiLabel = Form("%.0f fb^{-1} (13 TeV)", lumiValueDummy);
 	lhsStringAfterCMS = lhsStringAfterCMSDummy;
 
 	return;
@@ -1010,7 +1011,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		padUp->SetBottomMargin(0.016);
 		padUp->Draw();
 		padUp->cd();
-		th1Indi[0]->SetLabelOffset(777.7);
+		if(!th1Indi.empty()) th1Indi[0]->SetLabelOffset(777.7);
 	}
 
 	if (useLogY) gPad->SetLogy();
@@ -1189,6 +1190,11 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		if (plotWithErrorsStack){
 			hTotalBkg->Draw("same, E2");
 		}
+
+		if(hdata) {
+			hdata->Draw("E0 same");
+		}
+
 	}
 
 	if (addLatex) DrawLatex();
@@ -1219,8 +1225,10 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			}
 			TLatex * latexHT = new TLatex();
 		    latexHT->SetTextFont(42);
+			latexHT->SetTextSize(0.047);
 		    latexHT->SetTextAlign(11); // align from left
-		    latexHT->DrawLatex(c+1, lineMax, htBins[c/binsPerDivision].c_str());
+			float offsets[] = {1., 0.68, 1.55};
+		    latexHT->DrawLatex(c+offsets[c/binsPerDivision], lineMax, htBins[c/binsPerDivision].c_str());
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -1383,7 +1391,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		th1Stack[0]->SetMinimum(initialMin);
 	}
 
-	if (addRatioBox) th1Indi[0]->SetLabelOffset(0.007);
+	if (addRatioBox && !th1Indi.empty()) th1Indi[0]->SetLabelOffset(0.007);
 
 	delete ratioPlotEntryBackground;
 	delete hTotalBkg;
