@@ -60,12 +60,12 @@ int main(){
     // ONE: save info (signal specific directories beneath this)
     //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
     // const std::string outputDirGeneral = "combinedDataCards_final_2018";
-    const std::string outputDirGeneral = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.001tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_zeroBkgsRemoved";
+    const std::string outputDirGeneral = "combinedDataCards_5bins_lnNforQCD_batch";
     // const std::string outputDirGeneral = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
 
 
     // TWO: physics info - to match the histograms that you use
-    const unsigned int numberOfBins = 30;
+    const unsigned int numberOfBins = 15;
     const unsigned int numberOfHtDivisions = 3;
 
 
@@ -247,7 +247,9 @@ int main(){
                 std::string comboCommandStr = "combineCards.py ";
                 for (unsigned int iYear = 0; iYear < yearOfRunVec.size(); ++iYear)
                 {
-                    for (unsigned int i = 1; i < numberOfBins + 1; ++i) comboCommandStr += outputDir + "bin" + std::to_string(i+iYear*numberOfBins) + "_" + std::to_string(yearOfRunVec.at(iYear)) + ".txt ";
+                    for (unsigned int i = 1; i < numberOfBins + 1; ++i) comboCommandStr 
+                    // += outputDir + "bin" + std::to_string(i+iYear*numberOfBins) + "_" + std::to_string(yearOfRunVec.at(iYear)) + ".txt ";
+                    += Form("%sbin%02d_%d.txt ", outputDir.c_str(), i+iYear*numberOfBins, yearOfRunVec.at(iYear));
                 }
                 comboCommandStr += "> " + outputDir + "allbins.txt\n";
                 comboCommand << comboCommandStr;
@@ -271,7 +273,7 @@ int main(){
                     double dataEstimate = hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
                     dataEstimate = dataEstimate - mcCount_UnD;
                     if (dataEstimate < 0) dataEstimate = 0.0;
-                    dataEstimate = dataEstimate * QcdSidebandCorr::GetCorr(iBin, yearOfRun);
+                    dataEstimate = dataEstimate * QcdSidebandCorr::GetCorr5bins(iBin, yearOfRun);
                     dataEstimate = dataEstimate + mcCount_S;
                     if (dataEstimate < 0) dataEstimate = 0.0;
                     data_obs_S = round(dataEstimate);
@@ -308,7 +310,7 @@ int main(){
                 std::ofstream dataCard;
                 unsigned int binLabel = iBin;
                 binLabel += numYearsCount*numberOfBins;
-                dataCard.open( Form("%sbin%d_%d.txt", outputDir.c_str(),binLabel,yearOfRun) );
+                dataCard.open( Form("%sbin%02d_%d.txt", outputDir.c_str(),binLabel,yearOfRun) );
                 dataCard << "imax 2\n";
                 int jmax = mcbkVec[yearOfRun].size() + 1;
                 for (unsigned int c = 0; c < mcbkVec[yearOfRun].size(); ++c) if (rate_mcbkVec_S[c] == 0. && rate_mcbkVec_UnD[c] == 0.) --jmax;
@@ -400,7 +402,7 @@ int main(){
                 //     const unsigned int iVec = iBin - 1;
                 //     double signalWeight_S = signalWeightVec_S[iSig][iVec];
                 //     const int rawCount = round(rate_signal_S / signalWeight_S);
-                //     const std::string statSysName = "ch" + std::to_string(binLabel) + "_SIG_S_stats gmN " + std::to_string(rawCount);
+                //     const std::string statSysName = Form("ch%02d", binLabel) + "_SIG_S_stats gmN " + std::to_string(rawCount);
                 //     const std::string signalWeightStr = std::to_string(signalWeight_S);
                 //     WriteBlock(statSysName, firstColSize, dataCard);
                 //     WriteBlock(signalWeightStr, otherColSize, dataCard);
@@ -416,7 +418,7 @@ int main(){
                         const double mcbkWeight_S = mcbkWeightVec_S[iMC][iVec];
                         
                         const int rawCount = round(rate_mcbkVec_S[iMC] / mcbkWeight_S);
-                        const std::string statSysName = "ch" + std::to_string(binLabel) + "_" + mcbkVec[yearOfRun][iMC] + "_S_stats gmN " + std::to_string(rawCount);
+                        const std::string statSysName = Form("ch%02d_", binLabel) + mcbkVec[yearOfRun][iMC] + "_S_stats gmN " + std::to_string(rawCount);
                         const std::string mcbkWeightStr = std::to_string(mcbkWeight_S);
                         WriteBlock(statSysName, firstColSize, dataCard);
                         WriteBlock("-", otherColSize, dataCard);
@@ -434,7 +436,7 @@ int main(){
                 //     const unsigned int iVec = iBin - 1;
                 //     double signalWeight_UnD = signalWeightVec_UnD[iSig][iVec];
                 //     const int rawCount = round(rate_signal_UnD / signalWeight_UnD);
-                //     const std::string statSysName = "ch" + std::to_string(binLabel) + "_SIG_UnD_stats gmN " + std::to_string(rawCount);
+                //     const std::string statSysName = Form("ch%02d", binLabel) + "_SIG_UnD_stats gmN " + std::to_string(rawCount);
                 //     const std::string signalWeightStr = std::to_string(signalWeight_UnD);
                 //     WriteBlock(statSysName, firstColSize, dataCard);
                 //     for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) WriteBlock("-", otherColSize, dataCard);
@@ -451,7 +453,7 @@ int main(){
                         const double mcbkWeight_UnD = mcbkWeightVec_UnD[iMC][iVec];
 
                         const int rawCount = round(rate_mcbkVec_UnD[iMC] / mcbkWeight_UnD);
-                        const std::string statSysName = "ch" + std::to_string(binLabel) + "_" + mcbkVec[yearOfRun][iMC] + "_UnD_stats gmN " + std::to_string(rawCount);
+                        const std::string statSysName = Form("ch%02d_", binLabel) + mcbkVec[yearOfRun][iMC] + "_UnD_stats gmN " + std::to_string(rawCount);
                         const std::string mcbkWeightStr = std::to_string(mcbkWeight_UnD);
                         WriteBlock(statSysName, firstColSize, dataCard);
                         WriteBlock("-", otherColSize, dataCard);
@@ -470,14 +472,14 @@ int main(){
                 // double qcdUnDLowerBound = qcdUnDLowerBoundInHtDivison[iHtIndex]; // COMPLICATED LOWER BOUND
                 double qcdUnDLowerBound = 0.001; // SIMPLE LOWER BOUND
                 dataCard << "\n# estimate QCD\n";
-                double corrRatio = QcdSidebandCorr::GetCorr(iBin, yearOfRun);
-                double corrRatioError = QcdSidebandCorr::GetCorrErr(iBin, yearOfRun);
-                WriteBlock(Form("ch%d_F", binLabel), otherColSize, dataCard);
-                dataCard << "param " << std::to_string(corrRatio) << " " << std::to_string(corrRatioError) << "\n";
+                double corrRatio = QcdSidebandCorr::GetCorr5bins(iBin, yearOfRun);
+                double corrRatioError = QcdSidebandCorr::GetCorrErr5bins(iBin, yearOfRun);
+                WriteBlock(Form("ch%02d_F", binLabel), otherColSize, dataCard);
+                dataCard << "param " << std::to_string(log(corrRatio)) << " " << std::to_string(corrRatioError) << "\n";
                 // TODO: re-add the 10% extra here? 
-                // WriteBlock(Form("ch%d_abcdErr", binLabel), otherColSize, dataCard);
+                // WriteBlock(Form("ch%02d_abcdErr", binLabel), otherColSize, dataCard);
                 // dataCard << "param 1.000000 0.100000\n";
-                WriteBlock(Form("ch%d_alpha", binLabel), otherColSize, dataCard);
+                WriteBlock(Form("ch%02d_alpha", binLabel), otherColSize, dataCard);
                 dataCard << "rateParam mass_UnD " << qcdName << " ";
                 double qcdInitialEstimate = data_obs_UnD;
                 for (auto rate_mcbk_UnD : rate_mcbkVec_UnD) qcdInitialEstimate = qcdInitialEstimate - rate_mcbk_UnD;
@@ -488,9 +490,9 @@ int main(){
                 double qcdLowerLimit = std::max(qcdUnDLowerBound, qcdInitialEstimate - 5.0 * sqrt(data_obs_UnD) );
                 double qcdUpperLimit = data_obs_UnD + std::max(5.0 * sqrt(data_obs_UnD), 12.0);
                 dataCard << std::to_string(qcdInitialEstimate) << " " << "[" << std::to_string(qcdLowerLimit) << "," << std::to_string(qcdUpperLimit) << "]\n";            
-                WriteBlock(Form("ch%d_beta", binLabel), otherColSize, dataCard);
-                // dataCard << "rateParam mass_S " << qcdName << " (@0*@1*@2) ch" << binLabel << "_F,ch" << binLabel << "_abcdErr,ch" << binLabel << "_alpha\n";
-                dataCard << "rateParam mass_S " << qcdName << " (@0*@1) ch" << binLabel << "_F,ch" << binLabel << "_alpha\n";
+                WriteBlock(Form("ch%02d_beta", binLabel), otherColSize, dataCard);
+                // dataCard << "rateParam mass_S " << qcdName << " (@0*@1*@2) ch" << Form("%02d", binLabel) << "_F,ch" << Form("%02d", binLabel) << "_abcdErr,ch" << Form("%02d", binLabel) << "_alpha\n";
+                dataCard << "rateParam mass_S " << qcdName << " (exp(@0)*@1) ch" << Form("%02d", binLabel) << "_F,ch" << Form("%02d", binLabel) << "_alpha\n";
 
                 dataCard.close();
 
@@ -724,8 +726,17 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
             h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("U_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
             h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Add((TH1D*)f->Get(Form("D_dbtDiagUpLoose_%s", nonTrivialSys.c_str())));
 
+            Double_t newBins[16] = {0.,1.,3.,5.,7.,10.,11.,13.,15.,17.,20.,21.,23.,25.,27.,30.};
+
+            h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*) h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Rebin(15, h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->GetName(), newBins);
+            h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*) h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Rebin(15, h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->GetName(), newBins);
+
         } // closes loop through nonTrivialSysVec
     } // closes loop through histoNameVec
+
+    // h_["S_tag_data_NOSYS"]->Print("all");
+    // h_["S_tag_WJets_NOSYS"]->Print("all");
+    // h_["S_tag_mH70_mSusy2400_NOSYS"]->Print("all");
 
 } // closes function GetHistograms
 

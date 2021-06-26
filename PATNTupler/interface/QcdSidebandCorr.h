@@ -429,5 +429,300 @@ namespace QcdSidebandCorr{
 	} // closes function GetCorrErr
 
 
+
+
+	double GetCorr5bins(const unsigned int& binIndex, const unsigned int& yearOfRun){
+
+		// #*,. #*,. #*,. #*,.
+		// #*,. 2016 #*,. #*,.
+		// #*,. #*,. #*,. #*,.
+		if (yearOfRun == 2016){
+
+			std::vector<double> corrVec;
+			
+			// ht1500to2500 - calculation (data)
+			corrVec.push_back(1.552939133);
+			corrVec.push_back(0.827155089);
+			corrVec.push_back(0.966279481);
+			corrVec.push_back(1.04896632);
+			corrVec.push_back(1.157450794);
+
+			// ht2500to3500 - calculation (data)
+			corrVec.push_back(1.418078214);
+			corrVec.push_back(0.709085667);
+			corrVec.push_back(0.898410593);
+			corrVec.push_back(0.991279323);
+			corrVec.push_back(1.047321235);
+
+			// ht3500toInf - calculation (mc)
+			corrVec.push_back(1.528324149);
+			corrVec.push_back(0.662406567);
+			corrVec.push_back(0.825990754);
+			corrVec.push_back(0.940890082);
+			corrVec.push_back(1.003634045);
+
+
+
+
+			if (binIndex > 0 && binIndex < corrVec.size() + 1 ) return corrVec[binIndex - 1];
+			else{
+				std::cout << "WARNING: you haven't provided a valid index for the QCD 2016 sideband correction factor" << std::endl;
+				std::cout << "You are being given a dummy value of -123456789.0" << std::endl;
+				return -123456789.0;
+			}
+		} // closes 'if' yearOfRun==2016
+
+
+		// #*,. #*,. #*,. #*,.
+		// #*,. 2017 #*,. #*,.
+		// #*,. #*,. #*,. #*,.
+		else if (yearOfRun == 2017){
+			
+			std::vector<double> corrVec;
+
+			// ht1500to2500 - calculation (data)
+			corrVec.push_back(1.573412198);
+			corrVec.push_back(0.842478687);
+			corrVec.push_back(0.972974379);
+			corrVec.push_back(1.053424582);
+			corrVec.push_back(1.170190095);
+
+			// ht2500to3500 - calculation (data)
+			corrVec.push_back(1.429181563);
+			corrVec.push_back(0.72814794);
+			corrVec.push_back(0.91330711);
+			corrVec.push_back(1.002716099);
+			corrVec.push_back(1.043647889);
+
+			// ht3500toInf - calculation (mc)
+			corrVec.push_back(1.521211486);
+			corrVec.push_back(0.640586313);
+			corrVec.push_back(0.805182939);
+			corrVec.push_back(0.939768495);
+			corrVec.push_back(1.04552963);
+
+
+
+			if (binIndex > 0 && binIndex < corrVec.size() + 1 ) return corrVec[binIndex - 1];
+			else{
+				std::cout << "WARNING: you haven't provided a valid index for the QCD 2017 sideband correction factor" << std::endl;
+				std::cout << "You are being given a dummy value of -123456789.0" << std::endl;
+				return -123456789.0;
+			}
+		} // closes 'if' yearOfRun==2017
+
+
+
+
+		// #*,. #*,. #*,. #*,.
+		// #*,. 2018 #*,. #*,.
+		// #*,. #*,. #*,. #*,.
+		else if (yearOfRun == 2018){
+
+			std::vector<double> corrVec;
+
+			// ht1500to2500 - calculation (data)
+			corrVec.push_back(1.534942062);
+			corrVec.push_back(0.811710715);
+			corrVec.push_back(0.961921624);
+			corrVec.push_back(1.051378004);
+			corrVec.push_back(1.173171583);
+
+			// ht2500to3500 - calculation (data)
+			corrVec.push_back(1.438481826);
+			corrVec.push_back(0.722467308);
+			corrVec.push_back(0.907452154);
+			corrVec.push_back(1.002309572);
+			corrVec.push_back(1.053583578);
+
+			// ht3500toInf - calculation (data, normal bins)
+			corrVec.push_back(1.543382528);
+			corrVec.push_back(0.664678156);
+			corrVec.push_back(0.821879182);
+			corrVec.push_back(0.939633803);
+			corrVec.push_back(1.009565549);
+
+
+			if (binIndex > 0 && binIndex < corrVec.size() + 1 ) return corrVec[binIndex - 1];
+			else{
+				std::cout << "WARNING: you haven't provided a valid index for the QCD 2018 sideband correction factor" << std::endl;
+				std::cout << "You are being given a dummy value of -123456789.0" << std::endl;
+				return -123456789.0;
+			}
+		} // closes 'if' yearOfRun==2018
+
+		else{
+			std::cout << "You have not provided QcdSidebandCorr::GetCorr with a valid yearOfRun, must be 2016, 2017 or 2018" << std::endl;
+			std::cout << "You are being given a dummy value of -2635426354.0" << std::endl;
+			return -2635426354.0;
+		}
+
+
+
+	} // closes function GetCorr
+
+
+
+
+	double GetCorrErr5bins(const unsigned int& binIndex, const unsigned int& yearOfRun){
+
+		// #*,. #*,. #*,. #*,.
+		// #*,. 2016 #*,. #*,.
+		// #*,. #*,. #*,. #*,.
+		if (yearOfRun == 2016){
+
+			std::vector<double> corrErrVec;
+
+			// ht1500to2500 - normal method
+			// corrErrVec.push_back(0.0352796250);
+			// corrErrVec.push_back(0.0159298571);
+			// corrErrVec.push_back(0.0190088308);
+			// corrErrVec.push_back(0.0231644431);
+			// corrErrVec.push_back(0.0270426071);
+			// corrErrVec.push_back(0.0335637876);
+			// corrErrVec.push_back(0.0380500609);
+			// corrErrVec.push_back(0.0415511282);
+			// corrErrVec.push_back(0.0435266537);
+			// corrErrVec.push_back(0.0533274246);
+
+			// ht1500to2500 - calculation (data)
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+
+			// ht2500to3500 - calculation (data)
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+
+			// ht3500toInf - calculation (mc)
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+
+			if (binIndex > 0 && binIndex < corrErrVec.size() + 1 ) return corrErrVec[binIndex - 1];
+			else{
+				std::cout << "WARNING: you haven't provided a valid index for the QCD 2016 sideband correction factor error" << std::endl;
+				std::cout << "You are being given a dummy value of -123456789.0" << std::endl;
+				return -123456789.0;
+			}
+		} // closes 'if' yearOfRun==2016
+
+
+		// #*,. #*,. #*,. #*,.
+		// #*,. 2017 #*,. #*,.
+		// #*,. #*,. #*,. #*,.
+		if (yearOfRun == 2017){
+
+			std::vector<double> corrErrVec;
+
+			// ht1500to2500 - normal method
+			// corrErrVec.push_back(0.0345542152);
+			// corrErrVec.push_back(0.0147509712);
+			// corrErrVec.push_back(0.0176379321);
+			// corrErrVec.push_back(0.0191728313);
+			// corrErrVec.push_back(0.0248291208);
+			// corrErrVec.push_back(0.0295094637);
+			// corrErrVec.push_back(0.0332982690);
+			// corrErrVec.push_back(0.0386168015);
+			// corrErrVec.push_back(0.0399156117);
+			// corrErrVec.push_back(0.0458386330);
+
+			// ht1500to2500 - calculation (data)
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+
+			// ht2500to3500 - calculation (data)
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+
+			// ht3500toInf - calculation (mc)
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+
+			if (binIndex > 0 && binIndex < corrErrVec.size() + 1 ) return corrErrVec[binIndex - 1];
+			else{
+				std::cout << "WARNING: you haven't provided a valid index for the QCD 2017 sideband correction factor error" << std::endl;
+				std::cout << "You are being given a dummy value of -123456789.0" << std::endl;
+				return -123456789.0;
+			}
+		} // closes 'if' yearOfRun==2017
+
+
+		// #*,. #*,. #*,. #*,.
+		// #*,. 2018 #*,. #*,.
+		// #*,. #*,. #*,. #*,.
+		if (yearOfRun == 2018){
+
+			std::vector<double> corrErrVec;
+
+			// ht1500to2500 - normal method
+			// corrErrVec.push_back(0.0284016012);
+			// corrErrVec.push_back(0.0121837549);
+			// corrErrVec.push_back(0.0143463255);
+			// corrErrVec.push_back(0.0174777547);
+			// corrErrVec.push_back(0.0226117290);
+			// corrErrVec.push_back(0.0259033612);
+			// corrErrVec.push_back(0.0300473700);
+			// corrErrVec.push_back(0.0332777229);
+			// corrErrVec.push_back(0.0365395465);
+			// corrErrVec.push_back(0.0402043763);
+
+			// ht1500to2500 - calculation (data)
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+
+			// ht2500to3500 - calculation (data)
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.15);
+
+			// ht3500toInf - calculation (mc)
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+
+			if (binIndex > 0 && binIndex < corrErrVec.size() + 1 ) return corrErrVec[binIndex - 1];
+			else{
+				std::cout << "WARNING: you haven't provided a valid index for the QCD 2018 sideband correction factor error" << std::endl;
+				std::cout << "You are being given a dummy value of -123456789.0" << std::endl;
+				return -123456789.0;
+			}
+		} // closes 'if' yearOfRun==2018
+
+
+		else{
+			std::cout << "You have not provided QcdSidebandCorr::GetCorrErr with a valid yearOfRun, must be 2016, 2017 or 2018" << std::endl;
+			std::cout << "You are being given a dummy value of -2635426354.0" << std::endl;
+			return -2635426354.0;
+		}
+
+	} // closes function GetCorrErr
+
+
+
+
 } // closes namespace 'QcdSidebandCorr'
 #endif
