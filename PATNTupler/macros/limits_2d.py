@@ -34,16 +34,19 @@ origXSVec = np.array([0.4951000, 0.0603900, 0.0091050, 0.0036780, 0.0015050, 0.0
 NNLLXSVec = np.array([0.5794000, 0.0688200, 0.0101300, 0.0040540, 0.0016373, 0.0006666, 0.0002707])
 NNLLXSUncVec = np.array([0.079022196, 0.093790377, 0.113829758, 0.127247992, 0.143077412, 0.160332877, 0.181553335])
 # Shift the theoretical xsec down by its uncertainty to give conservative limits
-NNLLXSVec -= NNLLXSVec * NNLLXSUncVec
+NNLLXSVecDown = NNLLXSVec - NNLLXSVec * NNLLXSUncVec
+NNLLXSVecUp = NNLLXSVec + NNLLXSVec * NNLLXSUncVec
 
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600, 2800]
 mHiggsVec = [30, 35, 40, 50, 70, 90, 110, 125]
 # inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/noGluino/allSys/"
 # inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/"
 #inputDir = "combinedDataCards_xsec_correlated_jec_uncorrelated_2017as2018_0.98_processed"
-inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/Asymptotic_copy"
+
+# inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/Asymptotic_copy"
+inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_5bins_lnNforQCD_batch"
 # inputDir = "."
-outputDir = "limits_2d_unblinded_NNLL_1sigdown_fixedinterpolation"
+outputDir = "limits_2d_unblinded_NNLL_fixedinterpolation_5bins_QCDlnN_theoryBand"
 # outputDir = inputDir + "/a_limitPlot_intp1_noObs/"
 # outputDir = inputDir + "/a_limitPlot_intp1_withObs/"
 
@@ -72,6 +75,8 @@ f_50p0 = open("tmpLimits_50p0.txt", 'w')
 f_84p0 = open("tmpLimits_84p0.txt", 'w')
 f_97p5 = open("tmpLimits_97p5.txt", 'w')
 f_obs = open("tmpLimits_obs.txt", 'w')
+f_obsup = open("tmpLimits_obsup.txt", 'w')
+f_obsdown = open("tmpLimits_obsdown.txt", 'w')
 
 for iS,mSusy in enumerate(mSusyVec):
     for mHiggs in mHiggsVec:
@@ -104,6 +109,8 @@ for iS,mSusy in enumerate(mSusyVec):
         
         T.GetEntry(5)
         f_obs.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVec[iS]))
+        f_obsup.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVecUp[iS]))
+        f_obsdown.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVecDown[iS]))
 
 f_2p5.close()
 f_16p0.close()
@@ -111,6 +118,8 @@ f_50p0.close()
 f_84p0.close()
 f_97p5.close()
 f_obs.close()
+f_obsup.close()
+f_obsdown.close()
 
 exp_2p5 = np.loadtxt("tmpLimits_2p5.txt")
 exp_16p0 = np.loadtxt("tmpLimits_16p0.txt")
@@ -118,6 +127,8 @@ exp_50p0 = np.loadtxt("tmpLimits_50p0.txt")
 exp_84p0 = np.loadtxt("tmpLimits_84p0.txt")
 exp_97p5 = np.loadtxt("tmpLimits_97p5.txt")
 obs = np.loadtxt("tmpLimits_obs.txt")
+obsup = np.loadtxt("tmpLimits_obsup.txt")
+obsdown = np.loadtxt("tmpLimits_obsdown.txt")
 
 os.system("rm tmpLimits_2p5.txt")
 os.system("rm tmpLimits_16p0.txt")
@@ -125,6 +136,8 @@ os.system("rm tmpLimits_50p0.txt")
 os.system("rm tmpLimits_84p0.txt")
 os.system("rm tmpLimits_97p5.txt")
 os.system("rm tmpLimits_obs.txt")
+os.system("rm tmpLimits_obsup.txt")
+os.system("rm tmpLimits_obsdown.txt")
 
 
 
@@ -182,6 +195,8 @@ xj84, yj84, zj84 = interp(exp_84p0, 'linear') # expected line (+1 sigma)
 xk, yk, zk = 0, 0, 0 # observed line
 if (plotObserved):
     xk, yk, zk = interp(obs, 'linear') # observed line
+    xkup, ykup, zkup = interp(obsup, 'linear') # observed line
+    xkdown, ykdown, zkdown = interp(obsdown, 'linear') # observed line
 
 # print xk, yk, zk
 
@@ -230,13 +245,17 @@ bird = mcol.LinearSegmentedColormap('bird', cdict)
 if (plotObserved):
     plt_obs = plt.contour(xk, yk, zk, [1.0], colors='r')
     plt_obs.collections[0].set_label('Observed')
+    plt_obsup = plt.contour(xkup, ykup, zkup, [1.0], colors='r', linestyles='--')
+    plt_obsup.collections[0].set_label('$\pm1\sigma_{th}$')
+    plt_obsdown = plt.contour(xkdown, ykdown, zkdown, [1.0], colors='r', linestyles='--')
+    # plt_obsdown.collections[0].set_label('Observed down')
 else:
     plt_obs = plt.contour(xj, yj, zj, [1.0], colors='r')
     plt_obs.collections[0].set_label('Observed')
 plt_exp = plt.contour(xj, yj, zj, [1.0], colors='k')
 plt_exp.collections[0].set_label('Expected')
 plt_exp16 = plt.contour(xj16, yj16, zj16, [1.0], colors='k', linestyles='--', label='qwert')
-plt_exp16.collections[0].set_label('$\pm1\sigma$')
+plt_exp16.collections[0].set_label('$\pm1\sigma_{exp}$')
 plt_exp84 = plt.contour(xj84, yj84, zj84, [1.0], colors='k', linestyles='--')
 dummy = plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=10**minMu, vmax=10**maxMu), cmap=bird)
 
