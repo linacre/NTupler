@@ -23,6 +23,7 @@
 // MAKE DATACARDS TO USE WITH COMBINED
 
 bool use2017as2018 = true;
+bool rebinMass = false;
 
 
 void GetHistograms(std::map<std::string,TH1D*>&, const unsigned int&); // NEED TO CHANGE THE FILE PATH IN THIS FUNCTION WHEN USING NEW HISTOGRAMS
@@ -60,15 +61,13 @@ int main(){
     // ONE: save info (signal specific directories beneath this)
     //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
     // const std::string outputDirGeneral = "combinedDataCards_final_2018";
-    const std::string outputDirGeneral = "combinedDataCards_5bins_lnNforQCD_batch";
+    const std::string outputDirGeneral = "combinedDataCards_10bins_lnNforQCD_batch";
     // const std::string outputDirGeneral = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
 
 
     // TWO: physics info - to match the histograms that you use
-    const unsigned int numberOfBins = 15;
+    const unsigned int numberOfBins = 30 / (rebinMass ? 2 : 1);
     const unsigned int numberOfHtDivisions = 3;
-
-
 
     // THREE: Samples To Use (different project for each signal sample)
     const std::string dataSample = "data";
@@ -273,7 +272,7 @@ int main(){
                     double dataEstimate = hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
                     dataEstimate = dataEstimate - mcCount_UnD;
                     if (dataEstimate < 0) dataEstimate = 0.0;
-                    dataEstimate = dataEstimate * QcdSidebandCorr::GetCorr5bins(iBin, yearOfRun);
+                    dataEstimate = dataEstimate * ( !rebinMass ? QcdSidebandCorr::GetCorr(iBin, yearOfRun) : QcdSidebandCorr::GetCorr5bins(iBin, yearOfRun) );
                     dataEstimate = dataEstimate + mcCount_S;
                     if (dataEstimate < 0) dataEstimate = 0.0;
                     data_obs_S = round(dataEstimate);
@@ -472,8 +471,8 @@ int main(){
                 // double qcdUnDLowerBound = qcdUnDLowerBoundInHtDivison[iHtIndex]; // COMPLICATED LOWER BOUND
                 double qcdUnDLowerBound = 0.001; // SIMPLE LOWER BOUND
                 dataCard << "\n# estimate QCD\n";
-                double corrRatio = QcdSidebandCorr::GetCorr5bins(iBin, yearOfRun);
-                double corrRatioError = QcdSidebandCorr::GetCorrErr5bins(iBin, yearOfRun);
+                double corrRatio = ( !rebinMass ? QcdSidebandCorr::GetCorr(iBin, yearOfRun) : QcdSidebandCorr::GetCorr5bins(iBin, yearOfRun) );
+                double corrRatioError = ( !rebinMass ? QcdSidebandCorr::GetCorrErr(iBin, yearOfRun) : QcdSidebandCorr::GetCorrErr5bins(iBin, yearOfRun) );
                 WriteBlock(Form("ch%02d_F", binLabel), otherColSize, dataCard);
                 dataCard << "param " << std::to_string(log(corrRatio)) << " " << std::to_string(corrRatioError) << "\n";
                 // TODO: re-add the 10% extra here? 
@@ -726,17 +725,15 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
             h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("U_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
             h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Add((TH1D*)f->Get(Form("D_dbtDiagUpLoose_%s", nonTrivialSys.c_str())));
 
-            Double_t newBins[16] = {0.,1.,3.,5.,7.,10.,11.,13.,15.,17.,20.,21.,23.,25.,27.,30.};
+            if(rebinMass) {
+                Double_t newBins[16] = {0.,1.,3.,5.,7.,10.,11.,13.,15.,17.,20.,21.,23.,25.,27.,30.};
 
-            h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*) h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Rebin(15, h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->GetName(), newBins);
-            h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*) h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Rebin(15, h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->GetName(), newBins);
+                h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*) h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Rebin(15, h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->GetName(), newBins);
+                h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*) h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Rebin(15, h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->GetName(), newBins);
+            }
 
         } // closes loop through nonTrivialSysVec
     } // closes loop through histoNameVec
-
-    // h_["S_tag_data_NOSYS"]->Print("all");
-    // h_["S_tag_WJets_NOSYS"]->Print("all");
-    // h_["S_tag_mH70_mSusy2400_NOSYS"]->Print("all");
 
 } // closes function GetHistograms
 
