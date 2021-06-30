@@ -14,6 +14,7 @@
 #include <TStyle.h>
 #include <TLegend.h>
 #include <TFile.h>
+#include <TGraph.h>
 
 //RAL PARTICLE HEADERS
 #include "TimeStamp.h"
@@ -61,7 +62,7 @@ int main(){
     // ONE: save info (signal specific directories beneath this)
     //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
     // const std::string outputDirGeneral = "combinedDataCards_final_2018";
-    const std::string outputDirGeneral = "combinedDataCards_10bins_lnNforQCD_batch";
+    const std::string outputDirGeneral = "combinedDataCards_10bins_lnNforQCD_interpolated_batch";
     // const std::string outputDirGeneral = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
 
 
@@ -82,14 +83,14 @@ int main(){
     }
     else{
         signalVec = { // the different signal samples you wish to use
-                                            // "mH30_mSusy800",                                   "mH50_mSusy800",  "mH70_mSusy800",  "mH90_mSusy800",  "mH110_mSusy800",  "mH125_mSusy800",
-                                            "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH110_mSusy1200", "mH125_mSusy1200",
-                                            "mH30_mSusy1600", "mH35_mSusy1600", "mH40_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH110_mSusy1600", "mH125_mSusy1600",
-                                            "mH30_mSusy2000", "mH35_mSusy2000", "mH40_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000", "mH110_mSusy2000", "mH125_mSusy2000",
-                                            "mH30_mSusy2200", "mH35_mSusy2200", "mH40_mSusy2200", "mH50_mSusy2200", "mH70_mSusy2200", "mH90_mSusy2200", "mH110_mSusy2200", "mH125_mSusy2200",
-                                            "mH30_mSusy2400", "mH35_mSusy2400", "mH40_mSusy2400", "mH50_mSusy2400", "mH70_mSusy2400", "mH90_mSusy2400", "mH110_mSusy2400", "mH125_mSusy2400",
-                                            "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH70_mSusy2600", "mH90_mSusy2600", "mH110_mSusy2600", "mH125_mSusy2600", 
-                                            "mH30_mSusy2800", "mH35_mSusy2800", "mH40_mSusy2800", "mH50_mSusy2800", "mH70_mSusy2800", "mH90_mSusy2800", "mH110_mSusy2800", "mH125_mSusy2800", 
+                                            // "mH30_mSusy800",                                   "mH50_mSusy800", "mH60_mSusy800",  "mH70_mSusy800", "mH80_mSusy800",  "mH90_mSusy800", "mH100_mSusy800",  "mH110_mSusy800",  "mH125_mSusy800",
+                                            "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH60_mSusy1200", "mH70_mSusy1200", "mH80_mSusy1200", "mH90_mSusy1200", "mH100_mSusy1200", "mH110_mSusy1200", "mH125_mSusy1200",
+                                            "mH30_mSusy1600", "mH35_mSusy1600", "mH40_mSusy1600", "mH50_mSusy1600", "mH60_mSusy1600", "mH70_mSusy1600", "mH80_mSusy1600", "mH90_mSusy1600", "mH100_mSusy1600", "mH110_mSusy1600", "mH125_mSusy1600",
+                                            "mH30_mSusy2000", "mH35_mSusy2000", "mH40_mSusy2000", "mH50_mSusy2000", "mH60_mSusy2000", "mH70_mSusy2000", "mH80_mSusy2000", "mH90_mSusy2000", "mH100_mSusy2000", "mH110_mSusy2000", "mH125_mSusy2000",
+                                            "mH30_mSusy2200", "mH35_mSusy2200", "mH40_mSusy2200", "mH50_mSusy2200", "mH60_mSusy2200", "mH70_mSusy2200", "mH80_mSusy2200", "mH90_mSusy2200", "mH100_mSusy2200", "mH110_mSusy2200", "mH125_mSusy2200",
+                                            "mH30_mSusy2400", "mH35_mSusy2400", "mH40_mSusy2400", "mH50_mSusy2400", "mH60_mSusy2400", "mH70_mSusy2400", "mH80_mSusy2400", "mH90_mSusy2400", "mH100_mSusy2400", "mH110_mSusy2400", "mH125_mSusy2400",
+                                            "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH60_mSusy2600", "mH70_mSusy2600", "mH80_mSusy2600", "mH90_mSusy2600", "mH100_mSusy2600", "mH110_mSusy2600", "mH125_mSusy2600", 
+                                            "mH30_mSusy2800", "mH35_mSusy2800", "mH40_mSusy2800", "mH50_mSusy2800", "mH60_mSusy2800", "mH70_mSusy2800", "mH80_mSusy2800", "mH90_mSusy2800", "mH100_mSusy2800", "mH110_mSusy2800", "mH125_mSusy2800", 
 //                                        };
 //    }
 //     std::vector<std::string> signalVec = { // the different signal samples you wish to use: SQUARK PRODUCTION ONLY
@@ -734,6 +735,75 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
 
         } // closes loop through nonTrivialSysVec
     } // closes loop through histoNameVec
+
+    //TODO: add the signal mass interpolation here
+
+    const unsigned int nMassBins = 10;
+    const int minOffset = -6;
+    const int lowestSignalMass = 30;
+
+    std::vector<int> newMasses = {60, 80, 100};
+    std::vector<int> susyMasses = {1200, 1600, 2000, 2200, 2400, 2600, 2800};
+    std::vector<std::string> regionsVec;
+    regionsVec.push_back("S");
+    regionsVec.push_back("UnD");
+
+    for (auto region : regionsVec){
+        for (auto nonTrivialSys : nonTrivialSysVec){
+            for (unsigned int iS=0; iS<susyMasses.size(); iS++) {
+                
+                std::vector<std::vector<TGraph*>> Graphs;
+
+                for (int offset=minOffset; offset<= -minOffset; offset++){
+                    int point = 0;
+                    std::vector<TGraph*> GraphsHT{new TGraph(), new TGraph(), new TGraph()};
+                    for (unsigned int iBin=1; iBin<=3*nMassBins; iBin++){
+                        int mass = (100 / nMassBins)*( (iBin-1) % nMassBins) + lowestSignalMass;
+                        std::string histname = Form("%s_tag_mH%d_mSusy%d_%s", region.c_str(), mass, susyMasses[iS], nonTrivialSys.c_str());
+                        if(h_[histname]) {
+                            unsigned int massBin = (iBin - 1) % nMassBins + 1;
+                            if( massBin + offset >= 1 && massBin + offset <= nMassBins) {
+                                double yield = h_[histname]->GetBinContent(iBin + offset);
+                                GraphsHT[(iBin-1) / nMassBins]->SetPoint(point, double(mass), yield);
+                                // TODO: try correcting for density when massBin + offset = 1
+                                ++point;
+                            }
+                        }
+                        if( (iBin-1) % nMassBins == nMassBins - 1) point = 0;
+                    }
+
+                    Graphs.push_back(GraphsHT);
+                }
+
+                for (unsigned int iMass=0; iMass<newMasses.size(); iMass++) {
+                    h_[Form("%s_tag_mH%d_mSusy%d_%s", region.c_str(), newMasses[iMass], susyMasses[iS], nonTrivialSys.c_str())] = new TH1D(Form("%s_tag_mH%d_mSusy%d_%s", region.c_str(), newMasses[iMass], susyMasses[iS], nonTrivialSys.c_str()), "", 3*nMassBins, 0, 3*nMassBins);
+                }
+
+                for (int iht=0; iht<3; iht++) {
+                    for (int offset=minOffset; offset<= -minOffset; offset++){
+                        int hNumber = offset-minOffset;
+
+                        for (unsigned int iMass=0; iMass<newMasses.size(); iMass++) {
+                            // double interpolatedYield = Graphs[hNumber][iht]->Eval(newMasses[iMass]);
+                            double interpolatedYield = Graphs[hNumber][iht]->Eval(newMasses[iMass], 0, "S");
+                            if(interpolatedYield < 0) interpolatedYield = 0;
+                            int massBin = 1 + offset + (newMasses[iMass] - lowestSignalMass) * nMassBins / 100;
+                            if( massBin >= 1 && massBin <= int(nMassBins) )  h_[Form("%s_tag_mH%d_mSusy%d_%s", region.c_str(), newMasses[iMass], susyMasses[iS], nonTrivialSys.c_str())]->SetBinContent( iht * nMassBins + massBin, interpolatedYield );
+                        }
+
+                    }
+                }
+
+                for (int iht=0; iht<3; iht++) {
+                    for (int offset=minOffset; offset<= -minOffset; offset++){
+                        int hNumber = offset-minOffset;
+                        delete Graphs[hNumber][iht];
+                    }
+                }
+
+            }
+        }
+    }
 
 } // closes function GetHistograms
 
