@@ -90,8 +90,8 @@ int main(){
                                             "mH30_mSusy2400", "mH35_mSusy2400", "mH40_mSusy2400", "mH50_mSusy2400", "mH60_mSusy2400", "mH70_mSusy2400", "mH80_mSusy2400", "mH90_mSusy2400", "mH100_mSusy2400", "mH110_mSusy2400", "mH125_mSusy2400",
                                             "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH60_mSusy2600", "mH70_mSusy2600", "mH80_mSusy2600", "mH90_mSusy2600", "mH100_mSusy2600", "mH110_mSusy2600", "mH125_mSusy2600", 
                                             "mH30_mSusy2800", "mH35_mSusy2800", "mH40_mSusy2800", "mH50_mSusy2800", "mH60_mSusy2800", "mH70_mSusy2800", "mH80_mSusy2800", "mH90_mSusy2800", "mH100_mSusy2800", "mH110_mSusy2800", "mH125_mSusy2800", 
-//                                        };
-//    }
+                                        };
+    } /*
 //     std::vector<std::string> signalVec = { // the different signal samples you wish to use: SQUARK PRODUCTION ONLY
 //                                             // "mH30_mSquark800",                                       "mH50_mSquark800",  "mH70_mSquark800",  "mH90_mSquark800",  "mH110_mSquark800",  "mH125_mSquark800",
                                              "mH30_mSquark1200", "mH35_mSquark1200", "mH40_mSquark1200", "mH50_mSquark1200", "mH70_mSquark1200", "mH90_mSquark1200", "mH110_mSquark1200", "mH125_mSquark1200",
@@ -102,7 +102,7 @@ int main(){
                                              "mH30_mSquark2600", "mH35_mSquark2600", "mH40_mSquark2600", "mH50_mSquark2600", "mH70_mSquark2600", "mH90_mSquark2600", "mH110_mSquark2600", "mH125_mSquark2600", 
                                              "mH30_mSquark2800", "mH35_mSquark2800", "mH40_mSquark2800", "mH50_mSquark2800", "mH70_mSquark2800", "mH90_mSquark2800", "mH110_mSquark2800", "mH125_mSquark2800", 
                                          };                                        
-    }
+    } */
     std::map<unsigned int, std::vector<std::string>> mcbkVec;
     mcbkVec[2016] = {"TTJets", "ZJets", "WJets"}; // the 2016 MC background samples
     mcbkVec[2017] = {"TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}; // the 2017 MC background samples
@@ -636,7 +636,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
         histoNameVec.push_back("mH90_mSusy2800");
         histoNameVec.push_back("mH110_mSusy2800");
         histoNameVec.push_back("mH125_mSusy2800");
-
+/*
         histoNameVec.push_back("mH30_mSquark800");
         histoNameVec.push_back("mH50_mSquark800");
         histoNameVec.push_back("mH70_mSquark800");
@@ -699,6 +699,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
         histoNameVec.push_back("mH90_mSquark2800");
         histoNameVec.push_back("mH110_mSquark2800");
         histoNameVec.push_back("mH125_mSquark2800");
+*/
     }
 
     std::vector<std::string> nonTrivialSysVec;
