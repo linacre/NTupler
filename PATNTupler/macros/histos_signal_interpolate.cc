@@ -38,7 +38,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "./histos_signal_interpolation/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "./histos_signal_interpolation_9dc/"; // where we are going to save the output plots (should include the samples name, and any important features)
     //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/oneDimensionRepresentation/DATA/control/predNew_calcForHighestTwoHtBins/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
     const int year = 0;
@@ -316,9 +316,10 @@ int main(){
     */
 
 
+    bool doDensityCorrection = true;
     std::vector<std::vector<TGraph*>> Graphs;
     const unsigned int nMassBins = 10;
-    int minOffset = -6;
+    int minOffset = -9;
     int lowestSignalMass = 30;
     // std::vector<TH1D*> hMassDep;
     for (int offset=minOffset; offset<= -minOffset; offset++){
@@ -334,8 +335,8 @@ int main(){
                 // if( massBin + offset >= 1 && massBin + offset <= nMassBins) hMassDep_temp->SetBinContent(iBin, h16_[histname]->GetBinContent(iBin + offset) );
                 if( massBin + offset >= 1 && massBin + offset <= nMassBins) {
                     double yield = h16_[histname]->GetBinContent(iBin + offset);
+                    if(doDensityCorrection && (massBin + offset == 1)) yield *= 13.2/11.9;
                     GraphsHT[(iBin-1) / nMassBins]->SetPoint(point, double(mass), yield);
-                    // TODO: try correcting for density when massBin + offset = 1
                     ++point;
                 }
             }
@@ -372,6 +373,7 @@ int main(){
                 double interpolatedYield = Graphs[hNumber][iht]->Eval(newMasses[iMass], 0, "S");
                 if(interpolatedYield < 0) interpolatedYield = 0;
                 int massBin = 1 + offset + (newMasses[iMass] - lowestSignalMass) * nMassBins / 100;
+                if(doDensityCorrection && massBin == 1) interpolatedYield /= 13.2/11.9;
                 if( massBin >= 1 && massBin <= int(nMassBins) )  h16_[Form("S_tag_mH%d_mSusy1600", newMasses[iMass])]->SetBinContent( iht * nMassBins + massBin, interpolatedYield );
             }
 
@@ -382,7 +384,7 @@ int main(){
     c->SaveAs( Form("%s/%s_%s.pdf", outputDir.c_str(), "graphs", year == 0 ? "combined" : std::to_string(year).c_str()) );
     c->Close();
 
-    std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH30_mSusy1600"], h16_["S_tag_mH40_mSusy1600"], h16_["S_tag_mH50_mSusy1600"], h16_["S_tag_mH60_mSusy1600"], h16_["S_tag_mH70_mSusy1600"], h16_["S_tag_mH80_mSusy1600"], h16_["S_tag_mH90_mSusy1600"], h16_["S_tag_mH100_mSusy1600"], h16_["S_tag_mH110_mSusy1600"]}; // for post-fit
+    std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH30_mSusy1600"], h16_["S_tag_mH40_mSusy1600"], h16_["S_tag_mH50_mSusy1600"], h16_["S_tag_mH60_mSusy1600"], h16_["S_tag_mH70_mSusy1600"], h16_["S_tag_mH80_mSusy1600"], h16_["S_tag_mH90_mSusy1600"], h16_["S_tag_mH100_mSusy1600"], h16_["S_tag_mH110_mSusy1600"], h16_["S_tag_mH125_mSusy1600"]}; // for post-fit
 
     //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"], h16_["S_tag_2017as2018/mH70_mSusy1200"], h16_["S_tag_2017as2018/mH70_mSusy2000"], h16_["S_tag_2017as2018/mH70_mSusy2800"]};
     // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"], h16_["S_tag_jmsD_mH70_mSusy1200"], h16_["S_tag_jmsD_mH70_mSusy2000"], h16_["S_tag_jmsD_mH70_mSusy2800"], h16_["S_tag_jmsU_mH70_mSusy1200"], h16_["S_tag_jmsU_mH70_mSusy2000"], h16_["S_tag_jmsU_mH70_mSusy2800"]};
@@ -404,7 +406,7 @@ int main(){
     // plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
     // plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
 
-    std::vector<std::string> legendNames = {"S_{30,1600}", "S_{40,1600}", "S_{50,1600}", "S_{60,1600}", "S_{70,1600}", "S_{80,1600}", "S_{90,1600}", "S_{100,1600}", "S_{110,1600}"};  // for pre-fit
+    std::vector<std::string> legendNames = {"S_{30,1600}", "S_{40,1600}", "S_{50,1600}", "S_{60,1600}", "S_{70,1600}", "S_{80,1600}", "S_{90,1600}", "S_{100,1600}", "S_{110,1600}", "S_{125,1600}"};  // for pre-fit
     // std::vector<std::string> legendNames = {"m_{H}50", "m_{H}90", "m_{H}125", "WJets", "ZJets", "TTJets", "QCD"};  // for post-fit
     plot.AddLegend2Cols(0, legendNames, 0.67, 0.95, 0.55, 0.80, 0.045);
     

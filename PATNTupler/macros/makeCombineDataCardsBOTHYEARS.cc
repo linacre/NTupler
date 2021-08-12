@@ -49,6 +49,13 @@ std::vector<double> GetEventWeightVec_UnD(const std::string&, std::map<std::stri
 void WriteBlock(const std::string&, const unsigned int&, std::ofstream&, const bool = false);
 
 
+    // ONE: save info (signal specific directories beneath this)
+    //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
+    // const std::string outputDirGeneral = "combinedDataCards_final_2018";
+    const std::string outputDirGeneral = "combinedDataCards_10bins_lnNforQCD_interpolated9d";
+    // const std::string outputDirGeneral = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
+
+
 int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,14 +63,6 @@ int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-    // ONE: save info (signal specific directories beneath this)
-    //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
-    // const std::string outputDirGeneral = "combinedDataCards_final_2018";
-    const std::string outputDirGeneral = "combinedDataCards_10bins_lnNforQCD_interpolated_batch";
-    // const std::string outputDirGeneral = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
 
 
     // TWO: physics info - to match the histograms that you use
@@ -190,6 +189,15 @@ int main(){
         return 1;
     }
 
+    const std::string dirExistCommandGeneral = "test -e " + outputDirGeneral;
+    const std::string makeDirCommandGeneral = "mkdir -p " + outputDirGeneral;
+    if (std::system(dirExistCommandGeneral.c_str()) != 0) std::system(makeDirCommandGeneral.c_str());
+    else {
+        std::cout << "Output directory " << outputDirGeneral << " already exists. Exiting..." << std::endl;
+        return 1;
+    }
+    std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/makeCombineDataCardsBOTHYEARS.cc %s/%s__makeCombineDataCardsBOTHYEARS.cc", outputDirGeneral.c_str(), TimeStamp::GetTimeStamp().c_str()));
+
     // loop through 2016, 2017 and 2018
     int numYearsCount = 0;
     std::vector<unsigned int> yearOfRunVec = {2016, 2017, 2018};
@@ -239,7 +247,7 @@ int main(){
                 const std::string dirExistCommand = "test -e " + outputDir;
                 const std::string makeDirCommand = "mkdir -p " + outputDir;
                 if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-                std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/makeCombineDataCardsBOTHYEARS.cc %s/%s__makeCombineDataCardsBOTHYEARS.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+                // std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/makeCombineDataCardsBOTHYEARS.cc %s/%s__makeCombineDataCardsBOTHYEARS.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
                 
                 // write the command for combining the cards for this signal sample
                 std::ofstream comboCommand;
@@ -736,11 +744,13 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
         } // closes loop through nonTrivialSysVec
     } // closes loop through histoNameVec
 
-    //TODO: add the signal mass interpolation here
+    TFile * output;
+    output = new TFile( (outputDirGeneral + "/interpolated_histos_" +  std::to_string(yearOfRun) + ".root").c_str(), "RECREATE");
 
     const unsigned int nMassBins = 10;
-    const int minOffset = -6;
+    const int minOffset = -9;
     const int lowestSignalMass = 30;
+    bool doDensityCorrection = true; // to account for the fact the first mass bin is narrower
 
     std::vector<int> newMasses = {60, 80, 100};
     std::vector<int> susyMasses = {1200, 1600, 2000, 2200, 2400, 2600, 2800};
@@ -764,8 +774,8 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
                             unsigned int massBin = (iBin - 1) % nMassBins + 1;
                             if( massBin + offset >= 1 && massBin + offset <= nMassBins) {
                                 double yield = h_[histname]->GetBinContent(iBin + offset);
+                                if(doDensityCorrection && (massBin + offset == 1)) yield *= 13.2/11.9;
                                 GraphsHT[(iBin-1) / nMassBins]->SetPoint(point, double(mass), yield);
-                                // TODO: try correcting for density when massBin + offset = 1
                                 ++point;
                             }
                         }
@@ -776,7 +786,8 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
                 }
 
                 for (unsigned int iMass=0; iMass<newMasses.size(); iMass++) {
-                    h_[Form("%s_tag_mH%d_mSusy%d_%s", region.c_str(), newMasses[iMass], susyMasses[iS], nonTrivialSys.c_str())] = new TH1D(Form("%s_tag_mH%d_mSusy%d_%s", region.c_str(), newMasses[iMass], susyMasses[iS], nonTrivialSys.c_str()), "", 3*nMassBins, 0, 3*nMassBins);
+                    std::string tempname = Form("%s_tag_mH%d_mSusy%d_%s", region.c_str(), newMasses[iMass], susyMasses[iS], nonTrivialSys.c_str());
+                    h_[tempname] = new TH1D(tempname.c_str(), tempname.c_str(), 3*nMassBins, 0, 3*nMassBins);
                 }
 
                 for (int iht=0; iht<3; iht++) {
@@ -788,6 +799,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
                             double interpolatedYield = Graphs[hNumber][iht]->Eval(newMasses[iMass], 0, "S");
                             if(interpolatedYield < 0) interpolatedYield = 0;
                             int massBin = 1 + offset + (newMasses[iMass] - lowestSignalMass) * nMassBins / 100;
+                            if(doDensityCorrection && massBin == 1) interpolatedYield /= 13.2/11.9;
                             if( massBin >= 1 && massBin <= int(nMassBins) )  h_[Form("%s_tag_mH%d_mSusy%d_%s", region.c_str(), newMasses[iMass], susyMasses[iS], nonTrivialSys.c_str())]->SetBinContent( iht * nMassBins + massBin, interpolatedYield );
                         }
 
@@ -799,6 +811,15 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
                         int hNumber = offset-minOffset;
                         delete Graphs[hNumber][iht];
                     }
+                }
+
+
+                // std::vector<int> writeMasses = {50, 60, 70, 80, 90, 100, 110};
+                std::vector<int> writeMasses = {60, 80, 100};
+                for (unsigned int iMass=0; iMass<writeMasses.size(); iMass++) {
+                    std::string tempname = Form("%s_tag_mH%d_mSusy%d_%s", region.c_str(), writeMasses[iMass], susyMasses[iS], nonTrivialSys.c_str());
+                    output->cd();
+                    h_[tempname]->Write();
                 }
 
             }
