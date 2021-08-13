@@ -306,11 +306,25 @@ tdrStyle(TDRStyle())
 	    graphVec[4]->SetMarkerSize(0);
 	    graphVec[4]->SetMarkerStyle(8);
 
-	    graphVec[5]->SetLineWidth(0);
-	    graphVec[5]->SetFillColor(kRed);
+	    graphVec[5]->SetLineWidth(2);
+	    graphVec[5]->SetLineStyle(2);
+		graphVec[5]->SetLineColor(kRed);
 		graphVec[5]->SetMarkerColor(kRed);
-	    // graphVec[5]->SetFillStyle(3144);
-		graphVec[5]->SetFillStyle(3244);
+	    graphVec[5]->SetMarkerSize(0);
+	    graphVec[5]->SetMarkerStyle(8);
+
+	    graphVec[6]->SetLineWidth(2);
+	    graphVec[6]->SetLineStyle(2);
+		graphVec[6]->SetLineColor(kRed);
+		graphVec[6]->SetMarkerColor(kRed);
+	    graphVec[6]->SetMarkerSize(0);
+	    graphVec[6]->SetMarkerStyle(8);
+
+	    // graphVec[5]->SetLineWidth(0);
+	    // graphVec[5]->SetFillColor(kRed);
+		// graphVec[5]->SetMarkerColor(kRed);
+	    // // graphVec[5]->SetFillStyle(3144);
+		// graphVec[5]->SetFillStyle(3244);
 	}
 }
 
@@ -450,7 +464,7 @@ void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, co
 	   if (iG == 2) leg->AddEntry(graphVec[2], "#pm 1 #sigma", "f");
 	   if (iG == 3) leg->AddEntry(graphVec[3], "#pm 2 #sigma", "f");
 	   if (iG == 4) leg->AddEntry(graphVec[4], "NNLO+NNLL (approx)", "l");
-	   if (iG == 5) leg->AddEntry(graphVec[5], "Theory unc.", "f");
+	   if (iG == 5) leg->AddEntry(graphVec[5], "#pm 1 #sigma_{th}", "l");
 	}
 
 	return;
@@ -1818,6 +1832,7 @@ void Plotter::SaveBrazil(const std::string& saveName, const double& min, const d
     if (useObservedPlot) brazil->Add(graphVec[0]);
 	if (useObservedPlot) brazil->Add(graphVec[4]);
 	if (useObservedPlot) brazil->Add(graphVec[5]);
+	if (useObservedPlot) brazil->Add(graphVec[6]);
 
     brazil->Draw("a3LP");
     brazil->GetYaxis()->SetRangeUser(min, max);
@@ -1899,6 +1914,10 @@ int Plotter::SetColor_stark(const int& index)
 	if (index==5) return kSpring+10;
 
 	if (index==6) return kGray;
+
+	if (index==7) return kYellow-4;
+
+	if (index==8) return kGreen+1;
 
 	else return kBlack;
 }
