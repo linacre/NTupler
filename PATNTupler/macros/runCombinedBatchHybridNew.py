@@ -73,6 +73,9 @@ for signalDir in signalDirs:
     if "mSquark" in signalDir:
         continue
 
+    # if "mH100" not in signalDir:
+    #     continue
+
     for i in range(2, len(signalDir)):
         if (signalDir[i] == "_"):
             c1 = i
@@ -117,7 +120,7 @@ for signalDir in signalDirs:
     f.write("request_cpus            = 4\n")
     f.write("should_transfer_files   = YES\n")
     f.write("when_to_transfer_output = ON_EXIT_OR_EVICT\n")
-    f.write("periodic_hold                   = (CurrentTime - EnteredCurrentStatus > 120000)\n")
+    # f.write("periodic_hold                   = (CurrentTime - EnteredCurrentStatus > 700000)\n")
     f.write("periodic_release                = (CurrentTime - EnteredCurrentStatus > 60)\n")
     f.write("periodic_remove                 = False\n")
     f.write("#\n")
@@ -130,7 +133,10 @@ for signalDir in signalDirs:
     g.write("cd %s\n" % cmsswBase)
     g.write("eval `scramv1 runtime -sh`\n")
     g.write("cd %s\n" % inputDir)
-    g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 -T 1000 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose -1 --plot=limit_scan_mH%s%s%s.pdf --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
+    g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=limit_scan_mH%s%s%s.pdf --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
+    # g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=Explimit050_scan_mH%s%s%s.pdf  --expectedFromGrid=0.50 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
+    # g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=Explimit016_scan_mH%s%s%s.pdf  --expectedFromGrid=0.16 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
+    # g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=Explimit084_scan_mH%s%s%s.pdf  --expectedFromGrid=0.84 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
     g.close()
     os.chmod("%s/%s" % (batchDir,jobFileName), 0755)
 
