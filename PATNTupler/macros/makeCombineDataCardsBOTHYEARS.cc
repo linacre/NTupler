@@ -52,7 +52,7 @@ void WriteBlock(const std::string&, const unsigned int&, std::ofstream&, const b
     // ONE: save info (signal specific directories beneath this)
     //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
     // const std::string outputDirGeneral = "combinedDataCards_final_2018";
-    const std::string outputDirGeneral = "combinedDataCards_10bins_lnNforQCD_interpolated9d";
+    const std::string outputDirGeneral = "combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_batch";
     // const std::string outputDirGeneral = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
 
 
@@ -130,10 +130,10 @@ int main(){
     CommonSystematicVec[2016].push_back( CommonSystematic("XS_WJetsBOTH lnN", 1.1, {"WJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // uncorrelated
     CommonSystematicVec[2016].push_back( CommonSystematic("jerAKXUnc2016 lnN", "jerAKXUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jmsUnc2016 lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // uncorrelated
-    // CommonSystematicVec[2016].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // uncorrelated
-    CommonSystematicVec[2016].push_back( CommonSystematic("jmrUnc2016 lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // uncorrelated
-    // CommonSystematicVec[2016].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // uncorrelated
+    // CommonSystematicVec[2016].push_back( CommonSystematic("jmsUnc2016 lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // uncorrelated
+    CommonSystematicVec[2016].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // uncorrelated
+    // CommonSystematicVec[2016].push_back( CommonSystematic("jmrUnc2016 lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // uncorrelated
+    CommonSystematicVec[2016].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // uncorrelated
     CommonSystematicVec[2016].push_back( CommonSystematic("SigDbtTag2016 lnN", "dbtTag", {"SIGNAL"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("TtDbtTag2016 lnN", "dbtTag", {"TTJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("prefire2016 lnN", "prefire", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
@@ -146,12 +146,12 @@ int main(){
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_WJetsBOTH lnN", 1.1, {"WJets"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
     CommonSystematicVec[2017].push_back( CommonSystematic("jerAKXUnc2017 lnN", "jerAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jmsUnc2017 lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
-    // CommonSystematicVec[2017].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
-    CommonSystematicVec[2017].push_back( CommonSystematic("jmrUnc2017 lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
-    // CommonSystematicVec[2017].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
-    CommonSystematicVec[2017].push_back( CommonSystematic("SigDbtTag2017 lnN", "dbtTag", {"SIGNAL"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("TtDbtTag2017 lnN", "dbtTag", {"TTJets0L", "TTJets1L", "TTJets2L"}) );
+    // CommonSystematicVec[2017].push_back( CommonSystematic("jmsUnc2017 lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
+    CommonSystematicVec[2017].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
+    // CommonSystematicVec[2017].push_back( CommonSystematic("jmrUnc2017 lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
+    CommonSystematicVec[2017].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
+    CommonSystematicVec[2017].push_back( CommonSystematic("SigDbtTagBOTH lnN", "dbtTag", {"SIGNAL"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("TtDbtTagBOTH lnN", "dbtTag", {"TTJets0L", "TTJets1L", "TTJets2L"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("prefire2017 lnN", "prefire", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
     // *** 2018 ***
     // CommonSystematicVec[2018].push_back( CommonSystematic("signalPdfBOTH lnN", 1.1, {"SIGNAL"}) ); // correlated to 2016
@@ -162,12 +162,12 @@ int main(){
     CommonSystematicVec[2018].push_back( CommonSystematic("XS_WJetsBOTH lnN", 1.1, {"WJets"}) );
     CommonSystematicVec[2018].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
     CommonSystematicVec[2018].push_back( CommonSystematic("jerAKXUnc2018 lnN", "jerAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2018].push_back( CommonSystematic("jmsUnc2018 lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
-    // CommonSystematicVec[2018].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
-    CommonSystematicVec[2018].push_back( CommonSystematic("jmrUnc2018 lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
-    // CommonSystematicVec[2018].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
-    CommonSystematicVec[2018].push_back( CommonSystematic("SigDbtTag2018 lnN", "dbtTag", {"SIGNAL"}) );
-    CommonSystematicVec[2018].push_back( CommonSystematic("TtDbtTag2018 lnN", "dbtTag", {"TTJets0L", "TTJets1L", "TTJets2L"}) );
+    // CommonSystematicVec[2018].push_back( CommonSystematic("jmsUnc2018 lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
+    CommonSystematicVec[2018].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
+    // CommonSystematicVec[2018].push_back( CommonSystematic("jmrUnc2018 lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
+    CommonSystematicVec[2018].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // uncorrelated
+    CommonSystematicVec[2018].push_back( CommonSystematic("SigDbtTagBOTH lnN", "dbtTag", {"SIGNAL"}) );
+    CommonSystematicVec[2018].push_back( CommonSystematic("TtDbtTagBOTH lnN", "dbtTag", {"TTJets0L", "TTJets1L", "TTJets2L"}) );
     //CommonSystematicVec[2018].push_back( CommonSystematic("prefire2018 lnN", "prefire", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
 
     //TODO: add luminosity correlations https://twiki.cern.ch/twiki/bin/view/CMS/TWikiLUM#LumiComb
