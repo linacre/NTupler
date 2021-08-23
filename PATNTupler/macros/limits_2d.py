@@ -38,15 +38,22 @@ NNLLXSVecDown = NNLLXSVec - NNLLXSVec * NNLLXSUncVec
 NNLLXSVecUp = NNLLXSVec + NNLLXSVec * NNLLXSUncVec
 
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600, 2800]
-mHiggsVec = [30, 35, 40, 50, 70, 90, 110, 125]
+mHiggsVec = [30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 125]
 # inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/noGluino/allSys/"
 # inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/"
 #inputDir = "combinedDataCards_xsec_correlated_jec_uncorrelated_2017as2018_0.98_processed"
 
 # inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/Asymptotic_copy"
-inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_5bins_lnNforQCD_batch"
+# inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_5bins_lnNforQCD_batch"
+# inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9dcff_batch"
+
+#inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_dbtcorr_batch"
+#inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrcor_batch"
+#inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbtcorr_batch"
+inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_batch"
+
 # inputDir = "."
-outputDir = "limits_2d_unblinded_NNLL_fixedinterpolation_5bins_QCDlnN_theoryBand"
+outputDir = "limits_2d_unblinded_NNLL_fixedinterpolation_10binsInterpolated9dcff_QCDlnN_theoryBand_corrtest"
 # outputDir = inputDir + "/a_limitPlot_intp1_noObs/"
 # outputDir = inputDir + "/a_limitPlot_intp1_withObs/"
 
