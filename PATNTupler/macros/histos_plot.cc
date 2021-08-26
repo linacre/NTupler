@@ -36,7 +36,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "./histos_plot_combined_controlpull_splitstatsyst/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "./histos_plot_combined_paper/"; // where we are going to save the output plots (should include the samples name, and any important features)
     //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/oneDimensionRepresentation/DATA/control/predNew_calcForHighestTwoHtBins/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
     const int year = 0;
@@ -275,7 +275,7 @@ int main(){
     h16_["S_control_databkgsub"]->Chi2Test(h16_["predNew_control_databkgsub"],"WW CHI2 P");
     h16_["S_control_databkgsub"]->KolmogorovTest(h16_["predNew_control_databkgsub"],"D");
 
-    //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH90_mSusy2600"], h16_["S_tag_mH90_mSusy1200"], h16_["S_tag_mH90_mSusy2000"]}; // for pre-fit
+    std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"]}; // for pre-fit
     // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH110_mSusy2400"], h16_["S_tag_mH110_mSusy1600"]};
     // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH50_mSusy2200"], h16_["S_tag_mH90_mSusy2200"], h16_["S_tag_mH125_mSusy2200"]}; // for post-fit
 
@@ -284,32 +284,32 @@ int main(){
     //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"], h16_["S_tag_jmsD_mH70_mSusy1200"], h16_["S_tag_jmsD_mH70_mSusy2000"], h16_["S_tag_jmsD_mH70_mSusy2800"], h16_["S_tag_2017as2018/mH70_mSusy1200"], h16_["S_tag_2017as2018/mH70_mSusy2000"], h16_["S_tag_2017as2018/mH70_mSusy2800"]};
     // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy2000"], h16_["S_tag_mH70_mSusy2800"], h16_["S_tag_jmrU_mH70_mSusy1200"], h16_["S_tag_jmrU_mH70_mSusy2000"], h16_["S_tag_jmrU_mH70_mSusy2800"], h16_["S_tag_2017as2018/mH70_mSusy1200"], h16_["S_tag_2017as2018/mH70_mSusy2000"], h16_["S_tag_2017as2018/mH70_mSusy2800"]};
     // std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_ZJets"], h16_["S_tag_TTJets"], h16_["S_tag_QCD"]};
-    //std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_ZJets"], h16_[year > 2016 ? "S_tag_TTJetsALL":"S_tag_TTJets"], h16_["predNew_tag_databkgsub"]};
+    std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_ZJets"], h16_[year > 2016 ? "S_tag_TTJetsALL":"S_tag_TTJets"], h16_["predNew_tag_databkgsub"]};
 
-    std::vector<TH1D*> stackHistoVec = {h16_["predNew_control_databkgsub"]};
+    // std::vector<TH1D*> stackHistoVec = {h16_["predNew_control_databkgsub"]};
 
     // Plotter plot = Plotter(indiHistoVec);
     // Plotter plot = Plotter({}, stackHistoVec);
     // Plotter plot = Plotter(indiHistoVec, stackHistoVec);
-    // Plotter plot = Plotter(indiHistoVec, stackHistoVec, *h16_["S_tag_data"]);
-    Plotter plot = Plotter({}, stackHistoVec, *h16_["S_control_databkgsub"]);
+    Plotter plot = Plotter(indiHistoVec, stackHistoVec, *h16_["S_tag_data"]);
+    // Plotter plot = Plotter({}, stackHistoVec, *h16_["S_control_databkgsub"]);
 
-    std::vector<std::string> legendNames = {"VR prediction"};
+    // std::vector<std::string> legendNames = {"VR prediction"};
 
     // plot.AddLegend(legendNames, 0.16, 0.38, 0.64, 0.83, 0.028);
     // plot.AddLegend(legendNames, 0.18, 0.38, 0.18, 0.30, 0.040);
     // plot.AddLegend(legendNames, 0.67, 0.88, 0.64, 0.83, 0.028);
-    plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
+    // plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
     // plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
 
-    // std::vector<std::string> legendNames = {"S_{90,2600}", "S_{90,1200}", "S_{90,2000}", "WJets", "ZJets", "TTJets", "QCD"};  // for pre-fit
-    // std::vector<std::string> legendNames = {"m_{H}50", "m_{H}90", "m_{H}125", "WJets", "ZJets", "TTJets", "QCD"};  // for post-fit
-    // plot.AddLegend2Cols(0, legendNames, 0.67, 0.95, 0.55, 0.80, 0.045);
+    std::vector<std::string> legendNames = {"M_{H_{1}}=70, M_{SUSY}=1200", "M_{H_{1}}=70, M_{SUSY}=2000", "M_{H_{1}}=70, M_{SUSY}=2800", "W+jets", "Z+jets", "t#bar{t}+jets", "Multijet"};  // for pre-fit
+    plot.AddLegendHT(legendNames, 0.67, 0.81, 0.55, 0.80, 0.046, true);
     
     // plot.AddLatex();
     // plot.AddLatex(luminosity);
     // plot.AddLatex("#it{Preliminary}");
-    plot.AddLatex(luminosity, "#it{Preliminary}");
+    // plot.AddLatex(luminosity, "#it{Preliminary}");
+    plot.AddLatex(luminosity, "");
     
     // plot.AddRatioBox("ratio");
     // plot.AddRatioBox("ratio", true);
@@ -318,7 +318,7 @@ int main(){
     // plot.AddRatioBox(0.1,2.4, "true / pred", true);
     // plot.AddRatioBox(0.84,1.16, "priv / central", true);
 
-    plot.AddRatioBox(0.3,1.8, "data / pred", true);
+    plot.AddRatioBox(0.2,1.9, "Data / Pred.", true);
     
     // plot.SetErrors();
     plot.SetErrors("only_stack");
@@ -331,8 +331,8 @@ int main(){
     plotName = "log";
     plot.SetLogY();
     // plot.SetYValueMin(0.15); // REMEMBER THIS PARAM! (only for log)
-    plot.SetYValueMin(0.50); // REMEMBER THIS PARAM! (only for log)
-    // plot.SetYValueMin(0.20); // REMEMBER THIS PARAM! (only for log)
+    // plot.SetYValueMin(0.50); // REMEMBER THIS PARAM! (only for log)
+    plot.SetYValueMin(0.20); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(0.40); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(1.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(3.10); // REMEMBER THIS PARAM! (only for log)

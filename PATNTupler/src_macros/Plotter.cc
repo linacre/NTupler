@@ -35,6 +35,7 @@ addRatioBox(false),
 addRatioBoxUnityLine(false),
 leg(0),
 leg2Cols(0),
+leg3Cols(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
@@ -66,6 +67,7 @@ addRatioBox(false),
 addRatioBoxUnityLine(false),
 leg(0),
 leg2Cols(0),
+leg3Cols(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
@@ -108,6 +110,7 @@ addRatioBox(false),
 addRatioBoxUnityLine(false),
 leg(0),
 leg2Cols(0),
+leg3Cols(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
@@ -137,6 +140,7 @@ addRatioBox(false),
 addRatioBoxUnityLine(false),
 leg(0),
 leg2Cols(0),
+leg3Cols(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
@@ -165,6 +169,7 @@ addRatioBox(false),
 addRatioBoxUnityLine(false),
 leg(0),
 leg2Cols(0),
+leg3Cols(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
@@ -209,6 +214,7 @@ addRatioBox(false),
 addRatioBoxUnityLine(false),
 leg(0),
 leg2Cols(0),
+leg3Cols(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
@@ -256,6 +262,7 @@ addRatioBox(false),
 addRatioBoxUnityLine(false),
 leg(0),
 leg2Cols(0),
+leg3Cols(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
@@ -485,11 +492,11 @@ void Plotter::AddLegend(const std::vector<std::string>& legendNames, const doubl
 	leg->SetTextSize(textSize);
 	leg->SetBorderSize(0);
 	leg->SetFillStyle(0);
+	if(hdata) leg->AddEntry(hdata, "VR data", "P");
 	for (size_t i = 0; i < legendNames.size(); ++i){
 		if (i < th1Indi.size()) leg->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
 		else leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
 	}
-	if(hdata) leg->AddEntry(hdata, "VR data", "P");
 	return;
 }
 
@@ -571,15 +578,80 @@ void Plotter::AddLegend2Cols(const unsigned int& numRowsBeforeUsing2Cols, const 
 			else leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
 		}
 		else {
-			if (i < th1Indi.size()) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
+			if (i < th1Indi.size()) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), legendNames[i] == "data" ? "p" : "L");
 			// if (i < th1Indi.size() && i != 0) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "L"); // JOE HACK
 			// if (i == 0) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "pL"); // JOE HACK
-			else leg2Cols->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
+			else if (legendNames[i] != "unc.") leg2Cols->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
 		}
 	}
 	if(hdata) leg2Cols->AddEntry(hdata, "data", "P");
 	return;
 }
+
+void Plotter::AddLegendHT(const std::vector<std::string>& legendNames, const double& x1, const double& x2, const double& y1, const double& y2, const double& textSize, const bool& threeCol)
+{
+	if (legendNames.size() != (th1Indi.size() + th1Stack.size()) ){
+		std::cout << "The legend you provided does not have the correct number of strings to match th1Indi+th1Stack" << std::endl;
+		std::cout << "Not inserting a legend" << std::endl;
+		return;
+	}
+
+	leg = new TLegend(x1 - 0.13, y1, x2 - 0.13, y2);
+    leg->SetX1NDC(x1 - 0.13);
+    leg->SetX2NDC(x2 - 0.13);
+	leg->SetY1NDC(y2);
+    leg->SetY2NDC(y2);
+	leg->SetTextSize(textSize);
+	leg->SetBorderSize(0);
+	leg->SetFillStyle(0);
+
+	if (threeCol) {
+		leg2Cols = new TLegend(x1, y1 + (y2 - y1)*0.25, x2, y2);
+		leg2Cols->SetX1NDC(x1);
+		leg2Cols->SetX2NDC(x2);
+		leg2Cols->SetY1NDC(y1 + (y2 - y1)*0.25);
+		leg2Cols->SetY2NDC(y2);
+		leg2Cols->SetTextSize(textSize);
+		leg2Cols->SetBorderSize(0);
+		leg2Cols->SetFillStyle(0);
+	}
+	else {
+		leg2Cols = new TLegend(x1, y1, x2, y2);
+		leg2Cols->SetX1NDC(x1);
+		leg2Cols->SetX2NDC(x2);
+		leg2Cols->SetY1NDC(y1);
+		leg2Cols->SetY2NDC(y2);
+		leg2Cols->SetTextSize(textSize);
+		leg2Cols->SetBorderSize(0);
+		leg2Cols->SetFillStyle(0);
+	}
+
+	if (threeCol) {
+		leg3Cols = new TLegend(x1 - 0.38, y1 + (y2 - y1)*0.75, x2 - 0.38, y2);
+		leg3Cols->SetX1NDC(x1 - 0.38);
+		leg3Cols->SetX2NDC(x2 - 0.38);
+		leg3Cols->SetY1NDC(y1 + (y2 - y1)*0.75);
+		leg3Cols->SetY2NDC(y2);
+		leg3Cols->SetTextSize(textSize);
+		leg3Cols->SetBorderSize(0);
+		leg3Cols->SetFillStyle(0);
+	}
+
+	if(hdata && threeCol) leg3Cols->AddEntry(hdata, "Data", "P");
+	for (size_t i = 0; i < legendNames.size(); ++i){
+			if (i < th1Indi.size()) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), legendNames[i] == "Data" ? "p" : "L");
+			// else if (legendNames[i] != "unc.") leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
+	}
+	for (size_t i = legendNames.size() - 1; i >= th1Indi.size(); --i){
+			// if (i < th1Indi.size()) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), legendNames[i] == "data" ? "p" : "L");
+			if (legendNames[i] != "unc.") leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
+	}
+
+	return;
+}
+
+
+
 
 void Plotter::AddLatex(const double& lumiValueDummy, const std::string& lhsStringAfterCMSDummy)
 {
@@ -1214,6 +1286,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	if (addLatex) DrawLatex();
 	if (leg != NULL) leg->Draw("same");
 	if (leg2Cols != NULL) leg2Cols->Draw("same");
+	if (leg3Cols != NULL) leg3Cols->Draw("same");
 	gPad->RedrawAxis();
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -1229,7 +1302,11 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			
 			double lineMax = 0.0;
 			if (useLogY == false) lineMax = 1.03 * max;
-			else lineMax = pow(10, 0.92 * (log10(graphMaxLog) - log10(graphMinLog)) + log10(graphMinLog));
+			else lineMax = pow(10, 0.96 * (log10(graphMaxLog) - log10(graphMinLog)) + log10(graphMinLog));
+
+			double lineMaxHT = 0.0;
+			if (useLogY == false) lineMaxHT = 1.03 * max;
+			else lineMaxHT = pow(10, 0.92 * (log10(graphMaxLog) - log10(graphMinLog)) + log10(graphMinLog));
 
 			if (c != 0){
 				TLine * line = new TLine(c, 0, c, lineMax); // xmin, ymin, xmax, ymax
@@ -1242,7 +1319,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			latexHT->SetTextSize(0.047);
 		    latexHT->SetTextAlign(11); // align from left
 			float offsets[] = {1., 0.68, 1.55};
-		    latexHT->DrawLatex(c+offsets[c/binsPerDivision], lineMax, htBins[c/binsPerDivision].c_str());
+		    latexHT->DrawLatex(c+offsets[c/binsPerDivision], lineMaxHT, htBins[c/binsPerDivision].c_str());
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -1519,7 +1596,11 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 			
 			double lineMax = 0.0;
 			if (useLogY == false) lineMax = 1.03 * max;
-			else lineMax = pow(10, 0.92 * (log10(graphMaxLog) - log10(graphMinLog)) + log10(graphMinLog));
+			else lineMax = pow(10, 0.96 * (log10(graphMaxLog) - log10(graphMinLog)) + log10(graphMinLog));
+
+			double lineMaxHT = 0.0;
+			if (useLogY == false) lineMaxHT = 1.03 * max;
+			else lineMaxHT = pow(10, 0.92 * (log10(graphMaxLog) - log10(graphMinLog)) + log10(graphMinLog));
 
 			if (c != 0){
 				TLine * line = new TLine(c, 0, c, lineMax); // xmin, ymin, xmax, ymax
@@ -1529,8 +1610,10 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 			}
 			TLatex * latexHT = new TLatex();
 		    latexHT->SetTextFont(42);
+			latexHT->SetTextSize(0.047);
 		    latexHT->SetTextAlign(11); // align from left
-		    latexHT->DrawLatex(c+1, lineMax, htBins[c/binsPerDivision].c_str());
+			float offsets[] = {1., 0.68, 1.55};
+		    latexHT->DrawLatex(c+offsets[c/binsPerDivision], lineMaxHT, htBins[c/binsPerDivision].c_str());
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////

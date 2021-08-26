@@ -37,7 +37,7 @@ int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     int chIndex[2][91] = {0};
-
+    // the order below is strange because combineCards.py names the channels ch1..ch10 etc instead of ch01 etc, and root puts the ch10..19 bins before ch1 in the correlation matrix
     chIndex[0][10] = 1;
     chIndex[1][10] = 2;
     chIndex[0][11] = 3;
@@ -239,12 +239,13 @@ int main(){
     //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/fitDiagnostics/mH30_mSusy2800/testing03/";
     
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_/mH70_mSusy2000/FitDiagnostics_noSig/fitDiagnostics.root";
-    const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/mH70_mSusy2000/d/fitDiagnostics.root";
+    // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/mH70_mSusy2000/d/fitDiagnostics.root";
+    const std::string inputFile = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_batch/mH70_mSusy2000/d/fitDiagnosticsTest.root";
 
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_nogmN_epsQCDsyst/mH70_mSusy2000/fitDiagnostics.root";
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/mH70_mSusy2000/fitDiagnostics.root";
 
-    const std::string outputDir = "MoneyPlot_unblindedAll_paper";
+    const std::string outputDir = "MoneyPlot_unblindedAll_paper_new";
     // const double luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot.
     // const double luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot.
     // const double luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
@@ -305,14 +306,14 @@ int main(){
     const std::string fitType = fitTypes.at(iF);
 
     // NB: this is hard coded and dependent on setup
-    h_QCD[iF] = new TH1D(("h_QCD_"+fitType).c_str(), ";Search Region Bin Number;Events", 30, 0, 30);
-    h_TTJets[iF] = new TH1D(("h_TTJets_"+fitType).c_str(), ";Search Region Bin Number;Events", 30, 0, 30);
-    h_ZJets[iF] = new TH1D(("h_ZJets_"+fitType).c_str(), ";Search Region Bin Number;Events", 30, 0, 30);
-    h_WJets[iF] = new TH1D(("h_WJets_"+fitType).c_str(), ";Search Region Bin Number;Events", 30, 0, 30);
-    h_backgroundError[iF] = new TH1D(("h_backgroundError_"+fitType).c_str(), ";Search Region Bin Number;Events", 30, 0, 30);
-    h_totalError[iF] = new TH1D(("h_totalError_"+fitType).c_str(), ";Search Region Bin Number;Events", 30, 0, 30);
-    h_backgroundVar[iF] = new TH1D(("h_backgroundVar_"+fitType).c_str(), ";Search Region Bin Number;Events", 30, 0, 30);
-    h_data[iF] = new TH1D(("h_data_"+fitType).c_str(), ";Search Region Bin Number;Events", 30, 0, 30);
+    h_QCD[iF] = new TH1D(("h_QCD_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
+    h_TTJets[iF] = new TH1D(("h_TTJets_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
+    h_ZJets[iF] = new TH1D(("h_ZJets_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
+    h_WJets[iF] = new TH1D(("h_WJets_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
+    h_backgroundError[iF] = new TH1D(("h_backgroundError_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
+    h_totalError[iF] = new TH1D(("h_totalError_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
+    h_backgroundVar[iF] = new TH1D(("h_backgroundVar_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
+    h_data[iF] = new TH1D(("h_data_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
 
     h_backgroundError[iF]->Sumw2(); // to avoid bug with AddBinContent adding an error for the first bin
     h_totalError[iF]->Sumw2(); // to avoid bug with AddBinContent adding an error for the first bin
@@ -498,11 +499,11 @@ int main(){
 
     if(massTypeOrig == "both") {
         indiHistoVec = {h_data[iF]};
-        legendNames = {"data", "WJets", "ZJets", "TTJets", "QCD", "unc."};
+        legendNames = {"Data", "W+jets", "Z+jets", "t#bar{t}+jets", "Multijet", "unc."};
     }
     else {
-        indiHistoVec = {h_data[iF], h16_[(massTypeOrig+"_tag_mH50_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH90_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH125_mSusy2200").c_str()]};
-        legendNames = {"data", "M_{H}=50", "M_{H}=90", "M_{H}=125", "WJets", "ZJets", "TTJets", "QCD", "unc."};
+        indiHistoVec = {h_data[iF], h16_[(massTypeOrig+"_tag_mH125_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH90_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH50_mSusy2200").c_str()]};
+        legendNames = {"Data", "M_{H_{1}}=125, M_{SUSY}=2200", "M_{H_{1}}=90, M_{SUSY}=2200", "M_{H_{1}}=50, M_{SUSY}=2200", "W+jets", "Z+jets", "t#bar{t}+jets", "Multijet", "unc."};
         // indiHistoVec = {h_data[iF], h16_[(massTypeOrig+"_tag_mH70_mSusy2000").c_str()]};
         // legendNames = {"data", "2000,70", "WJets", "ZJets", "TTJets", "QCD", "unc."};
     }
@@ -510,12 +511,13 @@ int main(){
     std::vector<TH1D*> stackHistoVec = {h_WJets[iF], h_ZJets[iF], h_TTJets[iF], h_QCD[iF], h_backgroundError[iF]};
     Plotter plot = Plotter(indiHistoVec, stackHistoVec);
 
-    plot.AddLegend2Cols(0, legendNames, 0.67, 0.95, 0.55, 0.80, 0.045);
+    plot.AddLegendHT(legendNames, 0.67, 0.81, 0.55, 0.80, 0.046, false);
     
     // plot.AddLatex(luminosity);
-    plot.AddLatex(luminosity, "#it{Preliminary}");    
+    // plot.AddLatex(luminosity, "#it{Preliminary}");    
+    plot.AddLatex(luminosity, "");
     // plot.AddRatioBox(0.0, 2.7, "data / pred", true);
-    plot.AddRatioBox(0.3, 1.8, "data / pred", true);
+    plot.AddRatioBox(0.2, 1.9, "Data / Fit", true);
 
     std::vector<std::string> stringVec = {"1500 < H_{T} < 2500 GeV", "2500 < H_{T} < 3500 GeV", " H_{T} > 3500 GeV"};
     std::string plotName = "linear_"+( yearsOfRun.size() ? "combined" : std::to_string(yearOfRun) )+"_"+( massTypes.size() ? "both" : massType )+"_"+fitType;

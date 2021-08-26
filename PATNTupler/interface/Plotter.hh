@@ -24,6 +24,7 @@ public:
 	void AddLegend(const std::vector<std::string>&, const double&, const double&, const double&, const double&, const double& = 0.04);
 	void AddLegend2Cols(const unsigned int&, const double&, const double&, const double&, const double&, const double& = 0.04);
 	void AddLegend2Cols(const unsigned int&, const std::vector<std::string>&, const double&, const double&, const double&, const double&, const double& = 0.04);
+	void AddLegendHT(const std::vector<std::string>&, const double&, const double&, const double&, const double&, const double& = 0.04, const bool& = false);
 	void AddLatex(const double&, const std::string& = "#it{Simulation}");
 	void AddLatex(const std::string& = "#it{Simulation}");
 	TStyle * GetTStyle(); // get it, to edit it
@@ -55,6 +56,7 @@ private:
 	std::vector<double> ratioBoxYAxisMinMax;
 	TLegend * leg;
 	TLegend * leg2Cols;
+	TLegend * leg3Cols;
 	bool addLatex;
 	std::string lumiLabel;
 	std::string lhsStringAfterCMS;
