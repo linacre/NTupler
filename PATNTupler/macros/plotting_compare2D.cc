@@ -30,7 +30,7 @@ int main(int argc, char** argv){
 
     // ONE: save info
     // std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/2d_doubleBTag/mH70_mSusy2000/fullKinCuts/"; // where we are going to save the output plots (should include the samples name, and any important features)
-    std::string outputDir = "plotting_compare_2D_normalised";
+    std::string outputDir = "plotting_compare_2D_forPaper";
 
     // TWO: set of cut params, each combination = new plot
     std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
@@ -52,7 +52,7 @@ int main(int argc, char** argv){
     double luminosity = 41.370; // 2017 DATASET
 
     // TH2D hTemplate = TH2D("hTemplate", ";fatJetA SoftDropMass (GeV);fatJetB SoftDropMass (GeV)", 400, 0, 205, 400, 0, 205);
-    TH2D hTemplate = TH2D("hTemplate", ";fatJetA Mass (GeV);fatJetB Mass (GeV)", 215, -0.005508812, 205.190359608, 215, -0.005508812, 205.190359608);
+    TH2D hTemplate = TH2D("hTemplate", ";Jet A Mass (GeV);Jet B Mass (GeV)", 215, -0.005508812, 205.190359608, 215, -0.005508812, 205.190359608);
     // TH2D hTemplate = TH2D("hTemplate", ";fatJetA Mass (GeV);fatJetB Mass (GeV)", 72, -0.9599082, 205.190359608, 72, -0.9599082, 205.190359608);
     std::string varXAxis = "fatJetA_softDropMassPuppi";
     std::string varYAxis = "fatJetB_softDropMassPuppi";
