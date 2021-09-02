@@ -34,7 +34,9 @@ public:
 	void SetYValueMin(const double&);
 	void Save(const std::string&);
 	void Save2D(const std::string&);
+	void Save2D(const std::string&, const bool&);
 	void Save2D(const std::string&, const MassRegionCuts&);
+	void Save2DEmpty(const std::string&, const MassRegionCuts&);
 	void SaveSpec01(const std::string& saveName, const std::vector<std::string>);
 	void SaveSpec02(const std::string& saveName, const std::vector<std::string>);
 	void SaveBrazil(const std::string& saveName, const double&, const double&);

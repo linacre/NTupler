@@ -17,7 +17,9 @@ public:
     std::vector<std::string> Get_S_Cuts() const;
     std::vector<std::string> Get_U_Cuts() const;
     std::vector<std::string> Get_D_Cuts() const;
+    std::vector<std::string> Get_C_Cuts() const;
     std::vector<std::string> GetAllCuts() const;
+	double yValue(const double&, const double&, const double&, const double&) const;
 
 private:
 	std::string MassRegionCutName; // name to identify the set of mass cuts
@@ -32,7 +34,7 @@ private:
 	std::vector<std::string> S_Cuts;
 	std::vector<std::string> U_Cuts;
 	std::vector<std::string> D_Cuts;
-	double yValue(const double&, const double&, const double&, const double&) const;
+    std::vector<std::string> C_Cuts;
 	void make_cuts();
 };
 

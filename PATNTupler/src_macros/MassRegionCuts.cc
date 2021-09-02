@@ -41,6 +41,7 @@ std::vector<double> MassRegionCuts::Get_SN_Nodes() const {return SN_Nodes;}
 std::vector<std::string> MassRegionCuts::Get_S_Cuts() const {return S_Cuts;}
 std::vector<std::string> MassRegionCuts::Get_U_Cuts() const {return U_Cuts;}
 std::vector<std::string> MassRegionCuts::Get_D_Cuts() const {return D_Cuts;}
+std::vector<std::string> MassRegionCuts::Get_C_Cuts() const {return C_Cuts;}
 std::vector<std::string> MassRegionCuts::GetAllCuts() const
 {
 	std::vector<std::string> allCuts;
@@ -144,6 +145,36 @@ void MassRegionCuts::make_cuts()
 	}
 	additionalLowerBandCuts[SN_Nodes.size()] += Form(" && %s < %s", fatJetB_mass.c_str(), finalDiagnolSegmentLine.c_str());
 	D_Cuts = additionalLowerBandCuts;
+
+
+	// Combined cuts
+	
+	std::string combinedBandBaseLineCuts = fatJetB_mass + " < " + upperBandLine;
+	combinedBandBaseLineCuts += " && " + fatJetB_mass + " >= " + lowerBandLine;
+
+	std::vector<std::string> additionalCombinedBandCuts(SN_Nodes.size()+1, combinedBandBaseLineCuts);
+	if (gradientUpperSegment1LowerBound > 0) additionalCombinedBandCuts[0] += Form(" && %s< (%f * (%s - %f) + %f)", fatJetB_mass.c_str(), gradientUpperSegment1LowerBound, fatJetA_mass.c_str(), S1_Node2, S1_Node1);
+	else if (gradientUpperSegment1LowerBound < 0) additionalCombinedBandCuts[0] += Form(" && %s>= (%f * (%s - %f) + %f)", fatJetB_mass.c_str(), gradientUpperSegment1LowerBound, fatJetA_mass.c_str(), S1_Node2, S1_Node1);
+	else{
+		std::cout << "WARNING: gradient of U1 lower bounding segment is undefined, setting at 999999.0" << std::endl;
+		gradientUpperSignalLine = 999999.0;
+		additionalCombinedBandCuts[0] += Form(" && %s< (%f * (%s - %f) + %f)", fatJetB_mass.c_str(), gradientUpperSegment1LowerBound, fatJetA_mass.c_str(), S1_Node2, S1_Node1);
+	}
+	for (size_t i=0; i!=SN_Nodes.size(); ++i){
+
+		double correspondingYValue = yValue(SN_Nodes[i], gradientLowerSignalLine, S1_Node1, S1_Node2);
+		std::string diagnolSegmentLine = Form("(-1 * (%s - %f) + %f)", fatJetA_mass.c_str(), SN_Nodes[i], correspondingYValue);
+		additionalCombinedBandCuts[i] += Form(" && %s < %s", fatJetB_mass.c_str(), diagnolSegmentLine.c_str());
+		additionalCombinedBandCuts[i+1] += Form(" && %s >= %s", fatJetB_mass.c_str(), diagnolSegmentLine.c_str());
+	}
+	additionalCombinedBandCuts[SN_Nodes.size()] += Form(" && %s < %s", fatJetB_mass.c_str(), finalDiagnolSegmentLine.c_str());
+
+	additionalCombinedBandCuts[0] += Form(" && %s >= %s", fatJetB_mass.c_str(), initialDiagnolSegmentLine.c_str());
+	additionalCombinedBandCuts[0] += Form(" && %s>= (%f * (%s - %f) + %f)", fatJetB_mass.c_str(), gradientDownerSegment1LowerBound, fatJetA_mass.c_str(), S1_Node1, S1_Node2);
+
+	C_Cuts = additionalCombinedBandCuts;
+
+
 
 	return;
 }

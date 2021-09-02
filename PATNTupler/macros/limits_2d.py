@@ -253,7 +253,7 @@ if (plotObserved):
     plt_obs = plt.contour(xk, yk, zk, [1.0], colors='r')
     plt_obs.collections[0].set_label('Observed')
     plt_obsup = plt.contour(xkup, ykup, zkup, [1.0], colors='r', linestyles='--')
-    plt_obsup.collections[0].set_label('$\pm1\sigma_{th}$')
+    plt_obsup.collections[0].set_label('$\pm1\,\sigma_{\mathrm{theory}}$')
     plt_obsdown = plt.contour(xkdown, ykdown, zkdown, [1.0], colors='r', linestyles='--')
     # plt_obsdown.collections[0].set_label('Observed down')
 else:
@@ -262,19 +262,19 @@ else:
 plt_exp = plt.contour(xj, yj, zj, [1.0], colors='k')
 plt_exp.collections[0].set_label('Expected')
 plt_exp16 = plt.contour(xj16, yj16, zj16, [1.0], colors='k', linestyles='--', label='qwert')
-plt_exp16.collections[0].set_label('$\pm1\sigma_{exp}$')
+plt_exp16.collections[0].set_label('$\pm1\,\sigma_{\mathrm{exp.}}$')
 plt_exp84 = plt.contour(xj84, yj84, zj84, [1.0], colors='k', linestyles='--')
 dummy = plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=10**minMu, vmax=10**maxMu), cmap=bird)
 
 for d in dummy.collections:
     d.set_edgecolor("face")
 
-plt.xlabel('M$_{SUSY}}$ (GeV)', fontsize=16)
-plt.ylabel('M$_{H}$ (GeV)', fontsize=16)
+plt.xlabel('M$_{\mathrm{SUSY}}}$ [GeV]', fontsize=16)
+plt.ylabel('M$_{\mathrm{H}_1}$ [GeV]', fontsize=16)
 cbar = plt.colorbar()
 cbar.set_ticks(ticks)
-cbar.set_label('95% CL Upper Limit on $\sigma/\sigma_{theory}$', rotation=90, fontsize=16, labelpad=14)
-plt.title('CMS $Preliminary$', loc='left', fontsize=17, fontweight='bold')
+cbar.set_label('95% CL Upper Limit on $(\sigma\\times\\mathrm{BR})/(\sigma\\times\mathrm{BR})_{\mathrm{theory}}$', rotation=90, fontsize=16, labelpad=14)
+plt.title('CMS', loc='left', fontsize=17, fontweight='bold')
 plt.title(plotTitle, loc='right', fontsize=17)
 plt.legend(loc='upper left')
 

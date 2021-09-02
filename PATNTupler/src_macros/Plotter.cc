@@ -18,6 +18,7 @@
 #include <TLegend.h>
 #include <TLatex.h>
 #include <TLine.h>
+#include <TPolyLine.h>
 #include <TCanvas.h>
 #include <THStack.h>
 // #include <TGaxis.h>
@@ -468,10 +469,10 @@ void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, co
 	   // if (iG == 0 && useObservedPlot) leg->AddEntry(graphVec[0], "Observed", "l");
 	   if (iG == 0) leg->AddEntry(graphVec[0], "Observed", "l");
 	   if (iG == 1) leg->AddEntry(graphVec[1], "Expected", "l");
-	   if (iG == 2) leg->AddEntry(graphVec[2], "#pm 1 #sigma", "f");
-	   if (iG == 3) leg->AddEntry(graphVec[3], "#pm 2 #sigma", "f");
+	   if (iG == 2) leg->AddEntry(graphVec[2], "#pm 1 #sigma_{exp.}", "f");
+	   if (iG == 3) leg->AddEntry(graphVec[3], "#pm 2 #sigma_{exp.}", "f");
 	   if (iG == 4) leg->AddEntry(graphVec[4], "NNLO+NNLL (approx)", "l");
-	   if (iG == 5) leg->AddEntry(graphVec[5], "#pm 1 #sigma_{th}", "l");
+	   if (iG == 5) leg->AddEntry(graphVec[5], "#pm 1 #sigma_{theory}", "l");
 	}
 
 	return;
@@ -1766,6 +1767,102 @@ void Plotter::Save2D(const std::string& saveName){
 }
 
 
+void Plotter::Save2D(const std::string& saveName, const bool& drawCRs){
+
+	if (histos2D.empty()){
+		std::cout << "Plotter::Save2D @@@ Exiting without saving... no 2D histos @@@" << std::endl;
+		return;
+	}
+
+	tdrStyle->cd();
+	double default_PadRightMargin = tdrStyle->GetPadRightMargin();
+	double default_PadLeftMargin = tdrStyle->GetPadLeftMargin();
+	double default_CanvasHeight = tdrStyle->GetCanvasDefH();
+	// std::cout << default_PadLeftMargin << " " << default_PadRightMargin << std::endl;
+
+	tdrStyle->SetPadRightMargin(0.05);
+	tdrStyle->SetPadLeftMargin(0.13);
+	tdrStyle->SetCanvasDefH(700);
+
+	TCanvas * c = new TCanvas("c","c",800,800);
+	if (useLogZ) gPad->SetLogz();
+
+	if(drawCRs) {
+
+		histos2D[0].GetHistogram()->Draw("box, same");
+
+		{
+		Double_t nodex[5] = {0.3, 1., 1.};
+		Double_t nodey[5] = {1., 0.3, 1.};
+		TPolyLine *pline = new TPolyLine(3,nodex,nodey);
+		pline->SetFillColorAlpha(kGreen+2, 0.35);
+		pline->SetLineColor(kGreen+2);
+		pline->SetLineWidth(4);
+		pline->Draw("f");
+		// pline->Draw();
+		}
+
+		{
+		Double_t nodex[5] = {-1., -1., 0.3, 0.3};
+		Double_t nodey[5] = {-1., 0.3, 0.3, -1.};
+		TPolyLine *pline = new TPolyLine(4,nodex,nodey);
+		pline->SetFillColorAlpha(kOrange+3, 0.35);
+		pline->SetLineColor(kOrange+3);
+		pline->SetLineWidth(4);
+		pline->Draw("f");
+		// pline->Draw();
+		}
+
+		{
+		Double_t nodex[5] = {0.3, 0.3, 0.8, 0.8};
+		Double_t nodey[5] = {-1, -0.4, -0.4, -1};
+		TPolyLine *pline = new TPolyLine(4,nodex,nodey);
+		pline->SetFillColorAlpha(kGray+3, 0.35);
+		pline->SetLineColor(kGray+3);
+		pline->SetLineWidth(4);
+		pline->Draw("f");
+		// pline->Draw();
+		}
+
+		{
+		Double_t nodex[5] = {-1., -1., -0.4, -0.4};
+		Double_t nodey[5] = {0.3, 0.8, 0.8, 0.3};
+		TPolyLine *pline = new TPolyLine(4,nodex,nodey);
+		pline->SetFillColorAlpha(kGray+3, 0.35);
+		pline->SetLineColor(kGray+3);
+		pline->SetLineWidth(4);
+		pline->Draw("f");
+		// pline->Draw();
+		}
+	}
+
+	int iTh2 = 0;
+	for (std::vector<PlotEntry2D>::const_iterator iHistos2D = histos2D.begin(); iHistos2D != histos2D.end(); ++iHistos2D, ++iTh2){
+
+		iHistos2D->GetHistogram()->SetEntries(1);
+		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
+		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.20);
+		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.20);
+		iHistos2D->GetHistogram()->SetLineColor(SetColor_stark(iTh2));
+		iHistos2D->GetHistogram()->Draw("box, same");
+		// iHistos2D->GetHistogram()->Draw("colz, same");
+		// iHistos2D->GetHistogram()->Draw("colz, same, text");
+	}
+
+
+
+	if (addLatex) DrawLatex(1);
+	c->SaveAs(saveName.c_str());
+	c->Close();
+	
+	tdrStyle->SetPadRightMargin(default_PadRightMargin);
+	tdrStyle->SetPadLeftMargin(default_PadLeftMargin);
+	tdrStyle->SetCanvasDefH(default_CanvasHeight);
+	std::cout << std::endl;
+	return;
+}
+
+
 void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCutsObject){
 
 	double sideBandScaleFactor = MassCutsObject.Get_sideBandScaleFactor();
@@ -1794,7 +1891,7 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.20);
 		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.20);
 		// iHistos2D->GetHistogram()->Draw("same");
-		iHistos2D->GetHistogram()->Draw("colz, same");
+		iHistos2D->GetHistogram()->Draw("colz");
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
 	}
 
@@ -1895,6 +1992,176 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	std::cout << std::endl;
 	return;
 }
+
+void Plotter::Save2DEmpty(const std::string& saveName, const MassRegionCuts& MassCutsObject){
+
+	double sideBandScaleFactor = MassCutsObject.Get_sideBandScaleFactor();
+
+	if (histos2D.empty()){
+		std::cout << "Plotter::Save2D @@@ Exiting without saving... no 2D histos @@@" << std::endl;
+		return;
+	}
+
+	tdrStyle->cd();
+	double default_PadRightMargin = tdrStyle->GetPadRightMargin();
+	double default_PadLeftMargin = tdrStyle->GetPadLeftMargin();
+	double default_CanvasHeight = tdrStyle->GetCanvasDefH();
+	// std::cout << default_PadLeftMargin << " " << default_PadRightMargin << std::endl;
+	tdrStyle->SetPadTopMargin(0.05);
+	tdrStyle->SetPadRightMargin(0.05);
+	tdrStyle->SetPadLeftMargin(0.13);
+	tdrStyle->SetCanvasDefH(700);
+
+	TCanvas * c = new TCanvas("c","c",800,800);
+	if (useLogZ) gPad->SetLogz();
+
+	for (std::vector<PlotEntry2D>::const_iterator iHistos2D = histos2D.begin(); iHistos2D != histos2D.end(); ++iHistos2D){
+		
+		iHistos2D->GetHistogram()->SetEntries(1);
+		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
+		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.20);
+		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.20);
+		iHistos2D->GetHistogram()->Draw("same");
+		// iHistos2D->GetHistogram()->Draw("colz");
+		// iHistos2D->GetHistogram()->Draw("colz, same, text");
+	}
+
+	// if (addLatex) DrawLatex(2);
+
+	// **************************
+	// NOW ADD THE MASS CUT LINES
+	// **************************
+	c->Update();
+	
+	double S1_Node1 = MassCutsObject.Get_S1_Node1();
+	double S1_Node2 = MassCutsObject.Get_S1_Node2();
+	double SMAX_Node1 = MassCutsObject.Get_SMAX_Node1();
+	double SMAX_Node2 = MassCutsObject.Get_SMAX_Node2();
+	std::vector<double> SN_Nodes = MassCutsObject.Get_SN_Nodes();
+
+	double gradientUpperSignalLine = (SMAX_Node1 - S1_Node1) / (SMAX_Node2 - S1_Node2);
+	double gradientLowerSignalLine = 1 / gradientUpperSignalLine;
+	double upperBand_x1 = S1_Node2 - sideBandScaleFactor * (S1_Node1 - S1_Node2);
+	double upperBand_y1 = S1_Node1 + sideBandScaleFactor * (S1_Node1 - S1_Node2);
+	double upperBand_x2 = SMAX_Node2 - sideBandScaleFactor * (SMAX_Node1 - SMAX_Node2);
+	double upperBand_y2 = SMAX_Node1 + sideBandScaleFactor * (SMAX_Node1 - SMAX_Node2);
+	double gradientUpperBand = (upperBand_y2 - upperBand_y1) / (upperBand_x2 - upperBand_x1);
+	double gradientDownerBand = 1 / gradientUpperBand;
+
+	// work out the coords for 'upper' corner of upper segement 1
+	double yValue_S1UpperLeft = SN_Nodes[0];
+	double xValue_S1UpperLeft = gradientLowerSignalLine * (SN_Nodes[0] - S1_Node1) + S1_Node2;
+	double upperBand_x1U = xValue_S1UpperLeft - sideBandScaleFactor * (yValue_S1UpperLeft - xValue_S1UpperLeft);
+	double upperBand_y1U = yValue_S1UpperLeft + sideBandScaleFactor * (yValue_S1UpperLeft - xValue_S1UpperLeft);
+	TLine *line_U1Cap = new TLine(S1_Node2, S1_Node1, upperBand_x1U, upperBand_y1U); // xmin, ymin, xmax, ymax
+	line_U1Cap->SetLineStyle(2);
+	line_U1Cap->SetLineWidth(3);
+	line_U1Cap->Draw();
+	TLine *line_D1Cap = new TLine(S1_Node1, S1_Node2, upperBand_y1U, upperBand_x1U); // xmin, ymin, xmax, ymax
+	line_D1Cap->SetLineStyle(2);
+	line_D1Cap->SetLineWidth(3);
+	line_D1Cap->Draw();	
+
+	// bottom diagnol line for signal regions
+	TLine *line_signalBottom = new TLine(S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2); // xmin, ymin, xmax, ymax
+	line_signalBottom->SetLineStyle(2);
+	line_signalBottom->SetLineWidth(3);
+	line_signalBottom->Draw();
+
+	// top diagnol line for signal regions
+	TLine *line_signalTop = new TLine(S1_Node2, S1_Node1, SMAX_Node2, SMAX_Node1); // xmin, ymin, xmax, ymax
+	line_signalTop->SetLineStyle(2);
+	line_signalTop->SetLineWidth(3);
+	line_signalTop->Draw();
+
+	// caps the topRight segment of final signal region and U,D wings
+	TLine *line_signalSegmentTop = new TLine(upperBand_x2, upperBand_y2, upperBand_y2, upperBand_x2); // xmin, ymin, xmax, ymax
+	line_signalSegmentTop->SetLineStyle(2);
+	line_signalSegmentTop->SetLineWidth(3);
+	line_signalSegmentTop->Draw();
+
+	// caps the bottomLeft segment of first signal region and U,D wings
+	TLine *line_downerBottomLeft = new TLine(S1_Node1, S1_Node2, S1_Node2, S1_Node1); // xmin, ymin, xmax, ymax
+	line_downerBottomLeft->SetLineStyle(2);
+	line_downerBottomLeft->SetLineWidth(3);
+	line_downerBottomLeft->Draw();
+
+	// top line of upper band
+	TLine *line_upperBand = new TLine(upperBand_x1U, upperBand_y1U, upperBand_x2, upperBand_y2);
+	line_upperBand->SetLineStyle(2);
+	line_upperBand->SetLineWidth(3);
+	line_upperBand->Draw();
+
+	// bottom line of downer band
+	TLine *line_downBand = new TLine(upperBand_y1U, upperBand_x1U, upperBand_y2, upperBand_x2);
+	line_downBand->SetLineStyle(2);
+	line_downBand->SetLineWidth(3);
+	line_downBand->Draw();
+
+	std::vector<double> X_Centres;
+	std::vector<double> Y_Centres;
+	std::vector<double> X_CentresU;
+	std::vector<double> Y_CentresU;
+	X_Centres.push_back( 1.3*S1_Node1 - 0.3*S1_Node2 );
+	Y_Centres.push_back( 1.3*S1_Node2 - 0.3*S1_Node1 );
+	X_CentresU.push_back( 1.37*S1_Node1 - 0.37*S1_Node2 );
+	Y_CentresU.push_back( 1.37*S1_Node2 - 0.37*S1_Node1 );
+
+	// does the line segments...
+	for (size_t i=0; i!=SN_Nodes.size(); ++i){
+		
+		double yValueSignalLower = gradientLowerSignalLine * (SN_Nodes[i] - S1_Node1) + S1_Node2;
+		double xValueDownerLower = (yValueSignalLower - upperBand_x1 + gradientDownerBand * upperBand_y1 + SN_Nodes[i]) / (gradientDownerBand + 1);
+		double yValueDownerLower = gradientDownerBand * (xValueDownerLower - upperBand_y1) + upperBand_x1;
+
+		X_Centres.push_back( 0.86*xValueDownerLower + 0.14*yValueDownerLower );
+		Y_Centres.push_back( 0.86*yValueDownerLower + 0.14*xValueDownerLower );
+
+		X_CentresU.push_back( 0.925*xValueDownerLower + 0.075*yValueDownerLower );
+		Y_CentresU.push_back( 0.925*yValueDownerLower + 0.075*xValueDownerLower );
+
+		TLine *line_signalSegment = new TLine(xValueDownerLower, yValueDownerLower, yValueDownerLower, xValueDownerLower); // xmin, ymin, xmax, ymax
+		line_signalSegment->SetLineStyle(2);
+		line_signalSegment->SetLineWidth(3);
+		line_signalSegment->Draw();
+	}
+	// **************************
+	// **************************
+	// **************************
+
+	std::vector<double> SN_Centres;
+	SN_Centres.push_back( (S1_Node1 + S1_Node2)/ 2. );
+	for (size_t i=0; i!=SN_Nodes.size(); ++i) SN_Centres.push_back( (SN_Nodes[i] + MassCutsObject.yValue(SN_Nodes[i], gradientLowerSignalLine, S1_Node1, S1_Node2) )/ 2. );
+	SN_Centres.push_back( (SMAX_Node1 + SMAX_Node2)/ 2. );
+
+	auto lt = new TLatex();
+	lt->SetTextFont(42);
+	lt->SetTextSize(0.057);
+	lt->SetTextColor(kBlue);
+	for (size_t i=0; i!=SN_Centres.size() - 1; ++i){
+		std::cout << SN_Centres[i] << std::endl;
+		lt->DrawLatex(SN_Centres[i],SN_Centres[i],Form("S_{%d}",int(i+1)));
+	}
+
+	lt->SetTextColor(kRed);
+	for (size_t i=0; i!=X_Centres.size(); ++i){
+		std::cout << X_Centres[i] << " " << Y_Centres[i] << std::endl;
+		lt->DrawLatex(X_Centres[i],Y_Centres[i],Form("U_{%d}",int(i+1)));
+		lt->DrawLatex(Y_CentresU[i],X_CentresU[i],Form("U_{%d}",int(i+1)));
+	}
+
+
+	c->SaveAs(saveName.c_str());
+	c->Close();
+	
+	tdrStyle->SetPadRightMargin(default_PadRightMargin);
+	tdrStyle->SetPadLeftMargin(default_PadLeftMargin);
+	tdrStyle->SetCanvasDefH(default_CanvasHeight);
+	std::cout << std::endl;
+	return;
+}
+
+
 
 
 void Plotter::SaveBrazil(const std::string& saveName, const double& min, const double& max){

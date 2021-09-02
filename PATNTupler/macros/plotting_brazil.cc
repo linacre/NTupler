@@ -457,18 +457,18 @@ int main(){
     // const std::string inputDir = "/mercury/data2/linacre/NMSSM/Analysis_boostedNmssmHiggs/combinedDataCards_20200527/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
     // const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/Asymptotic_copy";
     // const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9_batch";
-    // const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_batch";
+    const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_batch";
     // const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_dbtcorr_batch";
     // const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrcor_batch";
     // const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbtcorr_batch";
-    const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9dcff_batch";
+    // const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9dcff_batch";
 
     // const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210204/combinedDataCards_ht_XSjmsryear_newZJ_2018_2017as2018sqtest2g_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
     // const std::string inputDir = "/opt/ppd/scratch/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20200120/combinedDataCards_final_2018_2017as2018_0.98_allSigs";
     // const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
 
     // TWO: plot output directory
-    std::string outputDir = "brazilplots_unblinded_NNLLth_interpolated9d_newhdecay_defaultcor";
+    std::string outputDir = "brazilplots_unblinded_NNLLth_interpolated9d_newhdecay_paper";
     // const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/brazilplots/mSusy2400/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)
@@ -611,15 +611,15 @@ int main(){
     // TGraphAsymmErrors * g_thErr1Sig = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(yTh_vec[0]), &(null_vec[0]), &(null_vec[0]), &(yThDown1Sig_vec[0]), &(yThUp1Sig_vec[0]));
 
     if(fixedYRange) {
-        maxLimitValue = 0.09;
+        maxLimitValue = 0.1;
         minLimitValue = 0.00006;
     }
 
     // the vector order goes: observed, expected, 1sigma, 2sigma, th, 1sigma
     Plotter brazilPlot = Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig, g_th, g_thDown1Sig, g_thUp1Sig}, plotObserved);
     // brazilPlot.AddLegend(0.20, 0.45, 0.63, 0.86);
-    brazilPlot.AddLegend(0.60, 0.85, 0.63, 0.86);
-    brazilPlot.AddLatex(luminosity, "#it{Preliminary}");
+    brazilPlot.AddLegend(0.60, 0.85, 0.63, 0.87);
+    brazilPlot.AddLatex(luminosity, "");
     brazilPlot.SaveBrazil(Form("%s/linear_%s_fixedMass%d_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.0, 1.05 * maxLimitValue);
     brazilPlot.SetLogY();
     brazilPlot.SaveBrazil(Form("%s/log_%s_fixedMass%d_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.85 * minLimitValue, 1.15 * maxLimitValue);
