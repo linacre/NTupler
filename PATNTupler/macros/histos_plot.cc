@@ -36,7 +36,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "./histos_plot_combined_paper/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "./histos_plot_combined_paper_incprelim/"; // where we are going to save the output plots (should include the samples name, and any important features)
     //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/oneDimensionRepresentation/DATA/control/predNew_calcForHighestTwoHtBins/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
     const int year = 0;
@@ -128,135 +128,135 @@ int main(){
         double binsyst[31] = {0.};
 
         if(year==2016) {
-            binsyst[1] = 12.9794;
-            binsyst[2] = 8.24222;
-            binsyst[3] = 1.44102;
-            binsyst[4] = 2.98228;
-            binsyst[5] = 7.99931;
-            binsyst[6] = 8.3336;
-            binsyst[7] = 6.43502;
-            binsyst[8] = 6.22131;
-            binsyst[9] = 6.43374;
-            binsyst[10] = 6.12792;
-            binsyst[11] = 0.784928;
-            binsyst[12] = 0.186652;
-            binsyst[13] = 0.890018;
-            binsyst[14] = 0.850534;
-            binsyst[15] = 1.50782;
-            binsyst[16] = 0.810448;
-            binsyst[17] = 0.583139;
-            binsyst[18] = 0.744434;
-            binsyst[19] = 1.33891;
-            binsyst[20] = 1.53306;
-            binsyst[21] = 0.00897116;
-            binsyst[22] = 0.225159;
-            binsyst[23] = 9.53351e-05;
-            binsyst[24] = 0.00314198;
-            binsyst[25] = 0.223477;
-            binsyst[26] = 0.199062;
-            binsyst[27] = 0.000100095;
-            binsyst[28] = 1.18159;
-            binsyst[29] = 0.271708;
-            binsyst[30] = 0.000105277;
+            binsyst[1] = 10.564;
+            binsyst[2] = 6.46964;
+            binsyst[3] = 1.60652;
+            binsyst[4] = 3.37154;
+            binsyst[5] = 8.19937;
+            binsyst[6] = 10.1971;
+            binsyst[7] = 7.48636;
+            binsyst[8] = 7.59624;
+            binsyst[9] = 7.61545;
+            binsyst[10] = 6.44524;
+            binsyst[11] = 0.724029;
+            binsyst[12] = 0.161937;
+            binsyst[13] = 1.04375;
+            binsyst[14] = 0.771755;
+            binsyst[15] = 1.1927;
+            binsyst[16] = 0.785601;
+            binsyst[17] = 0.711718;
+            binsyst[18] = 0.671202;
+            binsyst[19] = 1.70263;
+            binsyst[20] = 1.28109;
+            binsyst[21] = 0.00946963;
+            binsyst[22] = 0.221002;
+            binsyst[23] = 6.96734e-08;
+            binsyst[24] = 0.000241023;
+            binsyst[25] = 0.187062;
+            binsyst[26] = 0.178665;
+            binsyst[27] = 8.6967e-08;
+            binsyst[28] = 0.913147;
+            binsyst[29] = 0.253484;
+            binsyst[30] = 1.00948e-07;
         }
 
         else if(year==2017) {
-            binsyst[1] = 1.43297;
-            binsyst[2] = 1.4879;
-            binsyst[3] = 2.11821;
-            binsyst[4] = 3.17609;
-            binsyst[5] = 5.60133;
-            binsyst[6] = 6.31703;
-            binsyst[7] = 7.72194;
-            binsyst[8] = 7.65671;
-            binsyst[9] = 7.73159;
-            binsyst[10] = 6.9635;
-            binsyst[11] = 0.236294;
-            binsyst[12] = 0.801837;
-            binsyst[13] = 0.424796;
-            binsyst[14] = 0.513209;
-            binsyst[15] = 2.19642;
-            binsyst[16] = 1.12647;
-            binsyst[17] = 0.803422;
-            binsyst[18] = 1.5277;
-            binsyst[19] = 0.696753;
-            binsyst[20] = 0.579429;
-            binsyst[21] = 0.0179639;
-            binsyst[22] = 0.00257456;
-            binsyst[23] = 0.000743929;
-            binsyst[24] = 0.474111;
-            binsyst[25] = 0.206776;
-            binsyst[26] = 0.179879;
-            binsyst[27] = 9.66867e-05;
-            binsyst[28] = 0.000104281;
-            binsyst[29] = 0.313318;
-            binsyst[30] = 0.465596;
+            binsyst[1] = 1.33019;
+            binsyst[2] = 1.47848;
+            binsyst[3] = 2.11593;
+            binsyst[4] = 3.37479;
+            binsyst[5] = 5.46207;
+            binsyst[6] = 6.39689;
+            binsyst[7] = 7.73791;
+            binsyst[8] = 7.18051;
+            binsyst[9] = 7.66871;
+            binsyst[10] = 6.79905;
+            binsyst[11] = 0.20452;
+            binsyst[12] = 0.860587;
+            binsyst[13] = 0.406213;
+            binsyst[14] = 0.565355;
+            binsyst[15] = 2.19292;
+            binsyst[16] = 1.17348;
+            binsyst[17] = 0.734063;
+            binsyst[18] = 1.13344;
+            binsyst[19] = 0.788072;
+            binsyst[20] = 0.545846;
+            binsyst[21] = 0.0169751;
+            binsyst[22] = 0.000175195;
+            binsyst[23] = 4.84426e-05;
+            binsyst[24] = 0.573534;
+            binsyst[25] = 0.174064;
+            binsyst[26] = 0.167008;
+            binsyst[27] = 9.49721e-08;
+            binsyst[28] = 9.79943e-08;
+            binsyst[29] = 0.374207;
+            binsyst[30] = 0.296789;
         }
 
         else if(year==2018) {
-            binsyst[1] = 1.7946;
-            binsyst[2] = 2.76497;
-            binsyst[3] = 3.71427;
-            binsyst[4] = 6.73973;
-            binsyst[5] = 10.4517;
-            binsyst[6] = 10.9534;
-            binsyst[7] = 11.4674;
-            binsyst[8] = 10.8178;
-            binsyst[9] = 9.70231;
-            binsyst[10] = 13.8218;
-            binsyst[11] = 0.594545;
-            binsyst[12] = 1.02884;
-            binsyst[13] = 0.845175;
-            binsyst[14] = 0.415549;
-            binsyst[15] = 1.14191;
-            binsyst[16] = 2.3712;
-            binsyst[17] = 0.832957;
-            binsyst[18] = 0.902674;
-            binsyst[19] = 0.915287;
-            binsyst[20] = 1.14371;
-            binsyst[21] = 0.000756673;
-            binsyst[22] = 0.109403;
-            binsyst[23] = 0.0948404;
-            binsyst[24] = 0.222716;
-            binsyst[25] = 0.239899;
-            binsyst[26] = 0.447813;
-            binsyst[27] = 0.54743;
-            binsyst[28] = 0.0296198;
-            binsyst[29] = 0.000103;
-            binsyst[30] = 9.53281e-05;
+            binsyst[1] = 1.86162;
+            binsyst[2] = 2.68859;
+            binsyst[3] = 4.17121;
+            binsyst[4] = 6.65819;
+            binsyst[5] = 10.1403;
+            binsyst[6] = 10.9633;
+            binsyst[7] = 12.1615;
+            binsyst[8] = 11.0799;
+            binsyst[9] = 9.64676;
+            binsyst[10] = 12.9609;
+            binsyst[11] = 0.64038;
+            binsyst[12] = 0.870837;
+            binsyst[13] = 0.766848;
+            binsyst[14] = 0.489956;
+            binsyst[15] = 0.941448;
+            binsyst[16] = 1.94329;
+            binsyst[17] = 0.935168;
+            binsyst[18] = 0.846514;
+            binsyst[19] = 0.96291;
+            binsyst[20] = 1.18679;
+            binsyst[21] = 0.000113943;
+            binsyst[22] = 0.0878715;
+            binsyst[23] = 0.0777079;
+            binsyst[24] = 0.183349;
+            binsyst[25] = 0.294813;
+            binsyst[26] = 0.314145;
+            binsyst[27] = 0.443528;
+            binsyst[28] = 0.0316947;
+            binsyst[29] = 1.03372e-07;
+            binsyst[30] = 9.263e-08;
         }
 
         else {
-            binsyst[1] = 13.2859;
-            binsyst[2] = 9.31793;
-            binsyst[3] = 5.83484;
-            binsyst[4] = 10.5405;
-            binsyst[5] = 18.0168;
-            binsyst[6] = 20.2324;
-            binsyst[7] = 19.6461;
-            binsyst[8] = 19.0355;
-            binsyst[9] = 18.3439;
-            binsyst[10] = 20.1528;
-            binsyst[11] = 1.03107;
-            binsyst[12] = 1.54672;
-            binsyst[13] = 1.46996;
-            binsyst[14] = 1.09348;
-            binsyst[15] = 3.70189;
-            binsyst[16] = 3.25264;
-            binsyst[17] = 1.46044;
-            binsyst[18] = 2.1315;
-            binsyst[19] = 2.17547;
-            binsyst[20] = 2.15608;
-            binsyst[21] = 0.0207331;
-            binsyst[22] = 0.249534;
-            binsyst[23] = 0.0949082;
-            binsyst[24] = 0.548751;
-            binsyst[25] = 0.436571;
-            binsyst[26] = 0.533465;
-            binsyst[27] = 0.547433;
-            binsyst[28] = 1.18591;
-            binsyst[29] = 0.42598;
-            binsyst[30] = 0.465595;
+            binsyst[1] = 11.5061;
+            binsyst[2] = 7.6284;
+            binsyst[3] = 6.90855;
+            binsyst[4] = 12.0962;
+            binsyst[5] = 19.5508;
+            binsyst[6] = 24.436;
+            binsyst[7] = 23.5347;
+            binsyst[8] = 22.0888;
+            binsyst[9] = 22.1127;
+            binsyst[10] = 21.2526;
+            binsyst[11] = 0.813187;
+            binsyst[12] = 1.58746;
+            binsyst[13] = 1.79254;
+            binsyst[14] = 1.19862;
+            binsyst[15] = 3.41904;
+            binsyst[16] = 2.87958;
+            binsyst[17] = 1.55434;
+            binsyst[18] = 1.73936;
+            binsyst[19] = 3.00129;
+            binsyst[20] = 2.22647;
+            binsyst[21] = 0.0205812;
+            binsyst[22] = 0.302524;
+            binsyst[23] = 0.077707;
+            binsyst[24] = 0.701321;
+            binsyst[25] = 0.36233;
+            binsyst[26] = 0.369711;
+            binsyst[27] = 0.443528;
+            binsyst[28] = 0.91586;
+            binsyst[29] = 0.574766;
+            binsyst[30] = 0.296789;
         }
 
         for (unsigned int iBin=1; iBin<=30; iBin++){
@@ -338,6 +338,9 @@ int main(){
     // plot.SetYValueMin(3.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(12.10); // REMEMBER THIS PARAM! (only for log)
     plot.SaveSpec01(Form("%s/%s_%s.pdf", outputDir.c_str(), plotName.c_str(), year == 0 ? "combined" : std::to_string(year).c_str()), stringVec);
+
+    plot.AddLatex(luminosity, "#it{Preliminary}");
+    plot.SaveSpec01(Form("%s/%s_%s_Preliminary.pdf", outputDir.c_str(), plotName.c_str(), year == 0 ? "combined" : std::to_string(year).c_str()), stringVec);
 
 
 
