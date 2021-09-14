@@ -490,7 +490,10 @@ int main(){
     const bool varyHiggsMass = true;
     const bool fixedYRange = true;
 
+    const bool hybrid = true;
+
     if(fixedYRange) outputDir = outputDir + "_fixedYRange";
+    if(hybrid) outputDir = outputDir + "_HybridNew";
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -516,12 +519,12 @@ int main(){
     if (!varyHiggsMass){
         fixedMass = higgsMasses[j];
         variedMass = susyMasses;
-        xAxisTitle = "M_{SUSY} (GeV)";
+        xAxisTitle = "M_{SUSY} [GeV]";
     }
     else {
         fixedMass = susyMasses[j];
         variedMass = higgsMasses;
-        xAxisTitle = "M_{H} (GeV)";   
+        xAxisTitle = "M_{H} [GeV]";   
     }
 
 
@@ -547,6 +550,12 @@ int main(){
         if (varyHiggsMass) filePath += std::to_string(massPoint) + (plotSquark ? ".mSquark" : ".mSusy") + std::to_string(fixedMass) + ".root";
         else filePath += std::to_string(fixedMass) + (plotSquark ? ".mSquark" : ".mSusy") + std::to_string(massPoint) + ".root";
 
+
+        std::string filePathHybrid = inputDir + "/higgsCombineTest.HybridNew.mH";
+        if (varyHiggsMass) filePathHybrid += std::to_string(massPoint) + (plotSquark ? ".BugFixmSquark" : ".BugFixmSusy") + std::to_string(fixedMass) + ".123456";
+        else filePathHybrid += std::to_string(fixedMass) + (plotSquark ? ".BugFixmSquark" : ".BugFixmSusy") + std::to_string(massPoint) + ".123456";
+
+
         std::string mapString = "mH";
         if (varyHiggsMass) mapString += std::to_string(massPoint) + (plotSquark ? "_mSquark" : "_mSusy") + std::to_string(fixedMass);
         else mapString += std::to_string(fixedMass) + (plotSquark ? "_mSquark" : "_mSusy") + std::to_string(massPoint);
@@ -559,35 +568,121 @@ int main(){
 
         // if(plotSquark) xBR *= sqtest_2gcorrection[mapString];
 
-        TFile * f = new TFile(filePath.c_str());
-        TTree * T = (TTree*)f->Get("limit");
-        double limitValue;
-        T->SetBranchAddress("limit", &limitValue);
-
         x_vec.push_back(massPoint);
 
-        T->GetEntry(2);
-        y_vec.push_back(xBR*(limitValue));
-        double medianLimit = limitValue;
+        if (hybrid) {
 
-        T->GetEntry(0);
-        yErrDown2Sig_vec.push_back(xBR*(medianLimit - limitValue));
-        if (limitValue*xBR < minLimitValue) minLimitValue = limitValue*xBR;
+            // "Obs", ".123456.root"
+            // "Exp050" , ".123456.quant0.500.root"
+            // "Exp016" , ".123456.quant0.160.root"
+            // "Exp084" , ".123456.quant0.840.root"
+            // "Exp0025" , ".123456.quant0.025.root"
+            // "Exp0975" , ".123456.quant0.975.root"
 
-        T->GetEntry(1);
-        yErrDown1Sig_vec.push_back(xBR*(medianLimit - limitValue));
 
-        T->GetEntry(3);
-        yErrUp1Sig_vec.push_back(xBR*(limitValue - medianLimit));
+            TFile * f0500 = new TFile((filePathHybrid+".quant0.500.root").c_str());
+            TTree * T0500 = (TTree*)f0500->Get("limit");
+            double limitValue0500;
+            T0500->SetBranchAddress("limit", &limitValue0500);
+            if (! (T0500->GetEntry(0)) ) {
+                limitValue0500 = 0;
+                std::cout<<limitValue0500<<" *************** WARNING: limitValue0500 "<<massPoint<<" "<<fixedMass<<" missing! ***************"<<std::endl;
+                exit(1);
+            };
+            y_vec.push_back(xBR*(limitValue0500));
+            double medianLimit = limitValue0500;
 
-        T->GetEntry(4);
-        yErrUp2Sig_vec.push_back(xBR*(limitValue - medianLimit));
-        if (limitValue*xBR > maxLimitValue) maxLimitValue = limitValue*xBR;
+            TFile * f0025 = new TFile((filePathHybrid+".quant0.025.root").c_str());
+            TTree * T0025 = (TTree*)f0025->Get("limit");
+            double limitValue0025;
+            T0025->SetBranchAddress("limit", &limitValue0025);
+            if (! (T0025->GetEntry(0)) ) {
+                limitValue0025 = 0;
+                std::cout<<limitValue0025<<" *************** WARNING: limitValue0025 "<<massPoint<<" "<<fixedMass<<" missing! ***************"<<std::endl;
+                // exit(1);
+            }
+            yErrDown2Sig_vec.push_back(xBR*(medianLimit - limitValue0025));
 
-        T->GetEntry(5);
-        yObs_vec.push_back(xBR*(limitValue));
-        if (plotObserved && limitValue*xBR > maxLimitValue) maxLimitValue = limitValue*xBR;
-        if (plotObserved && limitValue*xBR < minLimitValue) minLimitValue = limitValue*xBR;
+            TFile * f0160 = new TFile((filePathHybrid+".quant0.160.root").c_str());
+            TTree * T0160 = (TTree*)f0160->Get("limit");
+            double limitValue0160;
+            T0160->SetBranchAddress("limit", &limitValue0160);
+            if (! (T0160->GetEntry(0)) ) {
+                limitValue0160 = 0;
+                std::cout<<limitValue0160<<" *************** WARNING: limitValue0160 "<<massPoint<<" "<<fixedMass<<" missing! ***************"<<std::endl;
+                exit(1);
+            };
+            yErrDown1Sig_vec.push_back(xBR*(medianLimit - limitValue0160));
+
+            TFile * f0840 = new TFile((filePathHybrid+".quant0.840.root").c_str());
+            TTree * T0840 = (TTree*)f0840->Get("limit");
+            double limitValue0840;
+            T0840->SetBranchAddress("limit", &limitValue0840);
+            if (! (T0840->GetEntry(0)) ) {
+                limitValue0840 = 0;
+                std::cout<<limitValue0840<<" *************** WARNING: limitValue0840 "<<massPoint<<" "<<fixedMass<<" missing! ***************"<<std::endl;
+                exit(1);
+            };
+            yErrUp1Sig_vec.push_back(xBR*(limitValue0840 - medianLimit));
+
+            TFile * f0975 = new TFile((filePathHybrid+".quant0.975.root").c_str());
+            TTree * T0975 = (TTree*)f0975->Get("limit");
+            double limitValue0975;
+            T0975->SetBranchAddress("limit", &limitValue0975);
+            if (! (T0975->GetEntry(0)) ) {
+                limitValue0975 = 0;
+                std::cout<<limitValue0975<<" *************** WARNING: limitValue0975 "<<massPoint<<" "<<fixedMass<<" missing! ***************"<<std::endl;
+                exit(1);
+            };
+            yErrUp2Sig_vec.push_back(xBR*(limitValue0975 - medianLimit));
+
+            TFile * fObs = new TFile((filePathHybrid+".root").c_str());
+            TTree * TObs = (TTree*)fObs->Get("limit");
+            double limitValueObs;
+            TObs->SetBranchAddress("limit", &limitValueObs);
+            if (! (TObs->GetEntry(0)) ) {
+                limitValueObs = 0;
+                std::cout<<limitValueObs<<" *************** WARNING: limitValueObs "<<massPoint<<" "<<fixedMass<<" missing! ***************"<<std::endl;
+                exit(1);
+            };
+            yObs_vec.push_back(xBR*(limitValueObs));
+
+            if (limitValue0025*xBR < minLimitValue) minLimitValue = limitValue0025*xBR;
+            if (limitValue0975*xBR > maxLimitValue) maxLimitValue = limitValue0975*xBR;
+
+            if (plotObserved && limitValueObs*xBR > maxLimitValue) maxLimitValue = limitValueObs*xBR;
+            if (plotObserved && limitValueObs*xBR < minLimitValue) minLimitValue = limitValueObs*xBR;
+        }
+
+        else {
+            TFile * f = new TFile(filePath.c_str());
+            TTree * T = (TTree*)f->Get("limit");
+            double limitValue;
+            T->SetBranchAddress("limit", &limitValue);
+
+            T->GetEntry(2);
+            y_vec.push_back(xBR*(limitValue));
+            double medianLimit = limitValue;
+
+            T->GetEntry(0);
+            yErrDown2Sig_vec.push_back(xBR*(medianLimit - limitValue));
+            if (limitValue*xBR < minLimitValue) minLimitValue = limitValue*xBR;
+
+            T->GetEntry(1);
+            yErrDown1Sig_vec.push_back(xBR*(medianLimit - limitValue));
+
+            T->GetEntry(3);
+            yErrUp1Sig_vec.push_back(xBR*(limitValue - medianLimit));
+
+            T->GetEntry(4);
+            yErrUp2Sig_vec.push_back(xBR*(limitValue - medianLimit));
+            if (limitValue*xBR > maxLimitValue) maxLimitValue = limitValue*xBR;
+
+            T->GetEntry(5);
+            yObs_vec.push_back(xBR*(limitValue));
+            if (plotObserved && limitValue*xBR > maxLimitValue) maxLimitValue = limitValue*xBR;
+            if (plotObserved && limitValue*xBR < minLimitValue) minLimitValue = limitValue*xBR;
+        }
 
         yTh_vec.push_back(xBRNNLL);
 
@@ -611,7 +706,7 @@ int main(){
     // TGraphAsymmErrors * g_thErr1Sig = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(yTh_vec[0]), &(null_vec[0]), &(null_vec[0]), &(yThDown1Sig_vec[0]), &(yThUp1Sig_vec[0]));
 
     if(fixedYRange) {
-        maxLimitValue = 0.1;
+        maxLimitValue = 0.11;
         minLimitValue = 0.00006;
     }
 
@@ -620,9 +715,12 @@ int main(){
     // brazilPlot.AddLegend(0.20, 0.45, 0.63, 0.86);
     brazilPlot.AddLegend(0.60, 0.85, 0.63, 0.87);
     brazilPlot.AddLatex(luminosity, "");
-    brazilPlot.SaveBrazil(Form("%s/linear_%s_fixedMass%d_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.0, 1.05 * maxLimitValue);
+    brazilPlot.SaveBrazil(Form("%s/linear_%s_fixedMass%d_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.0, 1.05 * maxLimitValue, fixedMass);
     brazilPlot.SetLogY();
-    brazilPlot.SaveBrazil(Form("%s/log_%s_fixedMass%d_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.85 * minLimitValue, 1.15 * maxLimitValue);
+    brazilPlot.SaveBrazil(Form("%s/log_%s_fixedMass%d_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.85 * minLimitValue, 1.15 * maxLimitValue, fixedMass);
+
+    brazilPlot.AddLatex(luminosity, "Preliminary");
+    brazilPlot.SaveBrazil(Form("%s/log_%s_fixedMass%d_%s_Preliminary.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.85 * minLimitValue, 1.15 * maxLimitValue, fixedMass);
 
     }
 

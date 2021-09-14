@@ -1219,6 +1219,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			th1Indi[0]->SetMaximum(graphMaxLog);
 			th1Indi[0]->SetMinimum(graphMinLog);
 		}
+		if ( std::string(th1Indi[0]->GetYaxis()->GetTitle()) == "Events" ) th1Indi[0]->GetYaxis()->SetTitle("Number of events");
 		if (!plotWithErrorsIndi) th1Indi[0]->Draw("HIST");
 		else th1Indi[0]->Draw("P");
 		hs->Draw("same");
@@ -2164,7 +2165,7 @@ void Plotter::Save2DEmpty(const std::string& saveName, const MassRegionCuts& Mas
 
 
 
-void Plotter::SaveBrazil(const std::string& saveName, const double& min, const double& max){
+void Plotter::SaveBrazil(const std::string& saveName, const double& min, const double& max, const int& fixedMass){
 	if (graphVec.empty()){
 		std::cout << "Plotter::SaveBrazil @@@ Exiting without saving... no brazil graphs @@@" << std::endl;
 		return;
@@ -2191,6 +2192,14 @@ void Plotter::SaveBrazil(const std::string& saveName, const double& min, const d
     brazil->Draw("a3LP");
 
 	if (addLatex) DrawLatex();
+
+	if(fixedMass) {
+		auto lt = new TLatex();
+		lt->SetTextFont(42);
+		lt->SetTextSize(0.05);
+		lt->DrawLatexNDC(0.26,0.75,Form("M_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }%d#kern[-0.4]{ }GeV",fixedMass));
+	}
+
 	if (leg != NULL) leg->Draw("same");
 	gPad->RedrawAxis();
 

@@ -39,7 +39,7 @@ public:
 	void Save2DEmpty(const std::string&, const MassRegionCuts&);
 	void SaveSpec01(const std::string& saveName, const std::vector<std::string>);
 	void SaveSpec02(const std::string& saveName, const std::vector<std::string>);
-	void SaveBrazil(const std::string& saveName, const double&, const double&);
+	void SaveBrazil(const std::string& saveName, const double&, const double&, const int&);
 	void CalculateKS(const int nCompare);
 	void DivideHistos();
 

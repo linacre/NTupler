@@ -44,16 +44,13 @@ mHiggsVec = [30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 125]
 #inputDir = "combinedDataCards_xsec_correlated_jec_uncorrelated_2017as2018_0.98_processed"
 
 # inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/Asymptotic_copy"
-# inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_5bins_lnNforQCD_batch"
-# inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9dcff_batch"
-
-#inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_dbtcorr_batch"
-#inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrcor_batch"
-#inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbtcorr_batch"
+# inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_batch"
+# inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated_batch"
+# inputDirE = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9_batch"
 inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_batch"
 
 # inputDir = "."
-outputDir = "limits_2d_unblinded_NNLL_fixedinterpolation_10binsInterpolated9dcff_QCDlnN_theoryBand_corrtest"
+outputDir = "limits_2d_unblinded_NNLL_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_HybridNew_paper"
 # outputDir = inputDir + "/a_limitPlot_intp1_noObs/"
 # outputDir = inputDir + "/a_limitPlot_intp1_withObs/"
 
@@ -65,7 +62,7 @@ plotTitle = '137 fb$^{-1}$ (13 TeV)'
 # plotTitle = '35.9 fb$^{-1}$ (13 TeV)'
 
 # maximally squeeze the z-axis
-minMu = -2.10
+minMu = -2.25
 maxMu = 1.35
 
 #############################
@@ -89,8 +86,21 @@ for iS,mSusy in enumerate(mSusyVec):
     for mHiggs in mHiggsVec:
 
         rootFile = "higgsCombineTest.AsymptoticLimits.mH" + str(mHiggs) + ".mSusy" + str(mSusy) + ".root"
+        rootFileHybrid = "higgsCombineTest.HybridNew.mH" + str(mHiggs) + ".BugFixmSusy" + str(mSusy) + ".123456.root"
+        rootFileHybridExp050 = "higgsCombineTest.HybridNew.mH" + str(mHiggs) + ".BugFixmSusy" + str(mSusy) + ".123456.quant0.500.root"
+        rootFileHybridExp016 = "higgsCombineTest.HybridNew.mH" + str(mHiggs) + ".BugFixmSusy" + str(mSusy) + ".123456.quant0.160.root"
+        rootFileHybridExp084 = "higgsCombineTest.HybridNew.mH" + str(mHiggs) + ".BugFixmSusy" + str(mSusy) + ".123456.quant0.840.root"
+        rootFileHybridExp0025 = "higgsCombineTest.HybridNew.mH" + str(mHiggs) + ".BugFixmSusy" + str(mSusy) + ".123456.quant0.025.root"
+        rootFileHybridExp0975 = "higgsCombineTest.HybridNew.mH" + str(mHiggs) + ".BugFixmSusy" + str(mSusy) + ".123456.quant0.975.root"
         #rootFile = "higgsCombineTest.AsymptoticLimits.mH" + str(mHiggs) + ".mSquark" + str(mSusy) + ".root"
         rootFile = os.path.join(inputDir, rootFile)
+        rootFileHybrid = os.path.join(inputDir, rootFileHybrid)
+        rootFileHybridExp050 = os.path.join(inputDir, rootFileHybridExp050)
+        rootFileHybridExp016 = os.path.join(inputDir, rootFileHybridExp016)
+        rootFileHybridExp084 = os.path.join(inputDir, rootFileHybridExp084)
+        rootFileHybridExp0025 = os.path.join(inputDir, rootFileHybridExp0025)
+        rootFileHybridExp0975 = os.path.join(inputDir, rootFileHybridExp0975)
+
         if os.path.isfile(rootFile) == False:
             print ""
             print "THIS PLOT IS MISSING: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
@@ -99,25 +109,117 @@ for iS,mSusy in enumerate(mSusyVec):
         f = ROOT.TFile(rootFile)
         T = f.Get("limit")
 
-        T.GetEntry(0)
-        f_2p5.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVec[iS]))
+        fHybrid = ROOT.TFile(rootFileHybrid)
+        try:
+            THybrid = fHybrid.Get("limit")
+        except:
+            print "THIS PLOT IS MISSING: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
+            continue
 
-        T.GetEntry(1)
-        f_16p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVec[iS]))
+        fHybridExp050 = ROOT.TFile(rootFileHybridExp050)
+        try:
+            THybridExp050 = fHybridExp050.Get("limit")
+        except:
+            print "THIS PLOT IS MISSING Exp50: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
+            continue
 
         T.GetEntry(2)
-        f_50p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVec[iS]))
+        oldexp50 = T.limit
+
+        try:
+            THybridExp050.GetEntry(0)
+        except:
+            print "THIS PLOT IS MISSING Exp50: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
+            continue
+        
+        if THybridExp050.limit:
+            pass
+        else:
+            print "Limit is missing Exp50: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
+            continue
+
+
+
+
+        fHybridExp016 = ROOT.TFile(rootFileHybridExp016)
+        try:
+            THybridExp016 = fHybridExp016.Get("limit")
+        except:
+            print "THIS PLOT IS MISSING Exp16: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
+            continue
+
+        T.GetEntry(1)
+        oldexp16 = T.limit
+
+        try:
+            THybridExp016.GetEntry(0)
+        except:
+            print "THIS PLOT IS MISSING Exp16: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
+            continue
+        
+        if THybridExp016.limit:
+            pass
+        else:
+            print "Limit is missing Exp16: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
+            continue
+
+
+
+
+        fHybridExp084 = ROOT.TFile(rootFileHybridExp084)
+        try:
+            THybridExp084 = fHybridExp084.Get("limit")
+        except:
+            print "THIS PLOT IS MISSING Exp84: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
+            continue
 
         T.GetEntry(3)
-        f_84p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVec[iS]))
+        oldexp84 = T.limit
+
+        try:
+            THybridExp084.GetEntry(0)
+        except:
+            print "THIS PLOT IS MISSING Exp84: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
+            continue
+        
+        if THybridExp084.limit:
+            pass
+        else:
+            print "Limit is missing Exp84: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
+            continue
+
+
+
+
+
+        T.GetEntry(0)
+        f_2p5.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp016.limit / oldexp16 * T.limit * origXSVec[iS] / NNLLXSVec[iS]))
+
+        T.GetEntry(1)
+        f_16p0.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp016.limit * origXSVec[iS] / NNLLXSVec[iS]))
+
+        T.GetEntry(2)
+        f_50p0.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp050.limit * origXSVec[iS] / NNLLXSVec[iS]))
+
+        T.GetEntry(3)
+        f_84p0.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp084.limit * origXSVec[iS] / NNLLXSVec[iS]))
 
         T.GetEntry(4)
-        f_97p5.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVec[iS]))
+        f_97p5.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp084.limit / oldexp84 * T.limit * origXSVec[iS] / NNLLXSVec[iS]))
         
-        T.GetEntry(5)
-        f_obs.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVec[iS]))
-        f_obsup.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVecUp[iS]))
-        f_obsdown.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit * origXSVec[iS] / NNLLXSVecDown[iS]))
+        try:
+            THybrid.GetEntry(0)
+        except:
+            print "THIS PLOT IS MISSING: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
+            continue
+
+        if THybrid.limit:
+            f_obs.write("%d   %d   %f\n" % (mSusy, mHiggs, THybrid.limit * origXSVec[iS] / NNLLXSVec[iS]))
+            f_obsup.write("%d   %d   %f\n" % (mSusy, mHiggs, THybrid.limit * origXSVec[iS] / NNLLXSVecUp[iS]))
+            f_obsdown.write("%d   %d   %f\n" % (mSusy, mHiggs, THybrid.limit * origXSVec[iS] / NNLLXSVecDown[iS]))
+        else:
+            print "Limit is missing: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
+            continue
 
 f_2p5.close()
 f_16p0.close()
@@ -201,6 +303,7 @@ xj16, yj16, zj16 = interp(exp_16p0, 'linear') # expected line (-1 sigma)
 xj84, yj84, zj84 = interp(exp_84p0, 'linear') # expected line (+1 sigma)
 xk, yk, zk = 0, 0, 0 # observed line
 if (plotObserved):
+    xi, yi, zi = interp(obs, 'linear') # expected grid
     xk, yk, zk = interp(obs, 'linear') # observed line
     xkup, ykup, zkup = interp(obsup, 'linear') # observed line
     xkdown, ykdown, zkdown = interp(obsdown, 'linear') # observed line
@@ -281,5 +384,8 @@ plt.legend(loc='upper left')
 
 
 plt.show()
-plt.savefig("%s/limit_plot.pdf" % outputDir)
+plt.savefig("%s/limit_plot_HybridObsExp165084.pdf" % outputDir)
 #plt.savefig("%s/limit_plot_squark.pdf" % outputDir)
+
+plt.title('CMS $Preliminary$', loc='left', fontsize=17, fontweight='bold')
+plt.savefig("%s/limit_plot_HybridObsExp165084_Preliminary.pdf" % outputDir)
