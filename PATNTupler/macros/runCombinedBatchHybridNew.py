@@ -48,101 +48,113 @@ timeStamp += str(time.localtime().tm_hour) + "_" + str(time.localtime().tm_min) 
 batchDir = "batchFiles_" + timeStamp
 os.mkdir(batchDir)
 
-for signalDir in signalDirs:
+for limtype in xrange(6):
+    for signalDir in signalDirs:
 
-    # IF YOU WANT TO BE SELECTIVE
-    # if (signalDir[0:4] != "mH40"):
-    #   continue
+        # IF YOU WANT TO BE SELECTIVE
+        # if (signalDir[0:4] != "mH40"):
+        #   continue
 
-    # IF YOU WANT TO BE SELECTIVE
-    # if (signalDir != "mH40_mSusy2400\n"):
-    #   continue
+        # IF YOU WANT TO BE SELECTIVE
+        # if (signalDir != "mH40_mSusy2400\n"):
+        #   continue
 
-    signalDir = signalDir.rstrip()
-    c1 = -1
-    c2 = -1
-    c3 = len(signalDir)
-    keyword = ""
+        signalDir = signalDir.rstrip()
+        c1 = -1
+        c2 = -1
+        c3 = len(signalDir)
+        keyword = ""
 
-    if (signalDir[-1] != "0"):
-        continue
+        if (signalDir[-1] != "0"):
+            continue
 
-    if signalDir[0:2] != "mH":
-        continue
+        if signalDir[0:2] != "mH":
+            continue
 
-    if "mSquark" in signalDir:
-        continue
+        if "mSquark" in signalDir:
+            continue
 
-    # if "mH100" not in signalDir:
-    #     continue
+        # if "mH100" not in signalDir:
+        #     continue
 
-    for i in range(2, len(signalDir)):
-        if (signalDir[i] == "_"):
-            c1 = i
-            break
+        # if "mSusy1" not in signalDir and "mSusy2000" not in signalDir:
+        #    continue
 
-    for i in range(c1, len(signalDir)):
-        if (signalDir[i:i+6] == "_mSusy"):
-            c2 = i + 6
-            keyword = "mSusy"
-            break
-        if (signalDir[i:i+8] == "_mSquark"):
-            c2 = i + 8
-            keyword = "mSquark"
-            break
+        for i in range(2, len(signalDir)):
+            if (signalDir[i] == "_"):
+                c1 = i
+                break
 
-    for i in range(c2, len(signalDir)):
-        if (signalDir[i].isdigit() == False):
-            c3 = i
-            break
+        for i in range(c1, len(signalDir)):
+            if (signalDir[i:i+6] == "_mSusy"):
+                c2 = i + 6
+                keyword = "mSusy"
+                break
+            if (signalDir[i:i+8] == "_mSquark"):
+                c2 = i + 8
+                keyword = "mSquark"
+                break
 
-    if (c1 == -1 or c2 == -1):
-        continue
+        for i in range(c2, len(signalDir)):
+            if (signalDir[i].isdigit() == False):
+                c3 = i
+                break
 
-    higgsMass = signalDir[2:c1]
-    susyMass = signalDir[c2:c3]
-    fileToUseTXT = os.path.join(inputDir,signalDir,"allbins.txt")
-    fileToUseROOT = os.path.join(inputDir,signalDir,"allbins.root")
-    
-    print "RUNNING COMBINE FOR mH" + higgsMass + " " + keyword + susyMass
-    print "nuisance to freeze: " + nuisancesToFreeze
+        if (c1 == -1 or c2 == -1):
+            continue
 
-    condorFileName = signalDir + ".condor"
-    jobFileName = signalDir + ".sh"
+        higgsMass = signalDir[2:c1]
+        susyMass = signalDir[c2:c3]
+        fileToUseTXT = os.path.join(inputDir,signalDir,"allbins.txt")
+        fileToUseROOT = os.path.join(inputDir,signalDir,"allbins.root")
 
-    f = open("%s/%s" % (batchDir,condorFileName), 'w')
-    f.write("Universe                = vanilla\n")
-    f.write("Executable              = %s/%s\n" % (batchDir,jobFileName) )
-    f.write("Log                     = %s/%s.log\n" % (batchDir,signalDir) )
-    f.write("Output                  = %s/%s.out\n" % (batchDir,signalDir) )
-    f.write("Error                   = %s/%s.err\n" % (batchDir,signalDir) )
-    f.write("Request_memory          = 1 GB\n")
-    f.write("request_cpus            = 4\n")
-    f.write("should_transfer_files   = YES\n")
-    f.write("when_to_transfer_output = ON_EXIT_OR_EVICT\n")
-    # f.write("periodic_hold                   = (CurrentTime - EnteredCurrentStatus > 700000)\n")
-    f.write("periodic_release                = (CurrentTime - EnteredCurrentStatus > 60)\n")
-    f.write("periodic_remove                 = False\n")
-    f.write("#\n")
-    f.write("Getenv                  = True\n")
-    f.write("Queue\n")
-    f.close()
+        keyword = "BugFixmSusy"
+        
+        print "RUNNING COMBINE FOR mH" + higgsMass + " " + keyword + susyMass
+        print "nuisance to freeze: " + nuisancesToFreeze
 
-    g = open("%s/%s" % (batchDir,jobFileName), 'w')
-    g.write("#!/bin/bash\n")
-    g.write("cd %s\n" % cmsswBase)
-    g.write("eval `scramv1 runtime -sh`\n")
-    g.write("cd %s\n" % inputDir)
-    g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=limit_scan_mH%s%s%s.pdf --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
-    # g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=Explimit050_scan_mH%s%s%s.pdf  --expectedFromGrid=0.50 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
-    # g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=Explimit016_scan_mH%s%s%s.pdf  --expectedFromGrid=0.16 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
-    # g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=Explimit084_scan_mH%s%s%s.pdf  --expectedFromGrid=0.84 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
-    # g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=Explimit0025_scan_mH%s%s%s.pdf  --expectedFromGrid=0.025 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
-    # g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=Explimit0975_scan_mH%s%s%s.pdf  --expectedFromGrid=0.975 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
-    g.close()
-    os.chmod("%s/%s" % (batchDir,jobFileName), 0755)
+        condorFileName = signalDir + "_" + str(limtype) + ".condor"
+        jobFileName = signalDir + "_" + str(limtype) + ".sh"
 
-    print "condor_submit %s/%s" % (batchDir,condorFileName)
-    os.system("condor_submit %s/%s" % (batchDir,condorFileName) )
-    print ""
-    print ""
+        f = open("%s/%s" % (batchDir,condorFileName), 'w')
+        f.write("Universe                = vanilla\n")
+        f.write("Executable              = %s/%s\n" % (batchDir,jobFileName) )
+        f.write("Log                     = %s/%s.log\n" % (batchDir,signalDir + "_" + str(limtype)) )
+        f.write("Output                  = %s/%s.out\n" % (batchDir,signalDir + "_" + str(limtype)) )
+        f.write("Error                   = %s/%s.err\n" % (batchDir,signalDir + "_" + str(limtype)) )
+        f.write("Request_memory          = 1 GB\n")
+        f.write("request_cpus            = 4\n")
+        f.write("should_transfer_files   = YES\n")
+        f.write("when_to_transfer_output = ON_EXIT_OR_EVICT\n")
+        # f.write("periodic_hold                   = (CurrentTime - EnteredCurrentStatus > 700000)\n")
+        f.write("periodic_release                = (CurrentTime - EnteredCurrentStatus > 60)\n")
+        f.write("periodic_remove                 = False\n")
+        f.write("#\n")
+        f.write("Getenv                  = True\n")
+        f.write("Queue\n")
+        f.close()
+
+        g = open("%s/%s" % (batchDir,jobFileName), 'w')
+        g.write("#!/bin/bash\n")
+        g.write("cd %s\n" % cmsswBase)
+        g.write("eval `scramv1 runtime -sh`\n")
+        g.write("cd %s\n" % inputDir)
+        if limtype == 0:
+            g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.0005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=Explimit0025_scan_mH%s%s%s.pdf  --expectedFromGrid=0.025 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
+        if limtype == 1:
+            g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.0005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=Explimit016_scan_mH%s%s%s.pdf  --expectedFromGrid=0.16 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
+        if limtype == 2:
+            g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.0005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=limit_scan_mH%s%s%s.pdf --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
+        if limtype == 3:
+            g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.0005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=Explimit050_scan_mH%s%s%s.pdf  --expectedFromGrid=0.50 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
+        if limtype == 4:
+            g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.0005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=Explimit084_scan_mH%s%s%s.pdf  --expectedFromGrid=0.84 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
+        if limtype == 5:
+            g.write("combine -H AsymptoticLimits -M HybridNew --LHCmode LHC-limits --saveToys --saveHybridResult --saveGrid --rMin 0 --rAbsAcc=0.0005 --cminDefaultMinimizerStrategy 0 --cminFallbackAlgo Minuit2,Migrad,1:0.1 --fork 4 --verbose 1 --plot=Explimit0975_scan_mH%s%s%s.pdf  --expectedFromGrid=0.975 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, higgsMass, keyword, susyMass, fileToUseTXT) )
+        g.close()
+        os.chmod("%s/%s" % (batchDir,jobFileName), 0755)
+
+        # print "condor_submit %s/%s" % (batchDir,condorFileName)
+        os.system("condor_submit %s/%s" % (batchDir,condorFileName) )
+        print ""
+        print ""
