@@ -307,32 +307,34 @@ tdrStyle(TDRStyle())
 	    graphVec[3]->SetFillColor(kGreen);
 	    graphVec[3]->SetFillStyle(1001);
 
-	    graphVec[4]->SetLineWidth(2);
-	    graphVec[4]->SetLineStyle(1);
-		graphVec[4]->SetLineColor(kRed);
-		graphVec[4]->SetMarkerColor(kRed);
-	    graphVec[4]->SetMarkerSize(0);
-	    graphVec[4]->SetMarkerStyle(8);
+		if (graphVec.size()>4) {
+			graphVec[4]->SetLineWidth(2);
+			graphVec[4]->SetLineStyle(1);
+			graphVec[4]->SetLineColor(kRed);
+			graphVec[4]->SetMarkerColor(kRed);
+			graphVec[4]->SetMarkerSize(0);
+			graphVec[4]->SetMarkerStyle(8);
 
-	    graphVec[5]->SetLineWidth(2);
-	    graphVec[5]->SetLineStyle(2);
-		graphVec[5]->SetLineColor(kRed);
-		graphVec[5]->SetMarkerColor(kRed);
-	    graphVec[5]->SetMarkerSize(0);
-	    graphVec[5]->SetMarkerStyle(8);
+			graphVec[5]->SetLineWidth(2);
+			graphVec[5]->SetLineStyle(2);
+			graphVec[5]->SetLineColor(kRed);
+			graphVec[5]->SetMarkerColor(kRed);
+			graphVec[5]->SetMarkerSize(0);
+			graphVec[5]->SetMarkerStyle(8);
 
-	    graphVec[6]->SetLineWidth(2);
-	    graphVec[6]->SetLineStyle(2);
-		graphVec[6]->SetLineColor(kRed);
-		graphVec[6]->SetMarkerColor(kRed);
-	    graphVec[6]->SetMarkerSize(0);
-	    graphVec[6]->SetMarkerStyle(8);
+			graphVec[6]->SetLineWidth(2);
+			graphVec[6]->SetLineStyle(2);
+			graphVec[6]->SetLineColor(kRed);
+			graphVec[6]->SetMarkerColor(kRed);
+			graphVec[6]->SetMarkerSize(0);
+			graphVec[6]->SetMarkerStyle(8);
 
-	    // graphVec[5]->SetLineWidth(0);
-	    // graphVec[5]->SetFillColor(kRed);
-		// graphVec[5]->SetMarkerColor(kRed);
-	    // // graphVec[5]->SetFillStyle(3144);
-		// graphVec[5]->SetFillStyle(3244);
+			// graphVec[5]->SetLineWidth(0);
+			// graphVec[5]->SetFillColor(kRed);
+			// graphVec[5]->SetMarkerColor(kRed);
+			// // graphVec[5]->SetFillStyle(3144);
+			// graphVec[5]->SetFillStyle(3244);
+		}
 	}
 }
 
@@ -463,16 +465,56 @@ void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, co
 	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
 		leg->AddEntry(iIndi->GetHistogram(), iIndi->GetPlotEntryName().c_str(), "L");	
 
+	for (size_t iG = 0; iG < graphVec.size(); ++iG){
+		
+	   // if (iG == 0 && useObservedPlot) leg->AddEntry(graphVec[0], "Observed", "l");
+	   if (iG == 0) leg->AddEntry(graphVec[0], "95% CL observed limit", "l");
+	   if (iG == 1) leg->AddEntry(graphVec[1], "95% CL expected limit", "l");
+	   if (iG == 2) leg->AddEntry(graphVec[2], "#pm 1 #sigma_{exp.}", "f");
+	   if (iG == 3) leg->AddEntry(graphVec[3], "#pm 2 #sigma_{exp.}", "f");
+	   if (iG == 4) leg2Cols->AddEntry(graphVec[4], "NNLO_{approx}+NNLL", "l");
+	   if (iG == 5) leg2Cols->AddEntry(graphVec[5], "#pm 1 #sigma_{theory}", "l");
+	}
+
+	return;
+}
+
+void Plotter::AddLegendBrazil(const double& x1, const double& x2, const double& y1, const double& y2, const double& textSize)
+{
+	leg = new TLegend(x1 - 0.37, y1, x2 - 0.37, y2 - 0.5*(y2-y1));
+    leg->SetX1NDC(x1);
+    leg->SetX2NDC(x2);
+	leg->SetY1NDC(y1);
+    leg->SetY2NDC(y2);
+	leg->SetTextSize(textSize);
+	leg->SetBorderSize(0);
+	leg->SetFillStyle(0);
+	for (std::vector<PlotEntry>::const_iterator iStack = histoStack.begin(); iStack != histoStack.end(); ++iStack)
+		leg->AddEntry(iStack->GetHistogram(), iStack->GetPlotEntryName().c_str(), "f");
+
+	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
+		leg->AddEntry(iIndi->GetHistogram(), iIndi->GetPlotEntryName().c_str(), "L");	
+
 	// additional section for the brazil plots - the vector order goes: observed, expected, 1sigma, 2sigma
+	leg2Cols = new TLegend(x1 - 0.17, y1, x2 - 0.17, y2 - 0.5*(y2-y1));
+	leg2Cols->SetTextSize(textSize);
+	leg2Cols->SetBorderSize(0);
+	leg2Cols->SetFillStyle(0);
+
+	leg3Cols = new TLegend(x1, y1, x2, y2 - 0.5*(y2-y1));
+	leg3Cols->SetTextSize(textSize);
+	leg3Cols->SetBorderSize(0);
+	leg3Cols->SetFillStyle(0);
+
 	for (size_t iG = 0; iG < graphVec.size(); ++iG){
 		
 	   // if (iG == 0 && useObservedPlot) leg->AddEntry(graphVec[0], "Observed", "l");
 	   if (iG == 0) leg->AddEntry(graphVec[0], "Observed", "l");
 	   if (iG == 1) leg->AddEntry(graphVec[1], "Expected", "l");
-	   if (iG == 2) leg->AddEntry(graphVec[2], "#pm 1 #sigma_{exp.}", "f");
-	   if (iG == 3) leg->AddEntry(graphVec[3], "#pm 2 #sigma_{exp.}", "f");
-	   if (iG == 4) leg->AddEntry(graphVec[4], "NNLO+NNLL (approx)", "l");
-	   if (iG == 5) leg->AddEntry(graphVec[5], "#pm 1 #sigma_{theory}", "l");
+	   if (iG == 2) leg2Cols->AddEntry(graphVec[2], "#pm 1 #sigma_{exp.}", "f");
+	   if (iG == 3) leg2Cols->AddEntry(graphVec[3], "#pm 2 #sigma_{exp.}", "f");
+	   if (iG == 4) leg3Cols->AddEntry(graphVec[4], "NNLO_{approx}+NNLL", "l");
+	   if (iG == 5) leg3Cols->AddEntry(graphVec[5], "#pm 1 #sigma_{theory}", "l");
 	}
 
 	return;
@@ -888,7 +930,8 @@ void Plotter::Save(const std::string& saveName){
 	double initialMin = 0.0;
 
 	double graphMaxLin = 1.05 * max;
-	double graphMaxLog = log10(max/min) * max;
+	// double graphMaxLog = log10(max/min) * max;
+	double graphMaxLog = 2.5 * max;
 	double graphMinLin = 0.0;
 	double graphMinLog = min/log10(max/min);
 
@@ -1206,6 +1249,18 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 				hTotalBkg->SetBinContent(i, binsum);
 			}
 		}
+
+		if ( std::string(th1Stack[0]->GetYaxis()->GetTitle()) == "Events" ) {
+			th1Stack[0]->GetYaxis()->SetTitle("Number of events");
+			if (th1Indi.size()) th1Indi[0]->GetYaxis()->SetTitle("Number of events");
+			if (hdata) hdata->GetYaxis()->SetTitle("Number of events");
+		}
+		if ( std::string(th1Stack[0]->GetXaxis()->GetTitle()) == "Search Region Bin Number" ) {
+			th1Stack[0]->GetXaxis()->SetTitle("Search region");
+			if (th1Indi.size()) th1Indi[0]->GetXaxis()->SetTitle("Search region");
+			if (hdata) hdata->GetXaxis()->SetTitle("Search region");
+		}
+
 	}
 
 	if (!th1Indi.empty() && !th1Stack.empty()){
@@ -1219,7 +1274,6 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			th1Indi[0]->SetMaximum(graphMaxLog);
 			th1Indi[0]->SetMinimum(graphMinLog);
 		}
-		if ( std::string(th1Indi[0]->GetYaxis()->GetTitle()) == "Events" ) th1Indi[0]->GetYaxis()->SetTitle("Number of events");
 		if (!plotWithErrorsIndi) th1Indi[0]->Draw("HIST");
 		else th1Indi[0]->Draw("P");
 		hs->Draw("same");
@@ -2181,13 +2235,14 @@ void Plotter::SaveBrazil(const std::string& saveName, const double& min, const d
     brazil->Add(graphVec[2]);
     brazil->Add(graphVec[1]);
     if (useObservedPlot) brazil->Add(graphVec[0]);
-	if (useObservedPlot) brazil->Add(graphVec[4]);
-	if (useObservedPlot) brazil->Add(graphVec[5]);
-	if (useObservedPlot) brazil->Add(graphVec[6]);
+	if (useObservedPlot && graphVec.size()>4) brazil->Add(graphVec[4]);
+	if (useObservedPlot && graphVec.size()>4) brazil->Add(graphVec[5]);
+	if (useObservedPlot && graphVec.size()>4) brazil->Add(graphVec[6]);
 
     brazil->Draw("a3LP");
     brazil->GetYaxis()->SetRangeUser(min, max);
     brazil->GetXaxis()->SetTitle(graphVec[0]->GetXaxis()->GetTitle());
+	brazil->GetXaxis()->SetTitleOffset(0.97);
     brazil->GetYaxis()->SetTitle(graphVec[0]->GetYaxis()->GetTitle());
     brazil->Draw("a3LP");
 
@@ -2196,11 +2251,16 @@ void Plotter::SaveBrazil(const std::string& saveName, const double& min, const d
 	if(fixedMass) {
 		auto lt = new TLatex();
 		lt->SetTextFont(42);
-		lt->SetTextSize(0.05);
-		lt->DrawLatexNDC(0.26,0.75,Form("M_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }%d#kern[-0.4]{ }GeV",fixedMass));
+		lt->SetTextSize(0.055);
+		// lt->DrawLatexNDC(0.22,0.81,"95% CL upper limit for");
+		std::string tempstring = "95% CL upper limit for ";
+		tempstring += Form("M_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }%d#kern[-0.4]{ }GeV",fixedMass);
+		lt->DrawLatexNDC(0.22,0.82,tempstring.c_str());
 	}
 
 	if (leg != NULL) leg->Draw("same");
+	if (leg2Cols != NULL) leg2Cols->Draw("same");
+	if (leg3Cols != NULL) leg3Cols->Draw("same");
 	gPad->RedrawAxis();
 
 	c->SaveAs(saveName.c_str());
@@ -2237,7 +2297,7 @@ int Plotter::SetColor_mellow(int position, int maxColors)
 	double colorIndex;
 	int colour = 1;
 	position++;
-	if (maxColors < 4) position++;
+	if (maxColors < 4) position+=3;
 	maxColors++;
 	if (maxColors < 6) maxColors = 6;
 	double fraction = (double)(position)/(double)(maxColors);
@@ -2267,10 +2327,13 @@ int Plotter::SetColor_stark(const int& index)
 
 	if (index==3) return kOrange+1;
 	// if (index==3) return kGreen+3;
+	// if (index==3) return SetColor_mellow(3,4);
 
 	if (index==4) return kSpring+10;
+	// if (index==4) return SetColor_mellow(2,4);
 
 	if (index==5) return kBlue-8;
+	// if (index==5) return SetColor_mellow(1,4);
 
 	if (index==6) return kGray;
 

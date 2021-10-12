@@ -28,7 +28,7 @@ int main(int argc, char** argv){
 
     bool doB = false;
 
-    bool emptyGrid = true;
+    bool emptyGrid = false;
     if (emptyGrid) doB = false;
 
     // ONE: save info
@@ -62,7 +62,7 @@ int main(int argc, char** argv){
     // TH2D hTemplate = TH2D("hTemplate", ";fatJetA doubleBtagDiscriminator;fatJetB doubleBtagDiscriminator", 1, 0.8, 1.0, 7, 0.3, 1.0); // all
 
 
-    TH2D hTemplate = doB ? TH2D("hTemplate", ";Jet A double-b discriminator;Jet B double-b discriminator", 20, -1.0, 1.0, 20, -1.0, 1.0) : TH2D("hTemplate", ";Jet A mass (GeV);Jet B mass (GeV)", 215, -0.005508812, 205.190359608, 215, -0.005508812, 205.190359608);
+    TH2D hTemplate = doB ? TH2D("hTemplate", ";Jet A double-b discriminator;Jet B double-b discriminator", 20, -1.0, 1.0, 20, -1.0, 1.0) : TH2D("hTemplate", ";Jet A mass [GeV];Jet B mass [GeV]", 215, -0.005508812, 205.190359608, 215, -0.005508812, 205.190359608);
     std::string varXAxis = doB ? "fatJetA_doubleBtagDiscrim" : "fatJetA_softDropMassPuppi";
     std::string varYAxis = doB ? "fatJetB_doubleBtagDiscrim" : "fatJetB_softDropMassPuppi";
 

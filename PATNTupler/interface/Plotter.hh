@@ -21,6 +21,7 @@ public:
 	void AddRatioBox(const double&, const double&, const std::string& = "ratio", const bool& = false);
 	void AddLegend(TLegend*);
 	void AddLegend(const double&, const double&, const double&, const double&, const double& = 0.04);
+	void AddLegendBrazil(const double&, const double&, const double&, const double&, const double& = 0.04);
 	void AddLegend(const std::vector<std::string>&, const double&, const double&, const double&, const double&, const double& = 0.04);
 	void AddLegend2Cols(const unsigned int&, const double&, const double&, const double&, const double&, const double& = 0.04);
 	void AddLegend2Cols(const unsigned int&, const std::vector<std::string>&, const double&, const double&, const double&, const double&, const double& = 0.04);

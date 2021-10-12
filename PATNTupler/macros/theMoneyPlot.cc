@@ -245,7 +245,7 @@ int main(){
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_nogmN_epsQCDsyst/mH70_mSusy2000/fitDiagnostics.root";
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/mH70_mSusy2000/fitDiagnostics.root";
 
-    const std::string outputDir = "MoneyPlot_unblindedAll_paper_new";
+    const std::string outputDir = "MoneyPlot_unblindedAll_paper_new_incPrelim";
     // const double luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot.
     // const double luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot.
     // const double luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
@@ -306,14 +306,14 @@ int main(){
     const std::string fitType = fitTypes.at(iF);
 
     // NB: this is hard coded and dependent on setup
-    h_QCD[iF] = new TH1D(("h_QCD_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
-    h_TTJets[iF] = new TH1D(("h_TTJets_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
-    h_ZJets[iF] = new TH1D(("h_ZJets_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
-    h_WJets[iF] = new TH1D(("h_WJets_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
-    h_backgroundError[iF] = new TH1D(("h_backgroundError_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
-    h_totalError[iF] = new TH1D(("h_totalError_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
-    h_backgroundVar[iF] = new TH1D(("h_backgroundVar_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
-    h_data[iF] = new TH1D(("h_data_"+fitType).c_str(), ";Search Region Bin Number;Number of events", 30, 0, 30);
+    h_QCD[iF] = new TH1D(("h_QCD_"+fitType).c_str(), ";Search region;Number of events", 30, 0, 30);
+    h_TTJets[iF] = new TH1D(("h_TTJets_"+fitType).c_str(), ";Search region;Number of events", 30, 0, 30);
+    h_ZJets[iF] = new TH1D(("h_ZJets_"+fitType).c_str(), ";Search region;Number of events", 30, 0, 30);
+    h_WJets[iF] = new TH1D(("h_WJets_"+fitType).c_str(), ";Search region;Number of events", 30, 0, 30);
+    h_backgroundError[iF] = new TH1D(("h_backgroundError_"+fitType).c_str(), ";Search region;Number of events", 30, 0, 30);
+    h_totalError[iF] = new TH1D(("h_totalError_"+fitType).c_str(), ";Search region;Number of events", 30, 0, 30);
+    h_backgroundVar[iF] = new TH1D(("h_backgroundVar_"+fitType).c_str(), ";Search region;Number of events", 30, 0, 30);
+    h_data[iF] = new TH1D(("h_data_"+fitType).c_str(), ";Search region;Number of events", 30, 0, 30);
 
     h_backgroundError[iF]->Sumw2(); // to avoid bug with AddBinContent adding an error for the first bin
     h_totalError[iF]->Sumw2(); // to avoid bug with AddBinContent adding an error for the first bin
@@ -529,24 +529,27 @@ int main(){
     // plot.SetYValueMin(0.4); // REMEMBER THIS PARAM! (only for log)
     plot.SaveSpec02(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
 
+    plot.AddLatex(luminosity, "#it{Preliminary}");
+    plot.SaveSpec02(Form("%s/%s_Preliminary.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
+
     } //iF
 
 
     //TODO: plot ratio of pre/post fit QCD (and other bkg)
 
-    TH1D* h_QCD_prepostratio = new TH1D("h_QCD_prepostratio", ";Search Region Bin Number;Events", 30, 0, 30);
+    TH1D* h_QCD_prepostratio = new TH1D("h_QCD_prepostratio", ";Search region;Events", 30, 0, 30);
     h_QCD_prepostratio->Divide( h_QCD[1], h_QCD[0] );
-    TH1D* h_TTJets_prepostratio = new TH1D("h_TTJets_prepostratio", ";Search Region Bin Number;Events", 30, 0, 30);
+    TH1D* h_TTJets_prepostratio = new TH1D("h_TTJets_prepostratio", ";Search region;Events", 30, 0, 30);
     h_TTJets_prepostratio->Divide( h_TTJets[1], h_TTJets[0] );
-    TH1D* h_ZJets_prepostratio = new TH1D("h_ZJets_prepostratio", ";Search Region Bin Number;Events", 30, 0, 30);
+    TH1D* h_ZJets_prepostratio = new TH1D("h_ZJets_prepostratio", ";Search region;Events", 30, 0, 30);
     h_ZJets_prepostratio->Divide( h_ZJets[1], h_ZJets[0] );
-    TH1D* h_WJets_prepostratio = new TH1D("h_WJets_prepostratio", ";Search Region Bin Number;Events", 30, 0, 30);
+    TH1D* h_WJets_prepostratio = new TH1D("h_WJets_prepostratio", ";Search region;Events", 30, 0, 30);
     h_WJets_prepostratio->Divide( h_WJets[1], h_WJets[0] );
-    TH1D* h_backgroundError_prepostratio = new TH1D("h_backgroundError_prepostratio", ";Search Region Bin Number;Events", 30, 0, 30);
+    TH1D* h_backgroundError_prepostratio = new TH1D("h_backgroundError_prepostratio", ";Search region;Events", 30, 0, 30);
     h_backgroundError_prepostratio->Divide( h_backgroundError[1], h_backgroundError[0] );
-    TH1D* h_backgroundVar_prepostratio = new TH1D("h_backgroundVar_prepostratio", ";Search Region Bin Number;Events", 30, 0, 30);
+    TH1D* h_backgroundVar_prepostratio = new TH1D("h_backgroundVar_prepostratio", ";Search region;Events", 30, 0, 30);
     h_backgroundVar_prepostratio->Divide( h_backgroundVar[1], h_backgroundVar[0] );
-    TH1D* h_data_prepostratio = new TH1D("h_data_prepostratio", ";Search Region Bin Number;Events", 30, 0, 30);
+    TH1D* h_data_prepostratio = new TH1D("h_data_prepostratio", ";Search region;Events", 30, 0, 30);
     h_data_prepostratio->Divide( h_data[1], h_data[0] );
 
     // THREE: make plot aesthetics and saving

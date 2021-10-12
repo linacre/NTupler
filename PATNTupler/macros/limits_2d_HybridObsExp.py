@@ -38,7 +38,7 @@ NNLLXSVecDown = NNLLXSVec - NNLLXSVec * NNLLXSUncVec
 NNLLXSVecUp = NNLLXSVec + NNLLXSVec * NNLLXSUncVec
 
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600, 2800]
-mHiggsVec = [30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 125]
+mHiggsVec = [30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 120, 125]
 # inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/noGluino/allSys/"
 # inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/"
 #inputDir = "combinedDataCards_xsec_correlated_jec_uncorrelated_2017as2018_0.98_processed"
@@ -47,10 +47,12 @@ mHiggsVec = [30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 125]
 # inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_batch"
 # inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated_batch"
 # inputDirE = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9_batch"
-inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_batch"
+# inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_batch"
+inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/merged_inc120"
+# inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_topHTonly_batch"
 
 # inputDir = "."
-outputDir = "limits_2d_unblinded_NNLL_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_HybridNew_paper"
+outputDir = "limits_2d_unblinded_NNLL_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_HybridNew_inc120_paper"
 # outputDir = inputDir + "/a_limitPlot_intp1_noObs/"
 # outputDir = inputDir + "/a_limitPlot_intp1_withObs/"
 
@@ -374,9 +376,15 @@ for d in dummy.collections:
 
 plt.xlabel('M$_{\mathrm{SUSY}}}$ [GeV]', fontsize=16)
 plt.ylabel('M$_{\mathrm{H}_1}$ [GeV]', fontsize=16)
+
+plt.gca().xaxis.set_major_locator(plt.MultipleLocator(200))
+plt.gca().xaxis.set_minor_locator(plt.MultipleLocator(100))
+# plt.gca().yaxis.set_major_locator(plt.MultipleLocator(20))
+plt.gca().yaxis.set_minor_locator(plt.MultipleLocator(5))
+
 cbar = plt.colorbar()
 cbar.set_ticks(ticks)
-cbar.set_label('95% CL Upper Limit on $(\sigma\\times\\mathrm{BR})/(\sigma\\times\mathrm{BR})_{\mathrm{theory}}$', rotation=90, fontsize=16, labelpad=14)
+cbar.set_label('95% CL upper limit of $(\sigma\\times\\mathrm{BR})/(\sigma\\times\mathrm{BR})_{\mathrm{theory}}$', rotation=90, fontsize=16, labelpad=14)
 plt.title('CMS', loc='left', fontsize=17, fontweight='bold')
 # plt.title('CMS $Preliminary$', loc='left', fontsize=17, fontweight='bold')
 plt.title(plotTitle, loc='right', fontsize=17)

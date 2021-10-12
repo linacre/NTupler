@@ -70,7 +70,7 @@ int main(int argc, char** argv){
     // TH1D hTemplate("hTemplate", ";fatJetA doubleBtagDiscriminator;fraction of events / bin", 20, -1, 1);
     // TH1D hTemplate("hTemplate", ";fatJetA SoftDropMass (GeV);events / bin", 40, 0, 200);
     // TH1D hTemplate("hTemplate", ";fatJetA SoftDropMass (GeV);fraction of events / bin", 40, 0, 200);
-    TH1D hTemplate("hTemplate", ";H_{T} (GeV);Fraction of events / 100 GeV", 55, 1000, 6500);
+    TH1D hTemplate("hTemplate", ";H_{T} [GeV];Fraction of events / 100 GeV", 55, 1000, 6500);
     // TH1D hTemplate("hTemplate", ";fatJetA p_{T} (GeV);fraction of events / bin", 60, 0, 3000);
     // TH1D hTemplate("hTemplate", ";leadingAK4Jet p_{T} (GeV);fraction of events / bin", 60, 0, 3000);
     // TH1D hTemplate("hTemplate", ";nPU;fraction of events / bin", 90, 0, 90);
@@ -352,7 +352,7 @@ int main(int argc, char** argv){
                     // plot.AddLegend(0.33, 0.88, 0.50, 0.67); // top right (extra wide 4)
                     //plot.AddLegend2Cols(0, 0.43, 0.89, 0.77, 0.87, 0.03); // 2 COLUMNS
                     // plot.AddLegend(0.20, 0.60, 0.20, 0.33); // bottom left (wide 2)
-                    plot.AddLegend(0.20, 0.60, 0.165, 0.44); // bottom left (wide 4)
+                    plot.AddLegend(0.20, 0.60, 0.16, 0.44); // bottom left (wide 4)
                     // plot.AddLegend(0.55, 0.88, 0.17, 0.37); // bottom right (wide 4)
                     // plot.AddLegend(0.22, 0.44, 0.77, 0.87); // top left (wide 2)
                     // plot.AddLegend(0.22, 0.45, 0.70, 0.87); // top left (wide 4)

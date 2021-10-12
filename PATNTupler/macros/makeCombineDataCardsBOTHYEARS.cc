@@ -52,7 +52,7 @@ void WriteBlock(const std::string&, const unsigned int&, std::ofstream&, const b
     // ONE: save info (signal specific directories beneath this)
     //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
     // const std::string outputDirGeneral = "combinedDataCards_final_2018";
-    const std::string outputDirGeneral = "combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_batch";
+    const std::string outputDirGeneral = "combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_inc120_batch";
     // const std::string outputDirGeneral = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
 
 
@@ -82,14 +82,14 @@ int main(){
     }
     else{
         signalVec = { // the different signal samples you wish to use
-                                            // "mH30_mSusy800",                                   "mH50_mSusy800", "mH60_mSusy800",  "mH70_mSusy800", "mH80_mSusy800",  "mH90_mSusy800", "mH100_mSusy800",  "mH110_mSusy800",  "mH125_mSusy800",
-                                            "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH60_mSusy1200", "mH70_mSusy1200", "mH80_mSusy1200", "mH90_mSusy1200", "mH100_mSusy1200", "mH110_mSusy1200", "mH125_mSusy1200",
-                                            "mH30_mSusy1600", "mH35_mSusy1600", "mH40_mSusy1600", "mH50_mSusy1600", "mH60_mSusy1600", "mH70_mSusy1600", "mH80_mSusy1600", "mH90_mSusy1600", "mH100_mSusy1600", "mH110_mSusy1600", "mH125_mSusy1600",
-                                            "mH30_mSusy2000", "mH35_mSusy2000", "mH40_mSusy2000", "mH50_mSusy2000", "mH60_mSusy2000", "mH70_mSusy2000", "mH80_mSusy2000", "mH90_mSusy2000", "mH100_mSusy2000", "mH110_mSusy2000", "mH125_mSusy2000",
-                                            "mH30_mSusy2200", "mH35_mSusy2200", "mH40_mSusy2200", "mH50_mSusy2200", "mH60_mSusy2200", "mH70_mSusy2200", "mH80_mSusy2200", "mH90_mSusy2200", "mH100_mSusy2200", "mH110_mSusy2200", "mH125_mSusy2200",
-                                            "mH30_mSusy2400", "mH35_mSusy2400", "mH40_mSusy2400", "mH50_mSusy2400", "mH60_mSusy2400", "mH70_mSusy2400", "mH80_mSusy2400", "mH90_mSusy2400", "mH100_mSusy2400", "mH110_mSusy2400", "mH125_mSusy2400",
-                                            "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH60_mSusy2600", "mH70_mSusy2600", "mH80_mSusy2600", "mH90_mSusy2600", "mH100_mSusy2600", "mH110_mSusy2600", "mH125_mSusy2600", 
-                                            "mH30_mSusy2800", "mH35_mSusy2800", "mH40_mSusy2800", "mH50_mSusy2800", "mH60_mSusy2800", "mH70_mSusy2800", "mH80_mSusy2800", "mH90_mSusy2800", "mH100_mSusy2800", "mH110_mSusy2800", "mH125_mSusy2800", 
+                                            // "mH30_mSusy800",                                   "mH50_mSusy800", "mH60_mSusy800",  "mH70_mSusy800", "mH80_mSusy800",  "mH90_mSusy800", "mH100_mSusy800",  "mH110_mSusy800",  "mH120_mSusy800", "mH125_mSusy800",
+                                            "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH60_mSusy1200", "mH70_mSusy1200", "mH80_mSusy1200", "mH90_mSusy1200", "mH100_mSusy1200", "mH110_mSusy1200", "mH120_mSusy1200", "mH125_mSusy1200",
+                                            "mH30_mSusy1600", "mH35_mSusy1600", "mH40_mSusy1600", "mH50_mSusy1600", "mH60_mSusy1600", "mH70_mSusy1600", "mH80_mSusy1600", "mH90_mSusy1600", "mH100_mSusy1600", "mH110_mSusy1600", "mH120_mSusy1600", "mH125_mSusy1600",
+                                            "mH30_mSusy2000", "mH35_mSusy2000", "mH40_mSusy2000", "mH50_mSusy2000", "mH60_mSusy2000", "mH70_mSusy2000", "mH80_mSusy2000", "mH90_mSusy2000", "mH100_mSusy2000", "mH110_mSusy2000", "mH120_mSusy2000", "mH125_mSusy2000",
+                                            "mH30_mSusy2200", "mH35_mSusy2200", "mH40_mSusy2200", "mH50_mSusy2200", "mH60_mSusy2200", "mH70_mSusy2200", "mH80_mSusy2200", "mH90_mSusy2200", "mH100_mSusy2200", "mH110_mSusy2200", "mH120_mSusy2200", "mH125_mSusy2200",
+                                            "mH30_mSusy2400", "mH35_mSusy2400", "mH40_mSusy2400", "mH50_mSusy2400", "mH60_mSusy2400", "mH70_mSusy2400", "mH80_mSusy2400", "mH90_mSusy2400", "mH100_mSusy2400", "mH110_mSusy2400", "mH120_mSusy2400", "mH125_mSusy2400",
+                                            "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH60_mSusy2600", "mH70_mSusy2600", "mH80_mSusy2600", "mH90_mSusy2600", "mH100_mSusy2600", "mH110_mSusy2600", "mH120_mSusy2600", "mH125_mSusy2600", 
+                                            "mH30_mSusy2800", "mH35_mSusy2800", "mH40_mSusy2800", "mH50_mSusy2800", "mH60_mSusy2800", "mH70_mSusy2800", "mH80_mSusy2800", "mH90_mSusy2800", "mH100_mSusy2800", "mH110_mSusy2800", "mH120_mSusy2800", "mH125_mSusy2800", 
                                         };
     } /*
 //     std::vector<std::string> signalVec = { // the different signal samples you wish to use: SQUARK PRODUCTION ONLY
@@ -255,6 +255,7 @@ int main(){
                 std::string comboCommandStr = "combineCards.py ";
                 for (unsigned int iYear = 0; iYear < yearOfRunVec.size(); ++iYear)
                 {
+                    // for (unsigned int i = 1; i < numberOfBins + 1; ++i) if (i>20) comboCommandStr 
                     for (unsigned int i = 1; i < numberOfBins + 1; ++i) comboCommandStr 
                     // += outputDir + "bin" + std::to_string(i+iYear*numberOfBins) + "_" + std::to_string(yearOfRunVec.at(iYear)) + ".txt ";
                     += Form("%sbin%02d_%d.txt ", outputDir.c_str(), i+iYear*numberOfBins, yearOfRunVec.at(iYear));
@@ -753,7 +754,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     const int lowestSignalMass = 30;
     bool doDensityCorrection = true; // to account for the fact the first mass bin is narrower
 
-    std::vector<int> newMasses = {60, 80, 100};
+    std::vector<int> newMasses = {60, 80, 100, 120};
     std::vector<int> susyMasses = {1200, 1600, 2000, 2200, 2400, 2600, 2800};
     std::vector<std::string> regionsVec;
     regionsVec.push_back("S");
@@ -816,7 +817,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
 
 
                 // std::vector<int> writeMasses = {50, 60, 70, 80, 90, 100, 110};
-                std::vector<int> writeMasses = {60, 80, 100};
+                std::vector<int> writeMasses = {60, 80, 100, 120};
                 for (unsigned int iMass=0; iMass<writeMasses.size(); iMass++) {
                     std::string tempname = Form("%s_tag_mH%d_mSusy%d_%s", region.c_str(), writeMasses[iMass], susyMasses[iS], nonTrivialSys.c_str());
                     output->cd();

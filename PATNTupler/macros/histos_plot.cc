@@ -553,13 +553,13 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
         if(histoToUse == "data") h_[Form("predNew_tag_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
         for (int iBin = 1; iBin < h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
             double corrValue = QcdSidebandCorr::GetCorr(iBin, year);
-            double corrError = QcdSidebandCorr::GetCorrErr(iBin, year);
+            double corrError = exp(QcdSidebandCorr::GetCorrErr(iBin, year)) - 1.;
             double UnDValue = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinContent(iBin);
             double UnDError = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinError(iBin);
 
             double predValue = corrValue * UnDValue;
             double predError = 0.0;
-            if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+            if (UnDValue != 0) predError = predValue * sqrt( (corrError)*(corrError) + (UnDError/UnDValue)*(UnDError/UnDValue) );
             h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
             h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
 
@@ -575,7 +575,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
 
                 predValue = corrValue * UnDValue;
                 predError = 0.0;
-                if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+                if (UnDValue != 0) predError = predValue * sqrt( (corrError)*(corrError) + (UnDError/UnDValue)*(UnDError/UnDValue) );
                 h_[Form("predNew_tag_%sbkgsub", histoToUse.c_str())]->SetBinContent(iBin, predValue);
                 h_[Form("predNew_tag_%sbkgsub", histoToUse.c_str())]->SetBinError(iBin, predError);
 
@@ -587,13 +587,13 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
         if(histoToUse == "data") h_[Form("predNew_control_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
         for (int iBin = 1; iBin < h_[Form("predNew_control_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
             double corrValue = QcdSidebandCorr::GetCorr(iBin, year);
-            double corrError = QcdSidebandCorr::GetCorrErr(iBin, year);
+            double corrError = exp(QcdSidebandCorr::GetCorrErr(iBin, year)) - 1.;
             double UnDValue = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinContent(iBin);
             double UnDError = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinError(iBin);
 
             double predValue = corrValue * UnDValue;
             double predError = 0.0;
-            if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+            if (UnDValue != 0) predError = predValue * sqrt( (corrError)*(corrError) + (UnDError/UnDValue)*(UnDError/UnDValue) );
             h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
             h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
 
@@ -609,7 +609,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
 
                 predValue = corrValue * UnDValue;
                 predError = 0.0;
-                if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+                if (UnDValue != 0) predError = predValue * sqrt( (corrError)*(corrError) + (UnDError/UnDValue)*(UnDError/UnDValue) );
                 h_[Form("predNew_control_%sbkgsub", histoToUse.c_str())]->SetBinContent(iBin, predValue);
                 h_[Form("predNew_control_%sbkgsub", histoToUse.c_str())]->SetBinError(iBin, predError);
 

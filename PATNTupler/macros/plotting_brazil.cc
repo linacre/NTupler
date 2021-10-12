@@ -34,6 +34,7 @@ std::map<std::string, double> xsecBR{
 {"mH90_mSusy800",  6.4720000*0.816*0.816},
 {"mH100_mSusy800",  6.4720000*0.795*0.795},
 {"mH110_mSusy800", 6.4720000*0.749*0.749},
+{"mH120_mSusy800", 6.4720000*0.652*0.652},
 {"mH125_mSusy800", 6.4720000*0.581*0.581},
 
 {"mH30_mSusy1200", 0.4951000*0.868*0.868},
@@ -46,6 +47,7 @@ std::map<std::string, double> xsecBR{
 {"mH90_mSusy1200", 0.4951000*0.816*0.816},
 {"mH100_mSusy1200", 0.4951000*0.795*0.795},
 {"mH110_mSusy1200",0.4951000*0.749*0.749},
+{"mH120_mSusy1200",0.4951000*0.652*0.652},
 {"mH125_mSusy1200",0.4951000*0.581*0.581},
 
 {"mH30_mSusy1600", 0.0603900*0.868*0.868},
@@ -58,6 +60,7 @@ std::map<std::string, double> xsecBR{
 {"mH90_mSusy1600", 0.0603900*0.816*0.816},
 {"mH100_mSusy1600", 0.0603900*0.795*0.795},
 {"mH110_mSusy1600",0.0603900*0.749*0.749},
+{"mH120_mSusy1600",0.0603900*0.652*0.652},
 {"mH125_mSusy1600",0.0603900*0.581*0.581},
 
 {"mH30_mSusy2000", 0.0091050*0.868*0.868},
@@ -70,6 +73,7 @@ std::map<std::string, double> xsecBR{
 {"mH90_mSusy2000", 0.0091050*0.816*0.816},
 {"mH100_mSusy2000", 0.0091050*0.795*0.795},
 {"mH110_mSusy2000",0.0091050*0.749*0.749},
+{"mH120_mSusy2000",0.0091050*0.652*0.652},
 {"mH125_mSusy2000",0.0091050*0.581*0.581},
 
 {"mH30_mSusy2200", 0.0036780*0.868*0.868},
@@ -82,6 +86,7 @@ std::map<std::string, double> xsecBR{
 {"mH90_mSusy2200", 0.0036780*0.816*0.816},
 {"mH100_mSusy2200", 0.0036780*0.795*0.795},
 {"mH110_mSusy2200",0.0036780*0.749*0.749},
+{"mH120_mSusy2200",0.0036780*0.652*0.652},
 {"mH125_mSusy2200",0.0036780*0.581*0.581},
 
 {"mH30_mSusy2400", 0.0015050*0.868*0.868},
@@ -94,6 +99,7 @@ std::map<std::string, double> xsecBR{
 {"mH90_mSusy2400", 0.0015050*0.816*0.816},
 {"mH100_mSusy2400", 0.0015050*0.795*0.795},
 {"mH110_mSusy2400",0.0015050*0.749*0.749},
+{"mH120_mSusy2400",0.0015050*0.652*0.652},
 {"mH125_mSusy2400",0.0015050*0.581*0.581},
 
 {"mH30_mSusy2600", 0.0006167*0.868*0.868},
@@ -106,6 +112,7 @@ std::map<std::string, double> xsecBR{
 {"mH90_mSusy2600", 0.0006167*0.816*0.816},
 {"mH100_mSusy2600", 0.0006167*0.795*0.795},
 {"mH110_mSusy2600",0.0006167*0.749*0.749},
+{"mH120_mSusy2600",0.0006167*0.652*0.652},
 {"mH125_mSusy2600",0.0006167*0.581*0.581},
 
 {"mH30_mSusy2800", 0.0002753*0.868*0.868},
@@ -118,6 +125,7 @@ std::map<std::string, double> xsecBR{
 {"mH90_mSusy2800", 0.0002753*0.816*0.816},
 {"mH100_mSusy2800", 0.0002753*0.795*0.795},
 {"mH110_mSusy2800",0.0002753*0.749*0.749},
+{"mH120_mSusy2800",0.0002753*0.652*0.652},
 {"mH125_mSusy2800",0.0002753*0.581*0.581},
 
 {"mH30_mSquark800",  2.0480000*0.868*0.868},
@@ -125,6 +133,7 @@ std::map<std::string, double> xsecBR{
 {"mH70_mSquark800",  2.0480000*0.840*0.840},
 {"mH90_mSquark800",  2.0480000*0.816*0.816},
 {"mH110_mSquark800", 2.0480000*0.749*0.749},
+{"mH120_mSquark800", 2.0480000*0.652*0.652},
 {"mH125_mSquark800", 2.0480000*0.581*0.581},
 
 {"mH30_mSquark1200", 0.2039000*0.868*0.868},
@@ -134,6 +143,7 @@ std::map<std::string, double> xsecBR{
 {"mH70_mSquark1200", 0.2039000*0.840*0.840},
 {"mH90_mSquark1200", 0.2039000*0.816*0.816},
 {"mH110_mSquark1200",0.2039000*0.749*0.749},
+{"mH120_mSquark1200",0.2039000*0.652*0.652},
 {"mH125_mSquark1200",0.2039000*0.581*0.581},
 
 {"mH30_mSquark1600", 0.0296800*0.868*0.868},
@@ -143,6 +153,7 @@ std::map<std::string, double> xsecBR{
 {"mH70_mSquark1600", 0.0296800*0.840*0.840},
 {"mH90_mSquark1600", 0.0296800*0.816*0.816},
 {"mH110_mSquark1600",0.0296800*0.749*0.749},
+{"mH120_mSquark1600",0.0296800*0.652*0.652},
 {"mH125_mSquark1600",0.0296800*0.581*0.581},
 
 {"mH30_mSquark2000", 0.0050450*0.868*0.868},
@@ -152,6 +163,7 @@ std::map<std::string, double> xsecBR{
 {"mH70_mSquark2000", 0.0050450*0.840*0.840},
 {"mH90_mSquark2000", 0.0050450*0.816*0.816},
 {"mH110_mSquark2000",0.0050450*0.749*0.749},
+{"mH120_mSquark2000",0.0050450*0.652*0.652},
 {"mH125_mSquark2000",0.0050450*0.581*0.581},
 
 {"mH30_mSquark2200", 0.0021320*0.868*0.868},
@@ -161,6 +173,7 @@ std::map<std::string, double> xsecBR{
 {"mH70_mSquark2200", 0.0021320*0.840*0.840},
 {"mH90_mSquark2200", 0.0021320*0.816*0.816},
 {"mH110_mSquark2200",0.0021320*0.749*0.749},
+{"mH120_mSquark2200",0.0021320*0.652*0.652},
 {"mH125_mSquark2200",0.0021320*0.581*0.581},
 
 {"mH30_mSquark2400", 0.0009076*0.868*0.868},
@@ -170,6 +183,7 @@ std::map<std::string, double> xsecBR{
 {"mH70_mSquark2400", 0.0009076*0.840*0.840},
 {"mH90_mSquark2400", 0.0009076*0.816*0.816},
 {"mH110_mSquark2400",0.0009076*0.749*0.749},
+{"mH120_mSquark2400",0.0009076*0.652*0.652},
 {"mH125_mSquark2400",0.0009076*0.581*0.581},
 
 {"mH30_mSquark2600", 0.0003843*0.868*0.868},
@@ -179,6 +193,7 @@ std::map<std::string, double> xsecBR{
 {"mH70_mSquark2600", 0.0003843*0.840*0.840},
 {"mH90_mSquark2600", 0.0003843*0.816*0.816},
 {"mH110_mSquark2600",0.0003843*0.749*0.749},
+{"mH120_mSquark2600",0.0003843*0.652*0.652},
 {"mH125_mSquark2600",0.0003843*0.581*0.581},
 
 {"mH30_mSquark2800", 0.0001849*0.868*0.868},
@@ -188,6 +203,7 @@ std::map<std::string, double> xsecBR{
 {"mH70_mSquark2800", 0.0001849*0.840*0.840},
 {"mH90_mSquark2800", 0.0001849*0.816*0.816},
 {"mH110_mSquark2800",0.0001849*0.749*0.749},
+{"mH120_mSquark2800",0.0001849*0.652*0.652},
 {"mH125_mSquark2800",0.0001849*0.581*0.581}
 
 };
@@ -205,6 +221,7 @@ std::map<std::string, double> xsecBRNNLL{
 {"mH90_mSusy800",  7.7800000*0.816*0.816},
 {"mH100_mSusy800",  7.7800000*0.795*0.795},
 {"mH110_mSusy800", 7.7800000*0.749*0.749},
+{"mH120_mSusy800", 7.7800000*0.652*0.652},
 {"mH125_mSusy800", 7.7800000*0.581*0.581},
 
 {"mH30_mSusy1200", 0.5794000*0.868*0.868},
@@ -217,6 +234,7 @@ std::map<std::string, double> xsecBRNNLL{
 {"mH90_mSusy1200", 0.5794000*0.816*0.816},
 {"mH100_mSusy1200", 0.5794000*0.795*0.795},
 {"mH110_mSusy1200",0.5794000*0.749*0.749},
+{"mH120_mSusy1200",0.5794000*0.652*0.652},
 {"mH125_mSusy1200",0.5794000*0.581*0.581},
 
 {"mH30_mSusy1600", 0.0688200*0.868*0.868},
@@ -229,6 +247,7 @@ std::map<std::string, double> xsecBRNNLL{
 {"mH90_mSusy1600", 0.0688200*0.816*0.816},
 {"mH100_mSusy1600", 0.0688200*0.795*0.795},
 {"mH110_mSusy1600",0.0688200*0.749*0.749},
+{"mH120_mSusy1600",0.0688200*0.652*0.652},
 {"mH125_mSusy1600",0.0688200*0.581*0.581},
 
 {"mH30_mSusy2000", 0.0101300*0.868*0.868},
@@ -241,6 +260,7 @@ std::map<std::string, double> xsecBRNNLL{
 {"mH90_mSusy2000", 0.0101300*0.816*0.816},
 {"mH100_mSusy2000", 0.0101300*0.795*0.795},
 {"mH110_mSusy2000",0.0101300*0.749*0.749},
+{"mH120_mSusy2000",0.0101300*0.652*0.652},
 {"mH125_mSusy2000",0.0101300*0.581*0.581},
 
 {"mH30_mSusy2200", 0.0040540*0.868*0.868},
@@ -253,6 +273,7 @@ std::map<std::string, double> xsecBRNNLL{
 {"mH90_mSusy2200", 0.0040540*0.816*0.816},
 {"mH100_mSusy2200", 0.0040540*0.795*0.795},
 {"mH110_mSusy2200",0.0040540*0.749*0.749},
+{"mH120_mSusy2200",0.0040540*0.652*0.652},
 {"mH125_mSusy2200",0.0040540*0.581*0.581},
 
 {"mH30_mSusy2400", 0.0016373*0.868*0.868},
@@ -265,6 +286,7 @@ std::map<std::string, double> xsecBRNNLL{
 {"mH90_mSusy2400", 0.0016373*0.816*0.816},
 {"mH100_mSusy2400", 0.0016373*0.795*0.795},
 {"mH110_mSusy2400",0.0016373*0.749*0.749},
+{"mH120_mSusy2400",0.0016373*0.652*0.652},
 {"mH125_mSusy2400",0.0016373*0.581*0.581},
 
 {"mH30_mSusy2600", 0.0006666*0.868*0.868},
@@ -277,6 +299,7 @@ std::map<std::string, double> xsecBRNNLL{
 {"mH90_mSusy2600", 0.0006666*0.816*0.816},
 {"mH100_mSusy2600", 0.0006666*0.795*0.795},
 {"mH110_mSusy2600",0.0006666*0.749*0.749},
+{"mH120_mSusy2600",0.0006666*0.652*0.652},
 {"mH125_mSusy2600",0.0006666*0.581*0.581},
 
 {"mH30_mSusy2800", 0.0002707*0.868*0.868},
@@ -289,6 +312,7 @@ std::map<std::string, double> xsecBRNNLL{
 {"mH90_mSusy2800", 0.0002707*0.816*0.816},
 {"mH100_mSusy2800", 0.0002707*0.795*0.795},
 {"mH110_mSusy2800",0.0002707*0.749*0.749},
+{"mH120_mSusy2800",0.0002707*0.652*0.652},
 {"mH125_mSusy2800",0.0002707*0.581*0.581},
 
 };
@@ -457,7 +481,8 @@ int main(){
     // const std::string inputDir = "/mercury/data2/linacre/NMSSM/Analysis_boostedNmssmHiggs/combinedDataCards_20200527/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
     // const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/Asymptotic_copy";
     // const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9_batch";
-    const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_batch";
+const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/merged_inc120";    
+// const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_batch";
     // const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_dbtcorr_batch";
     // const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrcor_batch";
     // const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbtcorr_batch";
@@ -468,11 +493,11 @@ int main(){
     // const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
 
     // TWO: plot output directory
-    std::string outputDir = "brazilplots_unblinded_NNLLth_interpolated9d_newhdecay_paper";
+    std::string outputDir = "brazilplots_unblinded_NNLLth_interpolated9d_newhdecay_inc120_paper";
     // const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/brazilplots/mSusy2400/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)
-    const std::vector<int> higgsMasses = {30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 125};
+    const std::vector<int> higgsMasses = {30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 120, 125};
     //const std::vector<int> susyMasses = {2600};
     // const std::vector<int> higgsMasses = {90};
     // const std::vector<int> susyMasses = {1200, 1600, 2000, 2200, 2400, 2600, 2800};
@@ -493,7 +518,7 @@ int main(){
     const bool hybrid = true;
 
     if(fixedYRange) outputDir = outputDir + "_fixedYRange";
-    if(hybrid) outputDir = outputDir + "_HybridNew";
+    if(hybrid) outputDir = outputDir + "_HybridNew_merged";
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -524,7 +549,7 @@ int main(){
     else {
         fixedMass = susyMasses[j];
         variedMass = higgsMasses;
-        xAxisTitle = "M_{H} [GeV]";   
+        xAxisTitle = "M_{H_{1}} [GeV]";   
     }
 
 
@@ -564,7 +589,7 @@ int main(){
         double xBRNNLL = 1;
         if (!plotSigma) xBR = 1;
         if(plotSigma && !plotSquark) xBRNNLL = xsecBRNNLL[mapString];
-        std::cout<<mapString<<" "<<xBR<<" "<<xBRNNLL<<std::endl;
+        // std::cout<<mapString<<" "<<xBR<<" "<<xBRNNLL<<std::endl;
 
         // if(plotSquark) xBR *= sqtest_2gcorrection[mapString];
 
@@ -597,7 +622,7 @@ int main(){
             double limitValue0025;
             T0025->SetBranchAddress("limit", &limitValue0025);
             if (! (T0025->GetEntry(0)) ) {
-                limitValue0025 = 0;
+                limitValue0025 = medianLimit;
                 std::cout<<limitValue0025<<" *************** WARNING: limitValue0025 "<<massPoint<<" "<<fixedMass<<" missing! ***************"<<std::endl;
                 // exit(1);
             }
@@ -646,6 +671,7 @@ int main(){
                 exit(1);
             };
             yObs_vec.push_back(xBR*(limitValueObs));
+            std::cout<<mapString<<" "<<limitValue0025<<" "<<limitValue0160<<" "<<limitValue0500<<" "<<limitValue0840<<" "<<limitValue0975<<" "<<limitValueObs<<std::endl;
 
             if (limitValue0025*xBR < minLimitValue) minLimitValue = limitValue0025*xBR;
             if (limitValue0975*xBR > maxLimitValue) maxLimitValue = limitValue0975*xBR;
@@ -690,10 +716,21 @@ int main(){
         yThUp1Sig_vec.push_back( xBRNNLL + xBRNNLL * xsecUnc[varyHiggsMass ? fixedMass : massPoint] );
     }     
 
+    for (size_t point = 0; point < yErrDown2Sig_vec.size(); ++point) {
+    //for (auto point : yErrDown2Sig_vec){
+        if (yErrDown2Sig_vec[point]==0 || ( fixedMass==1200 && (point==8) ) || ( fixedMass==2000 && (point==4 || point==7) ) || ( fixedMass==2200 && (point==5 || point==8) ) || ( fixedMass==2400 && (point==4 || point==8) ) || ( fixedMass==2600 && (point==4 || point==9) ) || ( fixedMass==2800 && (point==5 || point==9) ) ) {
+            double ratp1 = (yErrDown2Sig_vec[point+1]-y_vec[point+1])/(yErrDown1Sig_vec[point+1]-y_vec[point+1]);
+            double ratm1 = (yErrDown2Sig_vec[point-1]-y_vec[point-1])/(yErrDown1Sig_vec[point-1]-y_vec[point-1]);            
+            yErrDown2Sig_vec[point] = y_vec[point] + (yErrDown1Sig_vec[point]-y_vec[point])*sqrt(ratp1*ratm1);
+            std::cout<<" "<<" adjusted "<<ratp1<<" "<<ratm1<<": "<<yErrDown2Sig_vec[point]<<std::endl;
+        }
+    }
+
     TGraphAsymmErrors * g_obs = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(yObs_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]));
     g_obs->GetXaxis()->SetTitle(xAxisTitle.c_str());
     // g_obs->GetYaxis()->SetTitle("95% upper CL of r");
-    if (plotSigma) g_obs->GetYaxis()->SetTitle("95% CL upper limit of #sigma#timesBR [pb]");
+    // if (plotSigma) g_obs->GetYaxis()->SetTitle("95% CL upper limit of #sigma#timesBR [pb]");
+    if (plotSigma) g_obs->GetYaxis()->SetTitle("Cross section #times BR(H_{1}#rightarrow b#bar{b}) [pb]");
     else g_obs->GetYaxis()->SetTitle("95% upper CL of #sigma / #sigma_{theory}");
     TGraphAsymmErrors * g_exp = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]));
     TGraphAsymmErrors * g_expErr1Sig = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(yErrDown1Sig_vec[0]), &(yErrUp1Sig_vec[0]));
@@ -711,9 +748,10 @@ int main(){
     }
 
     // the vector order goes: observed, expected, 1sigma, 2sigma, th, 1sigma
-    Plotter brazilPlot = Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig, g_th, g_thDown1Sig, g_thUp1Sig}, plotObserved);
+    Plotter brazilPlot = fixedMass > 1200 ? Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig, g_th, g_thDown1Sig, g_thUp1Sig}, plotObserved) : Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig}, plotObserved);;
     // brazilPlot.AddLegend(0.20, 0.45, 0.63, 0.86);
-    brazilPlot.AddLegend(0.60, 0.85, 0.63, 0.87);
+    // brazilPlot.AddLegendBrazil(0.55, 0.85, 0.56, 0.87);
+    brazilPlot.AddLegendBrazil(0.63, 0.9, 0.675, 0.88);
     brazilPlot.AddLatex(luminosity, "");
     brazilPlot.SaveBrazil(Form("%s/linear_%s_fixedMass%d_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.0, 1.05 * maxLimitValue, fixedMass);
     brazilPlot.SetLogY();
