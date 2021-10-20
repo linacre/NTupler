@@ -479,6 +479,28 @@ void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, co
 	return;
 }
 
+
+void Plotter::AddLegend_cDSPaper(const double& x1, const double& x2, const double& y1, const double& y2, const double& textSize)
+{
+	leg = new TLegend(x1, y1, x2, y2);
+    leg->SetX1NDC(x1);
+    leg->SetX2NDC(x2);
+	leg->SetY1NDC(y1);
+    leg->SetY2NDC(y2);
+	leg->SetTextSize(textSize);
+	leg->SetBorderSize(0);
+	leg->SetFillStyle(0);
+
+	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin() + 3; iIndi != histoIndi.end(); ++iIndi)
+		leg->AddEntry(iIndi->GetHistogram(), iIndi->GetPlotEntryName().c_str(), "L");
+
+	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end() - 3; ++iIndi)
+		leg->AddEntry(iIndi->GetHistogram(), iIndi->GetPlotEntryName().c_str(), "L");
+
+	return;
+}
+
+
 void Plotter::AddLegendBrazil(const double& x1, const double& x2, const double& y1, const double& y2, const double& textSize)
 {
 	leg = new TLegend(x1 - 0.37, y1, x2 - 0.37, y2 - 0.5*(y2-y1));
@@ -2325,15 +2347,15 @@ int Plotter::SetColor_stark(const int& index)
 	// if (index==2) return kGreen+1;
 	if (index==2) return kMagenta-4;
 
-	if (index==3) return kOrange+1;
 	// if (index==3) return kGreen+3;
-	// if (index==3) return SetColor_mellow(3,4);
+	// if (index==3) return kOrange+1;
+	if (index==3) return SetColor_mellow(3,4);
 
-	if (index==4) return kSpring+10;
-	// if (index==4) return SetColor_mellow(2,4);
+	// if (index==4) return kSpring+10;
+	if (index==4) return SetColor_mellow(2,4);
 
-	if (index==5) return kBlue-8;
-	// if (index==5) return SetColor_mellow(1,4);
+	// if (index==5) return kBlue-8;
+	if (index==5) return SetColor_mellow(1,4);
 
 	if (index==6) return kGray;
 
