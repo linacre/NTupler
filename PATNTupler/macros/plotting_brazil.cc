@@ -588,7 +588,8 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
         double xBR = xsecBR[mapString];
         double xBRNNLL = 1;
         if (!plotSigma) xBR = 1;
-        if(plotSigma && !plotSquark) xBRNNLL = xsecBRNNLL[mapString];
+        else xBR *= 1000;
+        if(plotSigma && !plotSquark) xBRNNLL = xsecBRNNLL[mapString]*1000;
         // std::cout<<mapString<<" "<<xBR<<" "<<xBRNNLL<<std::endl;
 
         // if(plotSquark) xBR *= sqtest_2gcorrection[mapString];
@@ -729,8 +730,8 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     TGraphAsymmErrors * g_obs = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(yObs_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]));
     g_obs->GetXaxis()->SetTitle(xAxisTitle.c_str());
     // g_obs->GetYaxis()->SetTitle("95% upper CL of r");
-    // if (plotSigma) g_obs->GetYaxis()->SetTitle("95% CL upper limit of #sigma#timesBR [pb]");
-    if (plotSigma) g_obs->GetYaxis()->SetTitle("Cross section #times BR(H_{1}#rightarrow b#bar{b}) [pb]");
+    // if (plotSigma) g_obs->GetYaxis()->SetTitle("95% CL upper limit of #sigma#timesBR [fb]");
+    if (plotSigma) g_obs->GetYaxis()->SetTitle("Cross section #times #bf{#it{#Beta}}(H_{1}#rightarrow b#bar{b}) [fb]");
     else g_obs->GetYaxis()->SetTitle("95% upper CL of #sigma / #sigma_{theory}");
     TGraphAsymmErrors * g_exp = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]));
     TGraphAsymmErrors * g_expErr1Sig = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(yErrDown1Sig_vec[0]), &(yErrUp1Sig_vec[0]));
@@ -743,8 +744,8 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     // TGraphAsymmErrors * g_thErr1Sig = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(yTh_vec[0]), &(null_vec[0]), &(null_vec[0]), &(yThDown1Sig_vec[0]), &(yThUp1Sig_vec[0]));
 
     if(fixedYRange) {
-        maxLimitValue = 0.11;
-        minLimitValue = 0.00006;
+        maxLimitValue = 0.11*1000;
+        minLimitValue = 0.00006*1000;
     }
 
     // the vector order goes: observed, expected, 1sigma, 2sigma, th, 1sigma

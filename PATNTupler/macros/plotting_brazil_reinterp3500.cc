@@ -543,8 +543,29 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_brazil.cc %s/%s__plotting_brazil.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
 
     int nPlots = 0;
-    if(varyHiggsMass) nPlots = susyMasses.size();
-    else nPlots = higgsMasses.size();
+    unsigned int nEntries = 0;
+    std::string xAxisTitle = "";
+    if(varyHiggsMass) {
+        nPlots = susyMasses.size();
+        nEntries = higgsMasses.size();
+        xAxisTitle = "M_{H_{1}} [GeV]";
+    }
+    else {
+        nPlots = higgsMasses.size();
+        nEntries = susyMasses.size();
+        xAxisTitle = "M_{SUSY} [GeV]";
+    }
+
+    int avd = 0;
+    std::vector<double> Av_x_vec(nEntries, 0.0);
+    std::vector<double> Av_y_vec(nEntries, 0.0);
+    std::vector<double> Av_yObs_vec(nEntries, 0.0);
+    std::vector<double> Av_yErrUp1Sig_vec(nEntries, 0.0);
+    std::vector<double> Av_yErrDown1Sig_vec(nEntries, 0.0);
+    std::vector<double> Av_yErrUp2Sig_vec(nEntries, 0.0);
+    std::vector<double> Av_yErrDown2Sig_vec(nEntries, 0.0);
+    std::vector<double> Av_null_vec(nEntries, 0.0);
+
 
     for (int j = 0; j < nPlots; ++j) {
 
@@ -552,20 +573,14 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     int fixedMass = -1;
     std::vector<int> variedMass;
 
-    std::string xAxisTitle = "";
     if (!varyHiggsMass){
         fixedMass = higgsMasses[j];
         variedMass = susyMasses;
-        xAxisTitle = "M_{SUSY} [GeV]";
     }
     else {
         fixedMass = susyMasses[j];
         variedMass = higgsMasses;
-        xAxisTitle = "M_{H_{1}} [GeV]";   
     }
-
-
-    const unsigned int nEntries = variedMass.size();
     
     std::vector<double> x_vec;
     std::vector<double> y_vec;
@@ -600,7 +615,8 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
         double xBR = xsecBR[mapString];
         double xBRNNLL = 1;
         if (!plotSigma) xBR = 1;
-        if(plotSigma && !plotSquark) xBRNNLL = xsecBRNNLL[mapString];
+        else xBR *= 1000;
+        if(plotSigma && !plotSquark) xBRNNLL = xsecBRNNLL[mapString]*1000;
         // std::cout<<mapString<<" "<<xBR<<" "<<xBRNNLL<<std::endl;
 
         // if(plotSquark) xBR *= sqtest_2gcorrection[mapString];
@@ -749,8 +765,8 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     TGraphAsymmErrors * g_obs = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(yObs_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]));
     g_obs->GetXaxis()->SetTitle(xAxisTitle.c_str());
     // g_obs->GetYaxis()->SetTitle("95% upper CL of r");
-    // if (plotSigma) g_obs->GetYaxis()->SetTitle("95% CL upper limit of #sigma#timesBR [pb]");
-    if (plotSigma) g_obs->GetYaxis()->SetTitle("(Acc #times Eff)_{kin} #times #sigma #times BR(H_{1}#rightarrow b#bar{b}) [pb]");
+    // if (plotSigma) g_obs->GetYaxis()->SetTitle("95% CL upper limit of #sigma#timesBR [fb]");
+    if (plotSigma) g_obs->GetYaxis()->SetTitle("(Acc #times Eff)_{kin} #times #sigma #times #bf{#it{#Beta}}(H_{1}#rightarrow b#bar{b}) [fb]");
     else g_obs->GetYaxis()->SetTitle("95% upper CL of #sigma / #sigma_{theory}");
     TGraphAsymmErrors * g_exp = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]));
     TGraphAsymmErrors * g_expErr1Sig = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(yErrDown1Sig_vec[0]), &(yErrUp1Sig_vec[0]));
@@ -765,8 +781,8 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     if(fixedYRange) {
         // maxLimitValue = 0.11;
         // minLimitValue = 0.00006;
-        maxLimitValue = 0.01;
-        minLimitValue = 0.0001;
+        maxLimitValue = 0.01*1000;
+        minLimitValue = 0.0001*1000;
     }
 
     // the vector order goes: observed, expected, 1sigma, 2sigma, th, 1sigma
@@ -782,7 +798,74 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     brazilPlot.AddLatex(luminosity, "Preliminary");
     brazilPlot.SaveBrazil(Form("%s/log_%s_fixedMass%d_%s_Preliminary.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.85 * minLimitValue, 1.15 * maxLimitValue, fixedMass);
 
+    if (fixedMass > 1500) {
+        ++avd;
+        for (size_t point = 0; point < Av_x_vec.size(); ++point) {
+            Av_x_vec[point] += x_vec[point];
+            Av_y_vec[point] += y_vec[point];
+            Av_yObs_vec[point] += yObs_vec[point];
+            Av_yErrUp1Sig_vec[point] += yErrUp1Sig_vec[point];
+            Av_yErrDown1Sig_vec[point] += yErrDown1Sig_vec[point];
+            Av_yErrUp2Sig_vec[point] += yErrUp2Sig_vec[point];
+            Av_yErrDown2Sig_vec[point] += yErrDown2Sig_vec[point];
+        }
     }
+    std::cout << avd << std::endl;
+    }
+
+
+
+
+
+
+
+
+
+    for (size_t point = 0; point < Av_x_vec.size(); ++point) {
+        Av_x_vec[point] /= avd;
+        Av_y_vec[point] /= avd;
+        Av_yObs_vec[point] /= avd;
+        Av_yErrUp1Sig_vec[point] /= avd;
+        Av_yErrDown1Sig_vec[point] /= avd;
+        Av_yErrUp2Sig_vec[point] /= avd;
+        Av_yErrDown2Sig_vec[point] /= avd;
+    }
+    std::cout << "AccEffSigBR: ";
+    for (auto obs: Av_yObs_vec)
+        std::cout << obs << " ";
+    std::cout<<" (average)"<<std::endl;
+
+    TGraphAsymmErrors * g_obs = new TGraphAsymmErrors(nEntries, &(Av_x_vec[0]), &(Av_yObs_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]));
+    g_obs->GetXaxis()->SetTitle(xAxisTitle.c_str());
+    // g_obs->GetYaxis()->SetTitle("95% upper CL of r");
+    // if (plotSigma) g_obs->GetYaxis()->SetTitle("95% CL upper limit of #sigma#timesBR [fb]");
+    if (plotSigma) g_obs->GetYaxis()->SetTitle("(Acc #times Eff)_{kin} #times #sigma #times #bf{#it{#Beta}}(H_{1}#rightarrow b#bar{b}) [fb]");
+    else g_obs->GetYaxis()->SetTitle("95% upper CL of #sigma / #sigma_{theory}");
+    TGraphAsymmErrors * g_exp = new TGraphAsymmErrors(nEntries, &(Av_x_vec[0]), &(Av_y_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]));
+    TGraphAsymmErrors * g_expErr1Sig = new TGraphAsymmErrors(nEntries, &(Av_x_vec[0]), &(Av_y_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_yErrDown1Sig_vec[0]), &(Av_yErrUp1Sig_vec[0]));
+    TGraphAsymmErrors * g_expErr2Sig = new TGraphAsymmErrors(nEntries, &(Av_x_vec[0]), &(Av_y_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_yErrDown2Sig_vec[0]), &(Av_yErrUp2Sig_vec[0]));
+
+    double maxLimitValue = 0.01*1000;
+    double minLimitValue = 0.0001*1000;
+    int fixedMass = 0;
+
+    // the vector order goes: observed, expected, 1sigma, 2sigma, th, 1sigma
+    Plotter brazilPlot = Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig}, plotObserved);
+    // brazilPlot.AddLegend(0.20, 0.45, 0.63, 0.86);
+    // brazilPlot.AddLegendBrazil(0.55, 0.85, 0.56, 0.87);
+    brazilPlot.AddLegendBrazil(0.63, 0.9, 0.675, 0.88);
+    brazilPlot.AddLatex(luminosity, "");
+    brazilPlot.SaveBrazil(Form("%s/linear_%s_fixedMass%d_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.0, 0.1 * maxLimitValue, fixedMass);
+    brazilPlot.SetLogY();
+    brazilPlot.SaveBrazil(Form("%s/log_%s_fixedMass%d_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.85 * minLimitValue, 1.15 * maxLimitValue, fixedMass);
+
+    brazilPlot.AddLatex(luminosity, "Preliminary");
+    brazilPlot.SaveBrazil(Form("%s/log_%s_fixedMass%d_%s_Preliminary.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.85 * minLimitValue, 1.15 * maxLimitValue, fixedMass);
+
+
+
+
+
 
     return 0;
 }
