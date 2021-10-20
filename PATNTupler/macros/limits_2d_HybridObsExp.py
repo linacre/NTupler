@@ -37,6 +37,10 @@ NNLLXSUncVec = np.array([0.079022196, 0.093790377, 0.113829758, 0.127247992, 0.1
 NNLLXSVecDown = NNLLXSVec - NNLLXSVec * NNLLXSUncVec
 NNLLXSVecUp = NNLLXSVec + NNLLXSVec * NNLLXSUncVec
 
+origBR = np.array([0.868, 0.867, 0.865, 0.858, 0.850, 0.840, 0.829, 0.816, 0.795, 0.749, 0.652, 0.581])
+newBR = np.array([0.8640, 0.8639, 0.8620, 0.8559, 0.8481, 0.8386, 0.8276, 0.8145, 0.7938, 0.7478, 0.6508, 0.5793])
+origBR = origBR / newBR
+
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600, 2800]
 mHiggsVec = [30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 120, 125]
 # inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/noGluino/allSys/"
@@ -52,7 +56,7 @@ inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDa
 # inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_topHTonly_batch"
 
 # inputDir = "."
-outputDir = "limits_2d_unblinded_NNLL_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_HybridNew_inc120_paper"
+outputDir = "limits_2d_unblinded_NNLL_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_HybridNew_inc120_newBR_paper"
 # outputDir = inputDir + "/a_limitPlot_intp1_noObs/"
 # outputDir = inputDir + "/a_limitPlot_intp1_withObs/"
 
@@ -85,7 +89,7 @@ f_obsup = open("tmpLimits_obsup.txt", 'w')
 f_obsdown = open("tmpLimits_obsdown.txt", 'w')
 
 for iS,mSusy in enumerate(mSusyVec):
-    for mHiggs in mHiggsVec:
+    for iH,mHiggs in enumerate(mHiggsVec):
 
         rootFile = "higgsCombineTest.AsymptoticLimits.mH" + str(mHiggs) + ".mSusy" + str(mSusy) + ".root"
         rootFileHybrid = "higgsCombineTest.HybridNew.mH" + str(mHiggs) + ".BugFixmSusy" + str(mSusy) + ".123456.root"
@@ -195,19 +199,19 @@ for iS,mSusy in enumerate(mSusyVec):
 
 
         T.GetEntry(0)
-        f_2p5.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp016.limit / oldexp16 * T.limit * origXSVec[iS] / NNLLXSVec[iS]))
+        f_2p5.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp016.limit / oldexp16 * T.limit * origBR[iH] * origXSVec[iS] / NNLLXSVec[iS]))
 
         T.GetEntry(1)
-        f_16p0.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp016.limit * origXSVec[iS] / NNLLXSVec[iS]))
+        f_16p0.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp016.limit * origBR[iH] * origXSVec[iS] / NNLLXSVec[iS]))
 
         T.GetEntry(2)
-        f_50p0.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp050.limit * origXSVec[iS] / NNLLXSVec[iS]))
+        f_50p0.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp050.limit * origBR[iH] * origXSVec[iS] / NNLLXSVec[iS]))
 
         T.GetEntry(3)
-        f_84p0.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp084.limit * origXSVec[iS] / NNLLXSVec[iS]))
+        f_84p0.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp084.limit * origBR[iH] * origXSVec[iS] / NNLLXSVec[iS]))
 
         T.GetEntry(4)
-        f_97p5.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp084.limit / oldexp84 * T.limit * origXSVec[iS] / NNLLXSVec[iS]))
+        f_97p5.write("%d   %d   %f\n" % (mSusy, mHiggs, THybridExp084.limit / oldexp84 * T.limit * origBR[iH] * origXSVec[iS] / NNLLXSVec[iS]))
         
         try:
             THybrid.GetEntry(0)
@@ -216,9 +220,9 @@ for iS,mSusy in enumerate(mSusyVec):
             continue
 
         if THybrid.limit:
-            f_obs.write("%d   %d   %f\n" % (mSusy, mHiggs, THybrid.limit * origXSVec[iS] / NNLLXSVec[iS]))
-            f_obsup.write("%d   %d   %f\n" % (mSusy, mHiggs, THybrid.limit * origXSVec[iS] / NNLLXSVecUp[iS]))
-            f_obsdown.write("%d   %d   %f\n" % (mSusy, mHiggs, THybrid.limit * origXSVec[iS] / NNLLXSVecDown[iS]))
+            f_obs.write("%d   %d   %f\n" % (mSusy, mHiggs, THybrid.limit * origBR[iH] * origXSVec[iS] / NNLLXSVec[iS]))
+            f_obsup.write("%d   %d   %f\n" % (mSusy, mHiggs, THybrid.limit * origBR[iH] * origXSVec[iS] / NNLLXSVecUp[iS]))
+            f_obsdown.write("%d   %d   %f\n" % (mSusy, mHiggs, THybrid.limit * origBR[iH] * origXSVec[iS] / NNLLXSVecDown[iS]))
         else:
             print "Limit is missing: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
             continue
