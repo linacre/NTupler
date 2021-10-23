@@ -388,7 +388,7 @@ plt.gca().yaxis.set_minor_locator(plt.MultipleLocator(5))
 
 cbar = plt.colorbar()
 cbar.set_ticks(ticks)
-cbar.set_label('95% CL upper limit of $(\sigma\\times\\mathrm{BR})/(\sigma\\times\mathrm{BR})_{\mathrm{theory}}$', rotation=90, fontsize=16, labelpad=14)
+cbar.set_label('95% CL upper limit of $(\sigma {\\bf{\\it{B}}})/(\sigma {\\bf{\\it{B}}})_{\mathrm{theory}}$', rotation=90, fontsize=16, labelpad=14)
 plt.title('CMS', loc='left', fontsize=17, fontweight='bold')
 # plt.title('CMS $Preliminary$', loc='left', fontsize=17, fontweight='bold')
 plt.title(plotTitle, loc='right', fontsize=17)

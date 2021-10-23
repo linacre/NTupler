@@ -493,7 +493,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     // const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
 
     // TWO: plot output directory
-    std::string outputDir = "brazilplots_unblinded_NNLLth_interpolated9d_newhdecay_inc120_newBR_paper";
+    std::string outputDir = "brazilplots_unblinded_NNLLth_interpolated9d_newhdecay_inc120_newBR_paper_temp";
     // const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/brazilplots/mSusy2400/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)
@@ -719,7 +719,8 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
 
     for (size_t point = 0; point < yErrDown2Sig_vec.size(); ++point) {
     //for (auto point : yErrDown2Sig_vec){
-        if (yErrDown2Sig_vec[point]==0 || ( fixedMass==1200 && (point==8) ) || ( fixedMass==2000 && (point==4 || point==7) ) || ( fixedMass==2200 && (point==5 || point==8) ) || ( fixedMass==2400 && (point==4 || point==8) ) || ( fixedMass==2600 && (point==4 || point==9) ) || ( fixedMass==2800 && (point==5 || point==9) ) ) {
+        // if (yErrDown2Sig_vec[point]==0 || ( fixedMass==1200 && (point==8) ) || ( fixedMass==2000 && (point==4 || point==7) ) || ( fixedMass==2200 && (point==5 || point==8) ) || ( fixedMass==2400 && (point==4 || point==8) ) || ( fixedMass==2600 && (point==4 || point==9) ) || ( fixedMass==2800 && (point==5 || point==9) ) ) {
+        if (yErrDown2Sig_vec[point]==0 || ( fixedMass==1200 && (point==8) ) || ( fixedMass==2400 && (point==4) ) ) {
             double ratp1 = (yErrDown2Sig_vec[point+1]-y_vec[point+1])/(yErrDown1Sig_vec[point+1]-y_vec[point+1]);
             double ratm1 = (yErrDown2Sig_vec[point-1]-y_vec[point-1])/(yErrDown1Sig_vec[point-1]-y_vec[point-1]);            
             yErrDown2Sig_vec[point] = y_vec[point] + (yErrDown1Sig_vec[point]-y_vec[point])*sqrt(ratp1*ratm1);

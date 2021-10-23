@@ -505,7 +505,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     // const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
 
     // TWO: plot output directory
-    std::string outputDir = "brazilplots_reinterp3500_";
+    std::string outputDir = "brazilplots_reinterp3500__";
     // const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/brazilplots/mSusy2400/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)
@@ -749,6 +749,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
 
     for (size_t point = 0; point < yErrDown2Sig_vec.size(); ++point) {
     //for (auto point : yErrDown2Sig_vec){
+        // if (yErrDown2Sig_vec[point]==0 || ( fixedMass==1200 && (point==8) ) || ( fixedMass==2400 && (point==4) ) ) {
         if ( ( fixedMass==1200 && (point==5) ) || ( fixedMass==1600 && (point==3 || point==8) ) || ( fixedMass==2000 && (point==3) ) || ( fixedMass==2200 && (point==3 || point==10) ) || ( fixedMass==2400 && (point==1 || point==10) ) || ( fixedMass==2600 && (point==1 || point==999) ) || ( fixedMass==2800 && (point==1 || point==999) ) ) {
             double ratp1 = (yErrDown2Sig_vec[point+1]-y_vec[point+1])/(yErrDown1Sig_vec[point+1]-y_vec[point+1]);
             double ratm1 = (yErrDown2Sig_vec[point-1]-y_vec[point-1])/(yErrDown1Sig_vec[point-1]-y_vec[point-1]);            
@@ -853,14 +854,14 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     Plotter brazilPlot = Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig}, plotObserved);
     // brazilPlot.AddLegend(0.20, 0.45, 0.63, 0.86);
     // brazilPlot.AddLegendBrazil(0.55, 0.85, 0.56, 0.87);
-    brazilPlot.AddLegendBrazil(0.63, 0.9, 0.675, 0.88);
+    brazilPlot.AddLegendBrazil(0.83, 1.1, 0.725, 0.93);
     brazilPlot.AddLatex(luminosity, "");
-    brazilPlot.SaveBrazil(Form("%s/linear_%s_fixedMass%d_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.0, 0.1 * maxLimitValue, fixedMass);
+    brazilPlot.SaveBrazil(Form("%s/linear_%s_kinAccEff_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", plotSigma ? "xsec" : "mu"), 0.0, 0.1 * maxLimitValue, fixedMass);
     brazilPlot.SetLogY();
-    brazilPlot.SaveBrazil(Form("%s/log_%s_fixedMass%d_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.85 * minLimitValue, 1.15 * maxLimitValue, fixedMass);
+    brazilPlot.SaveBrazil(Form("%s/log_%s_kinAccEff_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", plotSigma ? "xsec" : "mu"), 0.85 * minLimitValue, 1.15 * maxLimitValue, fixedMass);
 
     brazilPlot.AddLatex(luminosity, "Preliminary");
-    brazilPlot.SaveBrazil(Form("%s/log_%s_fixedMass%d_%s_Preliminary.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.85 * minLimitValue, 1.15 * maxLimitValue, fixedMass);
+    brazilPlot.SaveBrazil(Form("%s/log_%s_kinAccEff_%s_Preliminary.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", plotSigma ? "xsec" : "mu"), 0.85 * minLimitValue, 1.15 * maxLimitValue, fixedMass);
 
 
 
