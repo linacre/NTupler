@@ -306,4 +306,33 @@ void PlotEntry::FitFunction(const std::string& functionToFit, const double& minX
 	std::cout << std::endl;
 }
 
+void PlotEntry::FitGaus()
+{
+	for (int i = 0; i < 12; ++i) hTotal->SetBinContent(i, 0); 
+
+	int binmax = hTotal->GetMaximumBin();
+	double x = hTotal->GetXaxis()->GetBinCenter(binmax);
+
+	TF1* f1 = new TF1("f1", "gaus", x*0.87, x*1.13);
+	f1->SetLineColor(hTotal->GetLineColor());
+	// hTotal->Print("all");
+	hTotal->Fit("f1", "RQ");
+
+	x = f1->GetParameter(1);
+	double s = f1->GetParameter(2);
+	TF1* f2 = new TF1("f2", "gaus", x-s, x+s);
+	f2->SetLineColor(hTotal->GetLineColor());
+	// hTotal->Print("all");
+	hTotal->Fit("f2", "RQ");
+
+	x = f2->GetParameter(1);
+	s = f2->GetParameter(2);
+	TF1* f3 = new TF1("f3", "gaus", x-s, x+s);
+	f3->SetLineColor(hTotal->GetLineColor());
+	// hTotal->Print("all");
+	hTotal->Fit("f3", "R");
+
+	// std::cout << binmax << std::endl;
+	std::cout << std::endl;
+}
 //-----------private----------//
