@@ -7,6 +7,9 @@
 #include <sys/stat.h>
 #include <map>
 
+#include <sstream>
+#include <iostream>
+
 //ROOT HEADERS
 #include <TFile.h>
 #include <TTree.h>
@@ -127,12 +130,12 @@ tdrStyle(TDRStyle())
 
 	for (size_t iHistos2D = 0; iHistos2D != histos2D.size(); ++iHistos2D){
 		histos2D[iHistos2D].GetHistogram()->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
-		histos2D[iHistos2D].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
+		histos2D[iHistos2D].GetHistogram()->GetXaxis()->SetLabelSize(0.045);
 		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetTitleSize(0.05);
-		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
+		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetLabelSize(0.045);
 		histos2D[iHistos2D].GetHistogram()->GetZaxis()->SetTitle("Fraction of events / bin");
 		histos2D[iHistos2D].GetHistogram()->GetZaxis()->SetTitleSize(0.05);
-		histos2D[iHistos2D].GetHistogram()->GetZaxis()->SetLabelSize(0.04);
+		histos2D[iHistos2D].GetHistogram()->GetZaxis()->SetLabelSize(0.045);
 	}
 }
 
@@ -190,17 +193,17 @@ tdrStyle(TDRStyle())
 		th1Indi[iTh1I]->SetLineColor(SetColor_stark(iTh1I));
 		th1Indi[iTh1I]->SetLineWidth(2);
 		th1Indi[iTh1I]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
-		th1Indi[iTh1I]->GetXaxis()->SetLabelSize(0.04);
+		th1Indi[iTh1I]->GetXaxis()->SetLabelSize(0.045);
 		th1Indi[iTh1I]->GetYaxis()->SetTitleSize(0.05);
-		th1Indi[iTh1I]->GetYaxis()->SetLabelSize(0.04);
+		th1Indi[iTh1I]->GetYaxis()->SetLabelSize(0.045);
 	}
 	for (size_t iTh1S = 0; iTh1S != th1Stack.size(); ++iTh1S){
 		th1Stack[iTh1S]->SetFillColor(SetColor_mellow(iTh1S, th1Stack.size()));
 		th1Stack[iTh1S]->SetLineWidth(0.0);
 		th1Stack[iTh1S]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
-		th1Stack[iTh1S]->GetXaxis()->SetLabelSize(0.04);
+		th1Stack[iTh1S]->GetXaxis()->SetLabelSize(0.045);
 		th1Stack[iTh1S]->GetYaxis()->SetTitleSize(0.05);
-		th1Stack[iTh1S]->GetYaxis()->SetLabelSize(0.04);
+		th1Stack[iTh1S]->GetYaxis()->SetLabelSize(0.045);
 	}
 
 	// JOE HACK::: (for money plot)
@@ -235,17 +238,17 @@ tdrStyle(TDRStyle())
 		th1Indi[iTh1I]->SetLineColor(SetColor_stark(iTh1I));
 		th1Indi[iTh1I]->SetLineWidth(2);
 		th1Indi[iTh1I]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
-		th1Indi[iTh1I]->GetXaxis()->SetLabelSize(0.04);
+		th1Indi[iTh1I]->GetXaxis()->SetLabelSize(0.045);
 		th1Indi[iTh1I]->GetYaxis()->SetTitleSize(0.05);
-		th1Indi[iTh1I]->GetYaxis()->SetLabelSize(0.04);
+		th1Indi[iTh1I]->GetYaxis()->SetLabelSize(0.045);
 	}
 	for (size_t iTh1S = 0; iTh1S != th1Stack.size(); ++iTh1S){
 		th1Stack[iTh1S]->SetFillColor(SetColor_mellow(iTh1S, th1Stack.size()));
 		th1Stack[iTh1S]->SetLineWidth(0.0);
 		th1Stack[iTh1S]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
-		th1Stack[iTh1S]->GetXaxis()->SetLabelSize(0.04);
+		th1Stack[iTh1S]->GetXaxis()->SetLabelSize(0.045);
 		th1Stack[iTh1S]->GetYaxis()->SetTitleSize(0.05);
-		th1Stack[iTh1S]->GetYaxis()->SetLabelSize(0.04);
+		th1Stack[iTh1S]->GetYaxis()->SetLabelSize(0.045);
 	}
 
 	hdata = (TH1D*)dataDummy.Clone();
@@ -470,8 +473,8 @@ void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, co
 	   // if (iG == 0 && useObservedPlot) leg->AddEntry(graphVec[0], "Observed", "l");
 	   if (iG == 0) leg->AddEntry(graphVec[0], "95% CL observed limit", "l");
 	   if (iG == 1) leg->AddEntry(graphVec[1], "95% CL expected limit", "l");
-	   if (iG == 2) leg->AddEntry(graphVec[2], "#pm 1 #sigma_{exp.}", "f");
-	   if (iG == 3) leg->AddEntry(graphVec[3], "#pm 2 #sigma_{exp.}", "f");
+	   if (iG == 2) leg->AddEntry(graphVec[2], "#pm 1 #sigma_{exp}", "f");
+	   if (iG == 3) leg->AddEntry(graphVec[3], "#pm 2 #sigma_{exp}", "f");
 	   if (iG == 4) leg2Cols->AddEntry(graphVec[4], "NNLO_{approx}+NNLL", "l");
 	   if (iG == 5) leg2Cols->AddEntry(graphVec[5], "#pm 1 #sigma_{theory}", "l");
 	}
@@ -503,7 +506,7 @@ void Plotter::AddLegend_cDSPaper(const double& x1, const double& x2, const doubl
 
 void Plotter::AddLegendBrazil(const double& x1, const double& x2, const double& y1, const double& y2, const double& textSize)
 {
-	leg = new TLegend(x1 - 0.37, y1, x2 - 0.37, y2 - 0.5*(y2-y1));
+	leg = new TLegend(x1 - 0.425, y1, x2 - 0.425, y2 - 0.5*(y2-y1));
     leg->SetX1NDC(x1);
     leg->SetX2NDC(x2);
 	leg->SetY1NDC(y1);
@@ -518,7 +521,7 @@ void Plotter::AddLegendBrazil(const double& x1, const double& x2, const double& 
 		leg->AddEntry(iIndi->GetHistogram(), iIndi->GetPlotEntryName().c_str(), "L");	
 
 	// additional section for the brazil plots - the vector order goes: observed, expected, 1sigma, 2sigma
-	leg2Cols = new TLegend(x1 - 0.17, y1, x2 - 0.17, y2 - 0.5*(y2-y1));
+	leg2Cols = new TLegend(x1 - 0.19, y1, x2 - 0.19, y2 - 0.5*(y2-y1));
 	leg2Cols->SetTextSize(textSize);
 	leg2Cols->SetBorderSize(0);
 	leg2Cols->SetFillStyle(0);
@@ -533,9 +536,9 @@ void Plotter::AddLegendBrazil(const double& x1, const double& x2, const double& 
 	   // if (iG == 0 && useObservedPlot) leg->AddEntry(graphVec[0], "Observed", "l");
 	   if (iG == 0) leg->AddEntry(graphVec[0], "Observed", "l");
 	   if (iG == 1) leg->AddEntry(graphVec[1], "Expected", "l");
-	   if (iG == 2) leg2Cols->AddEntry(graphVec[2], "#pm 1 #sigma_{exp.}", "f");
-	   if (iG == 3) leg2Cols->AddEntry(graphVec[3], "#pm 2 #sigma_{exp.}", "f");
-	   if (iG == 4) leg3Cols->AddEntry(graphVec[4], "NNLO_{approx}+NNLL", "l");
+	   if (iG == 2) leg2Cols->AddEntry(graphVec[2], "#pm 1 #sigma_{exp}", "f");
+	   if (iG == 3) leg2Cols->AddEntry(graphVec[3], "#pm 2 #sigma_{exp}", "f");
+	   if (iG == 4) leg3Cols->AddEntry(graphVec[4], "NNLO_{approx}#kern[-0.7]{ }+#kern[-0.5]{ }NNLL", "l");
 	   if (iG == 5) leg3Cols->AddEntry(graphVec[5], "#pm 1 #sigma_{theory}", "l");
 	}
 
@@ -702,9 +705,9 @@ void Plotter::AddLegendHT(const std::vector<std::string>& legendNames, const dou
 		leg3Cols->SetFillStyle(0);
 	}
 
-	if(hdata && threeCol) leg3Cols->AddEntry(hdata, "Data", "P");
+	if(hdata && threeCol) leg3Cols->AddEntry(hdata, "Data", "PE");
 	for (size_t i = 0; i < legendNames.size(); ++i){
-			if (i < th1Indi.size()) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), legendNames[i] == "Data" ? "p" : "L");
+			if (i < th1Indi.size()) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), legendNames[i] == "Data" ? "PE" : "L");
 			// else if (legendNames[i] != "unc.") leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
 	}
 	for (size_t i = legendNames.size() - 1; i >= th1Indi.size(); --i){
@@ -1299,9 +1302,13 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		if (!plotWithErrorsIndi) th1Indi[0]->Draw("HIST");
 		else th1Indi[0]->Draw("P");
 		hs->Draw("same");
-		for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I)
+		// int linestyles[] = {1, 7, 2};
+		for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I) {
+			// th1Indi[iTh1I]->SetLineStyle(linestyles[iTh1I]);
+			if(iTh1I==1) th1Indi[iTh1I]->SetLineColor(SetColor_stark(iTh1I+2));
 			if (plotWithErrorsIndi == false) th1Indi[iTh1I]->Draw("HIST, same");
 			else th1Indi[iTh1I]->Draw("same, P");
+		}
 		if (plotWithErrorsStack){
 
 			hTotalBkg->Draw("same, E2");
@@ -1361,7 +1368,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 
 	}
 
-	if (addLatex) DrawLatex();
+	if (addLatex) DrawLatexBrazil();
 	if (leg != NULL) leg->Draw("same");
 	if (leg2Cols != NULL) leg2Cols->Draw("same");
 	if (leg3Cols != NULL) leg3Cols->Draw("same");
@@ -1396,7 +1403,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		    latexHT->SetTextFont(42);
 			latexHT->SetTextSize(0.047);
 		    latexHT->SetTextAlign(11); // align from left
-			float offsets[] = {1., 0.68, 1.55};
+			float offsets[] = {0.94, 0.68, 1.55};
 		    latexHT->DrawLatex(c+offsets[c/binsPerDivision], lineMaxHT, htBins[c/binsPerDivision].c_str());
 		}
 	}
@@ -1437,7 +1444,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		}
 		ratioPlotEntry->GetXaxis()->SetTitleSize(0.05 * 2.5);
 		ratioPlotEntry->GetXaxis()->SetTitleOffset(1.00);
-		ratioPlotEntry->GetXaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntry->GetXaxis()->SetLabelSize(0.045 * 2.5);
 		ratioPlotEntry->GetXaxis()->SetLabelOffset(0.007);
 		ratioPlotEntry->GetXaxis()->SetTickLength(0.03 * 2.5);
 
@@ -1446,7 +1453,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		ratioPlotEntry->GetYaxis()->SetNdivisions(505);
 		ratioPlotEntry->GetYaxis()->SetTitleSize(0.05 * 2.5);
 		ratioPlotEntry->GetYaxis()->SetTitleOffset(0.4);
-		ratioPlotEntry->GetYaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntry->GetYaxis()->SetLabelSize(0.045 * 2.5);
 		ratioPlotEntry->GetYaxis()->SetLabelOffset(0.007);
 
 		ratioPlotEntry->Draw("E0");
@@ -1508,7 +1515,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 
 		ratioPlotEntryBackground->GetXaxis()->SetTitleSize(0.05 * 2.5);
 		ratioPlotEntryBackground->GetXaxis()->SetTitleOffset(1.00);
-		ratioPlotEntryBackground->GetXaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntryBackground->GetXaxis()->SetLabelSize(0.045 * 2.5);
 		ratioPlotEntryBackground->GetXaxis()->SetLabelOffset(0.007);
 		ratioPlotEntryBackground->GetXaxis()->SetTickLength(0.03 * 2.5);
 
@@ -1517,7 +1524,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		ratioPlotEntryBackground->GetYaxis()->SetNdivisions(505);
 		ratioPlotEntryBackground->GetYaxis()->SetTitleSize(0.05 * 2.5);
 		ratioPlotEntryBackground->GetYaxis()->SetTitleOffset(0.4);
-		ratioPlotEntryBackground->GetYaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntryBackground->GetYaxis()->SetLabelSize(0.045 * 2.5);
 		ratioPlotEntryBackground->GetYaxis()->SetLabelOffset(0.007);
 		
 		ratioPlotEntryBackground->Draw();
@@ -1656,7 +1663,7 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 		th1Indi[iTh1I]->Draw("HIST, same");
 	}
 
-	if (addLatex) DrawLatex();
+	if (addLatex) DrawLatexBrazil();
 	if (leg != NULL) leg->Draw("same");
 	if (leg2Cols != NULL) leg2Cols->Draw("same");
 	gPad->RedrawAxis();
@@ -1690,7 +1697,7 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 		    latexHT->SetTextFont(42);
 			latexHT->SetTextSize(0.047);
 		    latexHT->SetTextAlign(11); // align from left
-			float offsets[] = {1., 0.68, 1.55};
+			float offsets[] = {0.94, 0.68, 1.55};
 		    latexHT->DrawLatex(c+offsets[c/binsPerDivision], lineMaxHT, htBins[c/binsPerDivision].c_str());
 		}
 	}
@@ -1741,7 +1748,7 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 
 		ratioPlotEntryBackground->GetXaxis()->SetTitleSize(0.05 * 2.5);
 		ratioPlotEntryBackground->GetXaxis()->SetTitleOffset(1.00);
-		ratioPlotEntryBackground->GetXaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntryBackground->GetXaxis()->SetLabelSize(0.045 * 2.5);
 		ratioPlotEntryBackground->GetXaxis()->SetLabelOffset(0.007);
 		ratioPlotEntryBackground->GetXaxis()->SetTickLength(0.03 * 2.5);
 
@@ -1750,7 +1757,7 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 		ratioPlotEntryBackground->GetYaxis()->SetNdivisions(505);
 		ratioPlotEntryBackground->GetYaxis()->SetTitleSize(0.05 * 2.5);
 		ratioPlotEntryBackground->GetYaxis()->SetTitleOffset(0.4);
-		ratioPlotEntryBackground->GetYaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntryBackground->GetYaxis()->SetLabelSize(0.045 * 2.5);
 		ratioPlotEntryBackground->GetYaxis()->SetLabelOffset(0.007);
 		
 		ratioPlotEntryBackground->Draw();
@@ -1825,9 +1832,9 @@ void Plotter::Save2D(const std::string& saveName){
 	for (std::vector<PlotEntry2D>::const_iterator iHistos2D = histos2D.begin(); iHistos2D != histos2D.end(); ++iHistos2D){
 
 		iHistos2D->GetHistogram()->SetEntries(1);
-		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
-		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.20);
-		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.20);
+		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.05);
+		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.25);
+		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.25);
 		iHistos2D->GetHistogram()->Draw("colz, same");
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
 	}
@@ -1917,9 +1924,9 @@ void Plotter::Save2D(const std::string& saveName, const bool& drawCRs){
 	for (std::vector<PlotEntry2D>::const_iterator iHistos2D = histos2D.begin(); iHistos2D != histos2D.end(); ++iHistos2D, ++iTh2){
 
 		iHistos2D->GetHistogram()->SetEntries(1);
-		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
-		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.20);
-		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.20);
+		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.05);
+		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.25);
+		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.25);
 		iHistos2D->GetHistogram()->SetLineColor(SetColor_stark(iTh2));
 		iHistos2D->GetHistogram()->Draw("box, same");
 		// iHistos2D->GetHistogram()->Draw("colz, same");
@@ -1964,9 +1971,9 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	for (std::vector<PlotEntry2D>::const_iterator iHistos2D = histos2D.begin(); iHistos2D != histos2D.end(); ++iHistos2D){
 		
 		iHistos2D->GetHistogram()->SetEntries(1);
-		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
-		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.20);
-		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.20);
+		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.05);
+		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.25);
+		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.25);
 		// iHistos2D->GetHistogram()->Draw("same");
 		iHistos2D->GetHistogram()->Draw("colz");
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
@@ -2060,6 +2067,26 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	// **************************
 	// **************************
 
+
+	std::stringstream ss( histos2D[0].GetPlotEntryName().c_str() );
+	std::vector<std::string> result;
+	while( ss.good() )
+	{
+		std::string substr;
+		getline( ss, substr, ',' );
+		result.push_back( substr );
+	}
+
+	for (size_t i=0; i!=result.size(); ++i){
+		// if (i < result.size()-1) result[i] = result[i]+",";
+		TLatex * latexName = new TLatex();
+		latexName->SetTextFont(42);
+		latexName->SetTextSize(0.042);
+		latexName->SetTextAlign(31); // align from right
+		latexName->DrawLatex(199, 190 - 15*i, result[i].c_str());
+	}
+
+
 	c->SaveAs(saveName.c_str());
 	c->Close();
 	
@@ -2095,9 +2122,9 @@ void Plotter::Save2DEmpty(const std::string& saveName, const MassRegionCuts& Mas
 	for (std::vector<PlotEntry2D>::const_iterator iHistos2D = histos2D.begin(); iHistos2D != histos2D.end(); ++iHistos2D){
 		
 		iHistos2D->GetHistogram()->SetEntries(1);
-		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
-		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.20);
-		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.20);
+		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.05);
+		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.25);
+		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.25);
 		iHistos2D->GetHistogram()->Draw("same");
 		// iHistos2D->GetHistogram()->Draw("colz");
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
@@ -2266,9 +2293,11 @@ void Plotter::SaveBrazil(const std::string& saveName, const double& min, const d
     brazil->GetXaxis()->SetTitle(graphVec[0]->GetXaxis()->GetTitle());
 	brazil->GetXaxis()->SetTitleOffset(0.97);
     brazil->GetYaxis()->SetTitle(graphVec[0]->GetYaxis()->GetTitle());
+	brazil->GetXaxis()->SetLabelSize(0.045);
+	brazil->GetYaxis()->SetLabelSize(0.045);
     brazil->Draw("a3LP");
 
-	if (addLatex) DrawLatex();
+	if (addLatex) DrawLatexBrazil();
 
 	if(fixedMass) {
 		auto lt = new TLatex();
@@ -2276,8 +2305,8 @@ void Plotter::SaveBrazil(const std::string& saveName, const double& min, const d
 		lt->SetTextSize(0.055);
 		// lt->DrawLatexNDC(0.22,0.81,"95% CL upper limit for");
 		std::string tempstring = "95% CL upper limit for ";
-		tempstring += Form("M_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }%d#kern[-0.4]{ }GeV",fixedMass);
-		lt->DrawLatexNDC(0.22,0.82,tempstring.c_str());
+		tempstring += Form("#it{m}_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }%d#kern[-0.4]{ }GeV",fixedMass);
+		lt->DrawLatexNDC(fixedMass > 1600 ? 0.21 : fixedMass > 1200 ? 0.235 : 0.22, fixedMass == 1600 ? 0.63 : 0.82, tempstring.c_str());
 	}
 
 	if (leg != NULL) leg->Draw("same");
@@ -2301,16 +2330,33 @@ void Plotter::DrawLatex(const unsigned int& dimensions)
     latex->SetTextFont(42);
 
     latex->SetTextAlign(11); // align from left
-    if (dimensions == 1) latex->DrawLatex(0.15,0.92,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
-    else latex->DrawLatex(0.14,0.92,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
+    if (dimensions == 1) latex->DrawLatex(0.15,0.918,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
+    else latex->DrawLatex(0.14,0.918,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
 
     latex->SetTextAlign(31); // align from right
-	if (dimensions == 1) latex->DrawLatex(0.92,0.92,lumiLabel.c_str());
-	else latex->DrawLatex(0.88,0.92,lumiLabel.c_str());
+	if (dimensions == 1) latex->DrawLatex(0.92,0.918,lumiLabel.c_str());
+	else latex->DrawLatex(0.83,0.918,lumiLabel.c_str());
 
 	return;
 }
 
+void Plotter::DrawLatexBrazil(const unsigned int& dimensions)
+{
+	TLatex * latex = new TLatex();
+    latex->SetNDC();
+    latex->SetTextFont(42);
+	latex->SetTextSize(0.057);
+
+    latex->SetTextAlign(11); // align from left
+    if (dimensions == 1) latex->DrawLatex(0.15,0.918,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
+    else latex->DrawLatex(0.14,0.918,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
+
+    latex->SetTextAlign(31); // align from right
+	if (dimensions == 1) latex->DrawLatex(0.928,0.918,lumiLabel.c_str());
+	else latex->DrawLatex(0.88,0.918,lumiLabel.c_str());
+
+	return;
+}
 
 int Plotter::SetColor_mellow(int position, int maxColors)
 {
@@ -2348,8 +2394,8 @@ int Plotter::SetColor_stark(const int& index)
 	if (index==2) return kMagenta-4;
 
 	// if (index==3) return kGreen+3;
-	// if (index==3) return kOrange+1;
-	if (index==3) return SetColor_mellow(3,4);
+	if (index==3) return kOrange-3;
+	// if (index==3) return SetColor_mellow(3,4);
 
 	// if (index==4) return kSpring+10;
 	if (index==4) return SetColor_mellow(2,4);

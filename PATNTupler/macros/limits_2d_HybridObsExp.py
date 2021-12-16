@@ -8,12 +8,32 @@ from scipy import interpolate
 import numpy as np
 import matplotlib
 matplotlib.use('agg')
+import matplotlib.font_manager as mfm
 from matplotlib import rc
-matplotlib.rcParams['mathtext.fontset'] = 'custom'
-matplotlib.rcParams['mathtext.rm'] = 'Bitstream Vera Sans'
-matplotlib.rcParams['mathtext.it'] = 'Bitstream Vera Sans:italic'
-matplotlib.rcParams['mathtext.bf'] = 'Bitstream Vera Sans:bold'
+# matplotlib.rcParams['mathtext.fontset'] = 'custom'
+# matplotlib.rcParams['mathtext.rm'] = 'Bitstream Vera Sans'
+# matplotlib.rcParams['mathtext.it'] = 'Bitstream Vera Sans:italic'
+# matplotlib.rcParams['mathtext.bf'] = 'Bitstream Vera Sans:bold'
+# matplotlib.rcParams['mathtext.fontset'] = 'custom'
+# matplotlib.rcParams['mathtext.rm'] = 'Liberation Sans'
+# matplotlib.rcParams['mathtext.it'] = 'Liberation Sans:italic'
+# matplotlib.rcParams['mathtext.bf'] = 'Liberation Sans:bold'
+#matplotlib.rcParams['mathtext.fontset'] = 'custom'
+#matplotlib.rcParams['mathtext.rm'] = 'Arial'
+#matplotlib.rcParams['mathtext.it'] = 'Arial:italic'
+#matplotlib.rcParams['mathtext.bf'] = 'Arial:bold'
+matplotlib.rcParams["font.family"] = "sans-serif"
+matplotlib.rcParams["font.sans-serif"] = ["Arial"]
 matplotlib.rcParams['text.latex.preamble'].append(r'\usepackage{amsmath}')
+
+matplotlib.rcParams['axes.xmargin'] = 0.0 # rootlike, no extra padding within x axis
+matplotlib.rcParams['axes.formatter.use_mathtext'] = True
+matplotlib.rcParams['legend.framealpha'] = 0.6
+matplotlib.rcParams['axes.labelsize'] = '15'
+matplotlib.rcParams['axes.titlesize'] = '15'
+matplotlib.rcParams['xtick.labelsize'] = '15'
+matplotlib.rcParams['ytick.labelsize'] = '15'
+
 #matplotlib.rcParams['text.usetex'] = True
 #matplotlib.rcParams['text.latex.unicode'] = True
 #matplotlib.rcParams['text.dvipnghack'] = True
@@ -371,27 +391,28 @@ else:
 plt_exp = plt.contour(xj, yj, zj, [1.0], colors='k')
 plt_exp.collections[0].set_label('Expected')
 plt_exp16 = plt.contour(xj16, yj16, zj16, [1.0], colors='k', linestyles='--', label='qwert')
-plt_exp16.collections[0].set_label('$\pm1\,\sigma_{\mathrm{exp.}}$')
+plt_exp16.collections[0].set_label('$\pm1\,\sigma_{\mathrm{exp}}$')
 plt_exp84 = plt.contour(xj84, yj84, zj84, [1.0], colors='k', linestyles='--')
 dummy = plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=10**minMu, vmax=10**maxMu), cmap=bird)
 
 for d in dummy.collections:
     d.set_edgecolor("face")
 
-plt.xlabel('M$_{\mathrm{SUSY}}}$ [GeV]', fontsize=16)
-plt.ylabel('M$_{\mathrm{H}_1}$ [GeV]', fontsize=16)
+plt.xlabel('$m_{\mathrm{SUSY}}}$ [GeV]', fontsize=19)
+plt.ylabel('$m_{\mathrm{H}_1}$ [GeV]', fontsize=19)
 
-plt.gca().xaxis.set_major_locator(plt.MultipleLocator(200))
+plt.gca().xaxis.set_major_locator(plt.MultipleLocator(400))
 plt.gca().xaxis.set_minor_locator(plt.MultipleLocator(100))
 # plt.gca().yaxis.set_major_locator(plt.MultipleLocator(20))
 plt.gca().yaxis.set_minor_locator(plt.MultipleLocator(5))
 
 cbar = plt.colorbar()
 cbar.set_ticks(ticks)
-cbar.set_label('95% CL upper limit of $(\sigma {\\bf{\\it{B}}})/(\sigma {\\bf{\\it{B}}})_{\mathrm{theory}}$', rotation=90, fontsize=16, labelpad=14)
-plt.title('CMS', loc='left', fontsize=17, fontweight='bold')
-# plt.title('CMS $Preliminary$', loc='left', fontsize=17, fontweight='bold')
-plt.title(plotTitle, loc='right', fontsize=17)
+# cbar.set_label('95% CL upper limit on $(\sigma {\\bf{\\it{B}}})/(\sigma {\\bf{\\it{B}}})_{\mathrm{theory}}$', rotation=90, fontsize=19, labelpad=14)
+cbar.set_label('95% CL upper limit on $\sigma \\mathcal{B}/(\sigma \\mathcal{B})_{\mathrm{theory}}$', rotation=90, fontsize=19, labelpad=14)
+plt.title('CMS', loc='left', fontsize=20, fontweight='bold')
+# plt.title('CMS $Preliminary$', loc='left', fontsize=20, fontweight='bold')
+plt.title(plotTitle, loc='right', fontsize=20)
 plt.legend(loc='upper left')
 
 
@@ -399,5 +420,5 @@ plt.show()
 plt.savefig("%s/limit_plot_HybridObsExp165084.pdf" % outputDir)
 #plt.savefig("%s/limit_plot_squark.pdf" % outputDir)
 
-plt.title('CMS $Preliminary$', loc='left', fontsize=17, fontweight='bold')
+plt.title('CMS $Preliminary$', loc='left', fontsize=20, fontweight='bold')
 plt.savefig("%s/limit_plot_HybridObsExp165084_Preliminary.pdf" % outputDir)

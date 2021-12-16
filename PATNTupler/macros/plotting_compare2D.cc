@@ -210,21 +210,22 @@ int main(int argc, char** argv){
                         plot2dQCD.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54, "weight_combined");
                         plot2dQCD.NormalisePlot();
                     }
-/*
+
                     PlotEntry2D plot2d = PlotEntry2D("Multijet", hTemplate, varToPlot.c_str(), luminosity);
                     varToPlotSaveName = "Multijet" + varToPlotSaveName;
                     plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1005, "weight_combined");
                     plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 101.8, "weight_combined");
                     plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54, "weight_combined");
                     plot2d.NormalisePlot();
-*/
-                    PlotEntry2D plot2d = PlotEntry2D("mH70_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
+
+/*
+                    PlotEntry2D plot2d = PlotEntry2D("Signal: #it{m}_{H_{1}}#kern[-0.5]{ }=#kern[-0.5]{ }70#kern[-0.5]{ }GeV,#kern[-0.3]{ }#it{m}_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }2000#kern[-0.5]{ }GeV", hTemplate, varToPlot.c_str(), luminosity);
                     varToPlotSaveName = "mH70_mSusy2000" + varToPlotSaveName;
                     if (!emptyGrid) {
                         plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 1, "weight_combined");
                         plot2d.NormalisePlot();
                     }
-
+*/
                     // SIX: plot aesthetics
                     Plotter plot = doB ? Plotter({plot2d, plot2dQCD}) : Plotter({plot2d});
                     plot.AddLatex();

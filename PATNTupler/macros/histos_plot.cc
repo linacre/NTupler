@@ -302,7 +302,7 @@ int main(){
     // plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
     // plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
 
-    std::vector<std::string> legendNames = {"M_{H_{1}}=70, M_{SUSY}=1200", "M_{H_{1}}=70, M_{SUSY}=2000", "M_{H_{1}}=70, M_{SUSY}=2800", "W+jets", "Z+jets", "t#bar{t}+jets", "Multijet"};  // for pre-fit
+    std::vector<std::string> legendNames = {"#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }70,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }1200", "#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }70,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }2000", "#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }70,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }2800", "W#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Z#kern[-0.7]{ }+#kern[-0.7]{ }jets", "t#bar{t}#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Multijet"};  // for pre-fit
     plot.AddLegendHT(legendNames, 0.67, 0.81, 0.55, 0.80, 0.046, true);
     
     // plot.AddLatex();
@@ -318,7 +318,7 @@ int main(){
     // plot.AddRatioBox(0.1,2.4, "true / pred", true);
     // plot.AddRatioBox(0.84,1.16, "priv / central", true);
 
-    plot.AddRatioBox(0.2,1.9, "Data / Pred.", true);
+    plot.AddRatioBox(0.2,1.9, "Data / Pred", true);
     
     // plot.SetErrors();
     plot.SetErrors("only_stack");

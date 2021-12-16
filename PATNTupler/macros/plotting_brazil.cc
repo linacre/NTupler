@@ -544,12 +544,12 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     if (!varyHiggsMass){
         fixedMass = higgsMasses[j];
         variedMass = susyMasses;
-        xAxisTitle = "M_{SUSY} [GeV]";
+        xAxisTitle = "#it{m}_{SUSY} [GeV]";
     }
     else {
         fixedMass = susyMasses[j];
         variedMass = higgsMasses;
-        xAxisTitle = "M_{H_{1}} [GeV]";   
+        xAxisTitle = "#it{m}_{H_{1}} [GeV]";   
     }
 
 
@@ -720,11 +720,16 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     for (size_t point = 0; point < yErrDown2Sig_vec.size(); ++point) {
     //for (auto point : yErrDown2Sig_vec){
         // if (yErrDown2Sig_vec[point]==0 || ( fixedMass==1200 && (point==8) ) || ( fixedMass==2000 && (point==4 || point==7) ) || ( fixedMass==2200 && (point==5 || point==8) ) || ( fixedMass==2400 && (point==4 || point==8) ) || ( fixedMass==2600 && (point==4 || point==9) ) || ( fixedMass==2800 && (point==5 || point==9) ) ) {
-        if (yErrDown2Sig_vec[point]==0 || ( fixedMass==1200 && (point==8) ) || ( fixedMass==2400 && (point==4) ) ) {
-            double ratp1 = (yErrDown2Sig_vec[point+1]-y_vec[point+1])/(yErrDown1Sig_vec[point+1]-y_vec[point+1]);
-            double ratm1 = (yErrDown2Sig_vec[point-1]-y_vec[point-1])/(yErrDown1Sig_vec[point-1]-y_vec[point-1]);            
-            yErrDown2Sig_vec[point] = y_vec[point] + (yErrDown1Sig_vec[point]-y_vec[point])*sqrt(ratp1*ratm1);
-            std::cout<<" "<<" adjusted "<<ratp1<<" "<<ratm1<<": "<<yErrDown2Sig_vec[point]<<std::endl;
+        if (yErrDown2Sig_vec[point]==0 || ( fixedMass==1200 && (point==8 || point==9) ) || ( fixedMass==1600 && (point==399) ) || ( fixedMass==2000 && (point==4 || point==7 || point==11) ) || ( fixedMass==2200 && (point==5 || point==8 || point==10) ) || ( fixedMass==2400 && (point==4 || point==8)) || ( fixedMass==2600 && (point==4 || point==9) ) || ( fixedMass==2800 && (point==3 || point==6 || point==9 || point==10) ) ) {
+            double ratp1 = point + 1 < yErrDown2Sig_vec.size() ? (yErrDown2Sig_vec[point+1]-y_vec[point+1])/(yErrDown1Sig_vec[point+1]-y_vec[point+1]) : 0;
+            double ratm1 = (yErrDown2Sig_vec[point-1]-y_vec[point-1])/(yErrDown1Sig_vec[point-1]-y_vec[point-1]);
+            double rat0 = yErrDown2Sig_vec[point]==0 ? sqrt(ratp1*ratm1) : (yErrDown2Sig_vec[point]-y_vec[point])/(yErrDown1Sig_vec[point]-y_vec[point]);     
+            if (ratp1 == 0)
+                ratp1 = sqrt(rat0 * ratm1);
+            if (rat0 > 0.9 || rat0 < 0.5)
+                rat0 = sqrt(ratp1 * ratm1);
+            yErrDown2Sig_vec[point] = y_vec[point] + (yErrDown1Sig_vec[point] - y_vec[point]) * pow(ratp1 * ratm1 * rat0, 0.33333);
+            std::cout<<"point "<<point<<" adjusted "<<ratp1<<" "<<ratm1<<" "<<rat0<<": "<<yErrDown2Sig_vec[point]<<std::endl;
         }
     }
 
@@ -732,7 +737,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     g_obs->GetXaxis()->SetTitle(xAxisTitle.c_str());
     // g_obs->GetYaxis()->SetTitle("95% upper CL of r");
     // if (plotSigma) g_obs->GetYaxis()->SetTitle("95% CL upper limit of #sigma#timesBR [fb]");
-    if (plotSigma) g_obs->GetYaxis()->SetTitle("Cross section #times #bf{#it{#Beta}}(H_{1}#rightarrow b#bar{b}) [fb]");
+    if (plotSigma) g_obs->GetYaxis()->SetTitle("#sigma#kern[-0.8]{ }(p#kern[-0.8]{ }p#kern[-0.7]{ }#rightarrow#kern[-0.6]{ }#tilde{q}#kern[-0.8]{ }#tilde{q},#kern[-0.6]{ }#tilde{q}#kern[-0.8]{ }#tilde{g},#kern[-0.6]{ }#tilde{g}#kern[-0.8]{ }#tilde{g}#kern[-0.8]{ })#kern[-0.5]{ }#bf{#it{#Beta}}#kern[-0.7]{ }(H_{1}#rightarrow b#kern[-0.8]{ }#bar{b}) [fb]");
     else g_obs->GetYaxis()->SetTitle("95% upper CL of #sigma / #sigma_{theory}");
     TGraphAsymmErrors * g_exp = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]));
     TGraphAsymmErrors * g_expErr1Sig = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(yErrDown1Sig_vec[0]), &(yErrUp1Sig_vec[0]));
@@ -745,7 +750,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     // TGraphAsymmErrors * g_thErr1Sig = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(yTh_vec[0]), &(null_vec[0]), &(null_vec[0]), &(yThDown1Sig_vec[0]), &(yThUp1Sig_vec[0]));
 
     if(fixedYRange) {
-        maxLimitValue = 0.11*1000;
+        maxLimitValue = 0.12*1000;
         minLimitValue = 0.00006*1000;
     }
 
@@ -753,7 +758,8 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     Plotter brazilPlot = fixedMass > 1200 ? Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig, g_th, g_thDown1Sig, g_thUp1Sig}, plotObserved) : Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig}, plotObserved);;
     // brazilPlot.AddLegend(0.20, 0.45, 0.63, 0.86);
     // brazilPlot.AddLegendBrazil(0.55, 0.85, 0.56, 0.87);
-    brazilPlot.AddLegendBrazil(0.63, 0.9, 0.675, 0.88);
+    fixedMass > 1200 ?  fixedMass > 1600 ? brazilPlot.AddLegendBrazil(0.61, 0.88, 0.665, 0.87, 0.042) : brazilPlot.AddLegendBrazil(0.61, 0.88, 0.19, 0.395, 0.042) : brazilPlot.AddLegendBrazil(0.75, 1.02, 0.19, 0.395, 0.042);
+    // brazilPlot.AddLegendBrazil(0.63, 0.9, 0.675, 0.88);
     brazilPlot.AddLatex(luminosity, "");
     brazilPlot.SaveBrazil(Form("%s/linear_%s_fixedMass%d_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.0, 1.05 * maxLimitValue, fixedMass);
     brazilPlot.SetLogY();

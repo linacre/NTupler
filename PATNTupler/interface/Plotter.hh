@@ -72,6 +72,7 @@ private:
 	double yValueMin;
 	bool useObservedPlot;
 	void DrawLatex(const unsigned int& = 1);	
+	void DrawLatexBrazil(const unsigned int& = 1);	
 	int SetColor_mellow(int, int);
 	int SetColor_stark(const int&);
 	TStyle * tdrStyle;

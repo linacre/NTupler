@@ -499,11 +499,11 @@ int main(){
 
     if(massTypeOrig == "both") {
         indiHistoVec = {h_data[iF]};
-        legendNames = {"Data", "W+jets", "Z+jets", "t#bar{t}+jets", "Multijet", "unc."};
+        legendNames = {"Data", "W#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Z#kern[-0.7]{ }+#kern[-0.7]{ }jets", "t#bar{t}#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Multijet", "unc."};
     }
     else {
         indiHistoVec = {h_data[iF], h16_[(massTypeOrig+"_tag_mH125_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH90_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH50_mSusy2200").c_str()]};
-        legendNames = {"Data", "M_{H_{1}}=125, M_{SUSY}=2200", "M_{H_{1}}=90, M_{SUSY}=2200", "M_{H_{1}}=50, M_{SUSY}=2200", "W+jets", "Z+jets", "t#bar{t}+jets", "Multijet", "unc."};
+        legendNames = {"Data", "#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }125,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }2200", "#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }90,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }2200", "#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }50,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }2200", "W#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Z#kern[-0.7]{ }+#kern[-0.7]{ }jets", "t#bar{t}#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Multijet", "unc."};
         // indiHistoVec = {h_data[iF], h16_[(massTypeOrig+"_tag_mH70_mSusy2000").c_str()]};
         // legendNames = {"data", "2000,70", "WJets", "ZJets", "TTJets", "QCD", "unc."};
     }
@@ -511,7 +511,7 @@ int main(){
     std::vector<TH1D*> stackHistoVec = {h_WJets[iF], h_ZJets[iF], h_TTJets[iF], h_QCD[iF], h_backgroundError[iF]};
     Plotter plot = Plotter(indiHistoVec, stackHistoVec);
 
-    plot.AddLegendHT(legendNames, 0.67, 0.81, 0.55, 0.80, 0.046, false);
+    plot.AddLegendHT(legendNames, 0.667, 0.81, 0.55, 0.80, 0.046, false);
     
     // plot.AddLatex(luminosity);
     // plot.AddLatex(luminosity, "#it{Preliminary}");    
