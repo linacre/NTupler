@@ -19,6 +19,7 @@ public:
 
 	void AddRatioBox(const std::string& = "ratio", const bool& = false);
 	void AddRatioBox(const double&, const double&, const std::string& = "ratio", const bool& = false);
+	void AddLegend2D(const std::vector<std::string>&, const double&, const double&, const double&, const double&, const double& = 0.04);
 	void AddLegend(TLegend*);
 	void AddLegend(const double&, const double&, const double&, const double&, const double& = 0.04);
 	void AddLegend_cDSPaper(const double&, const double&, const double&, const double&, const double& = 0.04);

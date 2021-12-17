@@ -28,7 +28,7 @@ matplotlib.rcParams['text.latex.preamble'].append(r'\usepackage{amsmath}')
 
 matplotlib.rcParams['axes.xmargin'] = 0.0 # rootlike, no extra padding within x axis
 matplotlib.rcParams['axes.formatter.use_mathtext'] = True
-matplotlib.rcParams['legend.framealpha'] = 0.6
+# matplotlib.rcParams['legend.framealpha'] = 0.6
 matplotlib.rcParams['axes.labelsize'] = '15'
 matplotlib.rcParams['axes.titlesize'] = '15'
 matplotlib.rcParams['xtick.labelsize'] = '15'

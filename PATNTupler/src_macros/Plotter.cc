@@ -60,9 +60,9 @@ tdrStyle(TDRStyle())
 		histoIndi[iIndi].GetHistogram()->SetLineColor(SetColor_stark(iIndi));
 		histoIndi[iIndi].GetHistogram()->SetLineWidth(2);
 		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
-		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
+		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetLabelSize(0.045);
 		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetTitleSize(0.05);
-		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
+		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetLabelSize(0.045);
 	}
 }
 
@@ -438,6 +438,31 @@ void Plotter::AddRatioBox(const double& ratioBoxYAxisMin, const double& ratioBox
 }
 
 
+void Plotter::AddLegend2D(const std::vector<std::string>& legendNames, const double& x1, const double& x2, const double& y1, const double& y2, const double& textSize)
+{
+	std::cout<< legendNames.size() << histos2D.size() <<std::endl;
+	if (legendNames.size() != histos2D.size() ){
+		std::cout << "The legend you provided does not have the correct number of strings to match histos2D" << std::endl;
+		std::cout << "Not inserting a legend" << std::endl;
+		return;
+	}
+	leg = new TLegend(x1, y1, x2, y2);
+    leg->SetX1NDC(x1);
+    leg->SetX2NDC(x2);
+	leg->SetY1NDC(y1);
+    leg->SetY2NDC(y2);
+	leg->SetTextSize(textSize);
+	leg->SetBorderSize(0);
+	leg->SetFillStyle(1001);
+	leg->SetFillColorAlpha(0, 0.8);
+	for (size_t i = 0; i < legendNames.size(); ++i){
+		if (i < histos2D.size()) leg->AddEntry(histos2D[i].GetHistogram(), legendNames[i].c_str(), "f");
+	}
+	return;
+}
+
+
+
 void Plotter::AddLegend(TLegend * legDummy)
 {
 	leg = legDummy;
@@ -560,7 +585,7 @@ void Plotter::AddLegend(const std::vector<std::string>& legendNames, const doubl
 	leg->SetTextSize(textSize);
 	leg->SetBorderSize(0);
 	leg->SetFillStyle(0);
-	if(hdata) leg->AddEntry(hdata, "VR data", "P");
+	if(hdata) leg->AddEntry(hdata, "VR data", "PE");
 	for (size_t i = 0; i < legendNames.size(); ++i){
 		if (i < th1Indi.size()) leg->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
 		else leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
@@ -763,10 +788,12 @@ void Plotter::SetErrors(const std::string& errorInfo){
 	}
 	else{		
 		plotWithErrorsIndi = true;
-		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
+		int i = 0;
+		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi, ++i){
 			
 			iIndi->GetHistogram()->SetMarkerStyle(21);
 			iIndi->GetHistogram()->SetMarkerSize(0.2);
+			iIndi->GetHistogram()->SetMarkerColor(SetColor_stark(i));
 			iIndi->GetHistogram()->SetLineWidth(3);
 			for (int iBin = 0; iBin < iIndi->GetHistogram()->GetNbinsX()+2; ++iBin){
 				iIndi->GetHistogram()->SetBinError(iBin, sqrt(iIndi->GetStatErrorSquaredVector()[iBin]));
@@ -777,6 +804,7 @@ void Plotter::SetErrors(const std::string& errorInfo){
 			
 			th1Indi[iTh1I]->SetMarkerStyle(21);
 			th1Indi[iTh1I]->SetMarkerSize(0.2);
+			th1Indi[iTh1I]->SetMarkerColor(SetColor_stark(iTh1I));
 			th1Indi[iTh1I]->SetLineWidth(3);
 		}
 	}
@@ -993,6 +1021,7 @@ void Plotter::Save(const std::string& saveName){
 	else if (!histoIndi.empty() && histoStack.empty()){
 		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
 		initialMin = histoIndi[0].GetHistogram()->GetMinimum();
+		histoIndi[0].GetHistogram()->GetXaxis()->SetTitleOffset(1.1);
 		if (useLogY == false){
 			histoIndi[0].GetHistogram()->SetMaximum(graphMaxLin);
 			histoIndi[0].GetHistogram()->SetMinimum(graphMinLin);
@@ -1568,6 +1597,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	}
 
 	if (addRatioBox && !th1Indi.empty()) th1Indi[0]->SetLabelOffset(0.007);
+	if (addRatioBox && !th1Stack.empty()) th1Stack[0]->SetLabelOffset(0.01);
 
 	delete ratioPlotEntryBackground;
 	delete hTotalBkg;
@@ -1865,7 +1895,7 @@ void Plotter::Save2D(const std::string& saveName, const bool& drawCRs){
 	// std::cout << default_PadLeftMargin << " " << default_PadRightMargin << std::endl;
 
 	tdrStyle->SetPadRightMargin(0.05);
-	tdrStyle->SetPadLeftMargin(0.13);
+	tdrStyle->SetPadLeftMargin(0.14);
 	tdrStyle->SetCanvasDefH(700);
 
 	TCanvas * c = new TCanvas("c","c",800,800);
@@ -1879,8 +1909,8 @@ void Plotter::Save2D(const std::string& saveName, const bool& drawCRs){
 		Double_t nodex[5] = {0.3, 1., 1.};
 		Double_t nodey[5] = {1., 0.3, 1.};
 		TPolyLine *pline = new TPolyLine(3,nodex,nodey);
-		pline->SetFillColorAlpha(kGreen+2, 0.35);
-		pline->SetLineColor(kGreen+2);
+		pline->SetFillColorAlpha(kGreen+1, 0.35);
+		pline->SetLineColor(kGreen+1);
 		pline->SetLineWidth(4);
 		pline->Draw("f");
 		// pline->Draw();
@@ -1890,8 +1920,8 @@ void Plotter::Save2D(const std::string& saveName, const bool& drawCRs){
 		Double_t nodex[5] = {-1., -1., 0.3, 0.3};
 		Double_t nodey[5] = {-1., 0.3, 0.3, -1.};
 		TPolyLine *pline = new TPolyLine(4,nodex,nodey);
-		pline->SetFillColorAlpha(kOrange+3, 0.35);
-		pline->SetLineColor(kOrange+3);
+		pline->SetFillColorAlpha(kYellow, 0.35);
+		pline->SetLineColor(kYellow);
 		pline->SetLineWidth(4);
 		pline->Draw("f");
 		// pline->Draw();
@@ -1901,8 +1931,8 @@ void Plotter::Save2D(const std::string& saveName, const bool& drawCRs){
 		Double_t nodex[5] = {0.3, 0.3, 0.8, 0.8};
 		Double_t nodey[5] = {-1, -0.4, -0.4, -1};
 		TPolyLine *pline = new TPolyLine(4,nodex,nodey);
-		pline->SetFillColorAlpha(kGray+3, 0.35);
-		pline->SetLineColor(kGray+3);
+		pline->SetFillColorAlpha(kOrange+1, 0.35);
+		pline->SetLineColor(kOrange+1);
 		pline->SetLineWidth(4);
 		pline->Draw("f");
 		// pline->Draw();
@@ -1912,28 +1942,53 @@ void Plotter::Save2D(const std::string& saveName, const bool& drawCRs){
 		Double_t nodex[5] = {-1., -1., -0.4, -0.4};
 		Double_t nodey[5] = {0.3, 0.8, 0.8, 0.3};
 		TPolyLine *pline = new TPolyLine(4,nodex,nodey);
-		pline->SetFillColorAlpha(kGray+3, 0.35);
-		pline->SetLineColor(kGray+3);
+		pline->SetFillColorAlpha(kOrange+1, 0.35);
+		pline->SetLineColor(kOrange+1);
 		pline->SetLineWidth(4);
 		pline->Draw("f");
 		// pline->Draw();
 		}
+
+		float Rx[] = {-0.36, 0.55, -0.7, 0.75};
+		float Ry[] = {-0.30, -0.7, 0.55, 0.81};
+		std::string Rname[] = {"CR", "VR", "VR", "TR"};
+		int Rcol[] = {kYellow+1, kOrange+1, kOrange+1, kGreen+1};
+
+		for (size_t i=0; i!=4; ++i){
+			TLatex * latexName = new TLatex();
+			latexName->SetTextFont(62);
+			latexName->SetTextSize(0.12);
+			latexName->SetTextColor(Rcol[i]);
+			latexName->SetTextAlign(22); // align centre
+			latexName->DrawLatex(Rx[i], Ry[i], Rname[i].c_str());
+		}
+
+
+
 	}
 
 	int iTh2 = 0;
 	for (std::vector<PlotEntry2D>::const_iterator iHistos2D = histos2D.begin(); iHistos2D != histos2D.end(); ++iHistos2D, ++iTh2){
 
 		iHistos2D->GetHistogram()->SetEntries(1);
-		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.05);
-		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.25);
+		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.15);
+		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.45);
 		iHistos2D->GetHistogram()->GetZaxis()->SetTitleOffset(1.25);
 		iHistos2D->GetHistogram()->SetLineColor(SetColor_stark(iTh2));
+		// if(iTh2 == 0) iHistos2D->GetHistogram()->SetFillColor(SetColor_stark(iTh2));
+		if(iTh2 == 0) {
+			iHistos2D->GetHistogram()->SetFillColor(kRed-7);
+			iHistos2D->GetHistogram()->SetLineColor(kRed-7);
+		}
 		iHistos2D->GetHistogram()->Draw("box, same");
+		// iHistos2D->GetHistogram()->Draw("box, same");
+		// iHistos2D->GetHistogram()->Draw("CONT2, same");
+		// iHistos2D->GetHistogram()->Draw("same");
 		// iHistos2D->GetHistogram()->Draw("colz, same");
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
 	}
 
-
+	if (leg != NULL) leg->Draw("same");
 
 	if (addLatex) DrawLatex(1);
 	c->SaveAs(saveName.c_str());
@@ -2080,12 +2135,21 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	for (size_t i=0; i!=result.size(); ++i){
 		// if (i < result.size()-1) result[i] = result[i]+",";
 		TLatex * latexName = new TLatex();
-		latexName->SetTextFont(42);
+		latexName->SetTextFont(62);
+		latexName->SetTextSize(0.042);
+		latexName->SetTextColor(17);
+		latexName->SetTextAlign(31); // align from right
+		latexName->DrawLatex(199.3, 189.5 - 15*i, result[i].c_str());
+	}
+
+	for (size_t i=0; i!=result.size(); ++i){
+		// if (i < result.size()-1) result[i] = result[i]+",";
+		TLatex * latexName = new TLatex();
+		latexName->SetTextFont(62);
 		latexName->SetTextSize(0.042);
 		latexName->SetTextAlign(31); // align from right
 		latexName->DrawLatex(199, 190 - 15*i, result[i].c_str());
 	}
-
 
 	c->SaveAs(saveName.c_str());
 	c->Close();
@@ -2334,7 +2398,8 @@ void Plotter::DrawLatex(const unsigned int& dimensions)
     else latex->DrawLatex(0.14,0.918,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
 
     latex->SetTextAlign(31); // align from right
-	if (dimensions == 1) latex->DrawLatex(0.92,0.918,lumiLabel.c_str());
+	// if (dimensions == 1) latex->DrawLatex(0.922,0.918,lumiLabel.c_str());
+	if (dimensions == 1) latex->DrawLatex(0.94,0.918,lumiLabel.c_str());
 	else latex->DrawLatex(0.83,0.918,lumiLabel.c_str());
 
 	return;

@@ -163,22 +163,17 @@ int main(int argc, char** argv){
                     */
 
 
-                    PlotEntry mH70_mSusy1200 = PlotEntry("M_{H_{1}}=70 GeV, M_{SUSY}=1200 GeV", hTemplate, varToPlot.c_str(), luminosity);
+                    PlotEntry mH70_mSusy1200 = PlotEntry("#it{m}_{H_{1}}#kern[-0.6]{ }=#kern[-0.5]{ }70#kern[-0.3]{ }GeV,#kern[-0.3]{ }#it{m}_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }1200#kern[-0.3]{ }GeV", hTemplate, varToPlot.c_str(), luminosity);
                     mH70_mSusy1200.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 1, "weight_combined");
                     mH70_mSusy1200.NormalisePlot();
                     plotEntryVec2.push_back(mH70_mSusy1200);
 
-                    PlotEntry mH70_mSusy2000 = PlotEntry("M_{H_{1}}=70 GeV, M_{SUSY}=2000 GeV", hTemplate, varToPlot.c_str(), luminosity);
+                    PlotEntry mH70_mSusy2000 = PlotEntry("#it{m}_{H_{1}}#kern[-0.6]{ }=#kern[-0.5]{ }70#kern[-0.3]{ }GeV,#kern[-0.3]{ }#it{m}_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }2000#kern[-0.3]{ }GeV", hTemplate, varToPlot.c_str(), luminosity);
                     mH70_mSusy2000.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 1, "weight_combined");
                     mH70_mSusy2000.NormalisePlot();
                     plotEntryVec2.push_back(mH70_mSusy2000);
 
-                    // PlotEntry mH70_mSusy2600 = PlotEntry("M_{H_{1}}=70, M_{SUSY}=2600", hTemplate, varToPlot.c_str(), luminosity);
-                    // mH70_mSusy2600.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy2600p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 1, "weight_combined");
-                    // mH70_mSusy2600.NormalisePlot();
-                    // plotEntryVec2.push_back(mH70_mSusy2600);
-
-                    PlotEntry mH70_mSusy2800 = PlotEntry("M_{H_{1}}=70 GeV, M_{SUSY}=2800 GeV", hTemplate, varToPlot.c_str(), luminosity);
+                    PlotEntry mH70_mSusy2800 = PlotEntry("#it{m}_{H_{1}}#kern[-0.6]{ }=#kern[-0.5]{ }70#kern[-0.3]{ }GeV,#kern[-0.3]{ }#it{m}_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }2800#kern[-0.3]{ }GeV", hTemplate, varToPlot.c_str(), luminosity);
                     mH70_mSusy2800.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy2800p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 1, "weight_combined");
                     mH70_mSusy2800.NormalisePlot();
                     plotEntryVec2.push_back(mH70_mSusy2800);
@@ -208,14 +203,14 @@ int main(int argc, char** argv){
                     QCD.NormalisePlot(); // OPTIONAL: toggle on or off
                     plotEntryVec2.push_back(QCD);
 
-                    PlotEntry ttbar = PlotEntry("t#bar{t}+jets", hTemplate, varToPlot.c_str(), luminosity);
+                    PlotEntry ttbar = PlotEntry("t#bar{t}#kern[-0.7]{ }+#kern[-0.7]{ }jets", hTemplate, varToPlot.c_str(), luminosity);
                     ttbar.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017_forTablesOnly/TTToHadronic/flatTree.root", cutToApply.c_str(), 377.96, "weight_combined");
                     ttbar.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017_forTablesOnly/TTToSemiLeptonic/flatTree.root", cutToApply.c_str(), 365.34, "weight_combined");
                     ttbar.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017_forTablesOnly/TTTo2L2Nu/flatTree.root", cutToApply.c_str(), 88.29, "weight_combined");
                     ttbar.NormalisePlot(); // OPTIONAL: toggle on or off
                     plotEntryVec2.push_back(ttbar);
 
-                    PlotEntry VJets = PlotEntry("W/Z+jets", hTemplate, varToPlot.c_str(), luminosity);
+                    PlotEntry VJets = PlotEntry("W#kern[-0.8]{ }/#kern[-0.8]{ }Z#kern[-0.7]{ }+#kern[-0.7]{ }jets", hTemplate, varToPlot.c_str(), luminosity);
                     VJets.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017_forTablesOnly/WJets/flatTree.root", cutToApply.c_str(), 34.00, "weight_combined");
                     VJets.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017_forTablesOnly/ZJets/flatTree.root", cutToApply.c_str(), 18.69, "weight_combined");
                     VJets.NormalisePlot(); // OPTIONAL: toggle on or off

@@ -26,7 +26,7 @@ int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    bool doB = false;
+    bool doB = true;
 
     bool emptyGrid = false;
     if (emptyGrid) doB = false;
@@ -62,7 +62,7 @@ int main(int argc, char** argv){
     // TH2D hTemplate = TH2D("hTemplate", ";fatJetA doubleBtagDiscriminator;fatJetB doubleBtagDiscriminator", 1, 0.8, 1.0, 7, 0.3, 1.0); // all
 
 
-    TH2D hTemplate = doB ? TH2D("hTemplate", ";Jet A double-b discriminator;Jet B double-b discriminator", 20, -1.0, 1.0, 20, -1.0, 1.0) : TH2D("hTemplate", ";Jet A mass [GeV];Jet B mass [GeV]", 215, -0.005508812, 205.190359608, 215, -0.005508812, 205.190359608);
+    TH2D hTemplate = doB ? TH2D("hTemplate", ";Jet A double-b discriminant;Jet B double-b discriminant", 20, -1.0, 1.0, 20, -1.0, 1.0) : TH2D("hTemplate", ";Jet A mass [GeV];Jet B mass [GeV]", 215, -0.005508812, 205.190359608, 215, -0.005508812, 205.190359608);
     std::string varXAxis = doB ? "fatJetA_doubleBtagDiscrim" : "fatJetA_softDropMassPuppi";
     std::string varYAxis = doB ? "fatJetB_doubleBtagDiscrim" : "fatJetB_softDropMassPuppi";
 
@@ -179,23 +179,29 @@ int main(int argc, char** argv){
       
                     // FOUR: samples to use
 
-                    // PlotEntry2D plot2d = PlotEntry2D("data", hTemplate, varToPlot.c_str()); // NO LUMI
+                    // PlotEntry2D plot2d = PlotEntry2D("Data", hTemplate, varToPlot.c_str()); // NO LUMI
                     // varToPlotSaveName = "data" + varToPlotSaveName;
                     // plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/JetHT_Run2017TOTAL/flatTree.root", cutToApply.c_str());
                     // plot2d.NormalisePlot();
 
-                    // PlotEntry2D plot2d = PlotEntry2D("WJets", hTemplate, varToPlot.c_str(), luminosity);
+                    // PlotEntry2D plot2d = PlotEntry2D("W#kern[-0.7]{ }+#kern[-0.7]{ }jets", hTemplate, varToPlot.c_str(), luminosity);
                     // varToPlotSaveName = "WJets" + varToPlotSaveName;
                     // plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 34.00, "weight_combined");
                     // plot2d.NormalisePlot();
 
-                    // PlotEntry2D plot2d = PlotEntry2D("ZJets", hTemplate, varToPlot.c_str(), luminosity);
+                    // PlotEntry2D plot2d = PlotEntry2D("Z#kern[-0.7]{ }+#kern[-0.7]{ }jets", hTemplate, varToPlot.c_str(), luminosity);
                     // varToPlotSaveName = "ZJets" + varToPlotSaveName;
                     // plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 18.69, "weight_combined");
                     // plot2d.NormalisePlot();
 
+                    // PlotEntry2D plot2d = PlotEntry2D("W#kern[-0.8]{ }/#kern[-0.8]{ }Z#kern[-0.7]{ }+#kern[-0.7]{ }jets", hTemplate, varToPlot.c_str(), luminosity);
+                    // varToPlotSaveName = "WZJets" + varToPlotSaveName;
+                    // plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 34.00, "weight_combined");
+                    // plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 18.69, "weight_combined");
+                    // plot2d.NormalisePlot();
+
                     // double PDGhadBF = 67.41/100.;
-                    // PlotEntry2D plot2d = PlotEntry2D("TTJets_ALL", hTemplate, varToPlot.c_str(), luminosity);
+                    // PlotEntry2D plot2d = PlotEntry2D("t#bar{t}#kern[-0.7]{ }+#kern[-0.7]{ }jets", hTemplate, varToPlot.c_str(), luminosity);
                     // varToPlotSaveName = "ttbar" + varToPlotSaveName;
                     // plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/TTToHadronic_ht1200plus/flatTree.root", cutToApply.c_str(), 831.76*PDGhadBF*PDGhadBF, "weight_combined");
                     // plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/TTToSemiLeptonic_ht1200plus/flatTree.root", cutToApply.c_str(), 831.76*PDGhadBF*(1.-PDGhadBF)*2., "weight_combined");
@@ -210,27 +216,32 @@ int main(int argc, char** argv){
                         plot2dQCD.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54, "weight_combined");
                         plot2dQCD.NormalisePlot();
                     }
-
+/*
                     PlotEntry2D plot2d = PlotEntry2D("Multijet", hTemplate, varToPlot.c_str(), luminosity);
                     varToPlotSaveName = "Multijet" + varToPlotSaveName;
                     plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1005, "weight_combined");
                     plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 101.8, "weight_combined");
                     plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54, "weight_combined");
                     plot2d.NormalisePlot();
+*/
 
-/*
-                    PlotEntry2D plot2d = PlotEntry2D("Signal: #it{m}_{H_{1}}#kern[-0.5]{ }=#kern[-0.5]{ }70#kern[-0.5]{ }GeV,#kern[-0.3]{ }#it{m}_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }2000#kern[-0.5]{ }GeV", hTemplate, varToPlot.c_str(), luminosity);
+                    PlotEntry2D plot2d = PlotEntry2D("Signal:#kern[-0.4]{ }#it{m}_{H_{1}}#kern[-0.6]{ }=#kern[-0.5]{ }70#kern[-0.5]{ }GeV,#kern[-0.3]{ }#it{m}_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }2000#kern[-0.5]{ }GeV", hTemplate, varToPlot.c_str(), luminosity);
                     varToPlotSaveName = "mH70_mSusy2000" + varToPlotSaveName;
                     if (!emptyGrid) {
                         plot2d.AddInput("/mercury/data2/linacre/Joe_backupfromScratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 1, "weight_combined");
                         plot2d.NormalisePlot();
                     }
-*/
+
                     // SIX: plot aesthetics
                     Plotter plot = doB ? Plotter({plot2d, plot2dQCD}) : Plotter({plot2d});
                     plot.AddLatex();
                     // plot.AddLatex(luminosity);
                     // plot.AddLatex(luminosity, "#it{Preliminary}"); // DATA
+                    if(doB) {
+                        std::vector<std::string> legendNames = {"Signal", "Multijet"};
+                        plot.AddLegend2D(legendNames, 0.43, 0.644, 0.668, 0.782, 0.045);
+                    }
+
                     std::string saveName = varToPlotSaveName;
                     if (cut2_ak8Dbt[iCut2].size() == 4) saveName += "__dbt" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "And" + cut2_ak8Dbt[iCut2][2] + cut2_ak8Dbt[iCut2][3];
                     if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_UP") saveName += "__dbtDiagUp" + cut2_ak8Dbt[iCut2][1];
