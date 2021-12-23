@@ -505,11 +505,12 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     // const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
 
     // TWO: plot output directory
-    std::string outputDir = "brazilplots_reinterp3500__";
+    std::string outputDir = "brazilplots_reinterp3500";
     // const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/brazilplots/mSusy2400/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)
-    const std::vector<int> higgsMasses = {30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 120, 125};
+    // const std::vector<int> higgsMasses = {30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 120, 125};
+    const std::vector<int> higgsMasses = {35, 40, 50, 60, 70, 80, 90, 100, 110, 120, 125};
     //const std::vector<int> susyMasses = {2600};
     // const std::vector<int> higgsMasses = {90};
     // const std::vector<int> susyMasses = {1200, 1600, 2000, 2200, 2400, 2600, 2800};
@@ -548,12 +549,12 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     if(varyHiggsMass) {
         nPlots = susyMasses.size();
         nEntries = higgsMasses.size();
-        xAxisTitle = "M_{H_{1}} [GeV]";
+        xAxisTitle = "#it{m}_{H_{1}} [GeV]";
     }
     else {
         nPlots = higgsMasses.size();
         nEntries = susyMasses.size();
-        xAxisTitle = "M_{SUSY} [GeV]";
+        xAxisTitle = "#it{m}_{SUSY} [GeV]";
     }
 
     int avd = 0;
@@ -750,11 +751,16 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     for (size_t point = 0; point < yErrDown2Sig_vec.size(); ++point) {
     //for (auto point : yErrDown2Sig_vec){
         // if (yErrDown2Sig_vec[point]==0 || ( fixedMass==1200 && (point==8) ) || ( fixedMass==2400 && (point==4) ) ) {
-        if ( ( fixedMass==1200 && (point==5) ) || ( fixedMass==1600 && (point==3 || point==8) ) || ( fixedMass==2000 && (point==3) ) || ( fixedMass==2200 && (point==3 || point==10) ) || ( fixedMass==2400 && (point==1 || point==10) ) || ( fixedMass==2600 && (point==1 || point==999) ) || ( fixedMass==2800 && (point==1 || point==999) ) ) {
-            double ratp1 = (yErrDown2Sig_vec[point+1]-y_vec[point+1])/(yErrDown1Sig_vec[point+1]-y_vec[point+1]);
-            double ratm1 = (yErrDown2Sig_vec[point-1]-y_vec[point-1])/(yErrDown1Sig_vec[point-1]-y_vec[point-1]);            
-            yErrDown2Sig_vec[point] = y_vec[point] + (yErrDown1Sig_vec[point]-y_vec[point])*sqrt(ratp1*ratm1);
-            std::cout<<" "<<" adjusted "<<ratp1<<" "<<ratm1<<": "<<yErrDown2Sig_vec[point]<<std::endl;
+        if ( ( fixedMass==1200 && (point==4) ) || ( fixedMass==1600 && (point==2 || point==7) ) || ( fixedMass==2000 && (point==2) ) || ( fixedMass==2200 && (point==2 || point==9) ) || ( fixedMass==2400 && (point==0 || point==9) ) || ( fixedMass==2600 && (point==0 || point==998) ) || ( fixedMass==2800 && (point==0 || point==998) ) ) {
+            double ratp1 = point + 1 < yErrDown2Sig_vec.size() ? (yErrDown2Sig_vec[point+1]-y_vec[point+1])/(yErrDown1Sig_vec[point+1]-y_vec[point+1]) : 0;
+            double ratm1 = point > 0 ? (yErrDown2Sig_vec[point-1]-y_vec[point-1])/(yErrDown1Sig_vec[point-1]-y_vec[point-1]) : 0;
+            double rat0 = yErrDown2Sig_vec[point]==0 ? sqrt(ratp1*ratm1) : (yErrDown2Sig_vec[point]-y_vec[point])/(yErrDown1Sig_vec[point]-y_vec[point]);     
+            if (ratm1 == 0)
+                ratm1 = sqrt(rat0 * ratp1);
+            if (rat0 > 0.9 || rat0 < 0.5)
+                rat0 = sqrt(ratp1 * ratm1);
+            yErrDown2Sig_vec[point] = y_vec[point] + (yErrDown1Sig_vec[point] - y_vec[point]) * pow(ratp1 * ratm1 * rat0, 0.33333);
+            std::cout<<"point "<<point<<" adjusted "<<ratp1<<" "<<ratm1<<" "<<rat0<<": "<<yErrDown2Sig_vec[point]<<std::endl;
         }
     }
 
@@ -840,7 +846,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     g_obs->GetXaxis()->SetTitle(xAxisTitle.c_str());
     // g_obs->GetYaxis()->SetTitle("95% upper CL of r");
     // if (plotSigma) g_obs->GetYaxis()->SetTitle("95% CL upper limit of #sigma#timesBR [fb]");
-    if (plotSigma) g_obs->GetYaxis()->SetTitle("(Acc #times Eff)_{kin} #times #sigma #times #bf{#it{#Beta}}(H_{1}#rightarrow b#bar{b}) [fb]");
+    if (plotSigma) g_obs->GetYaxis()->SetTitle("A_{kin} #times #sigma #times #bf{#it{#Beta}}#kern[-0.7]{ }(H_{1}#rightarrow b#kern[-0.8]{ }#bar{b}) [fb]");
     else g_obs->GetYaxis()->SetTitle("95% upper CL of #sigma / #sigma_{theory}");
     TGraphAsymmErrors * g_exp = new TGraphAsymmErrors(nEntries, &(Av_x_vec[0]), &(Av_y_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]));
     TGraphAsymmErrors * g_expErr1Sig = new TGraphAsymmErrors(nEntries, &(Av_x_vec[0]), &(Av_y_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_yErrDown1Sig_vec[0]), &(Av_yErrUp1Sig_vec[0]));
