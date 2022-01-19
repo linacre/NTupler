@@ -245,7 +245,7 @@ int main(){
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_nogmN_epsQCDsyst/mH70_mSusy2000/fitDiagnostics.root";
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/mH70_mSusy2000/fitDiagnostics.root";
 
-    const std::string outputDir = "MoneyPlot_unblindedAll_paper_new_incPrelim";
+    const std::string outputDir = "MoneyPlot_unblindedAll_paper_noWhiteBorders_incPrelim";
     // const double luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot.
     // const double luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot.
     // const double luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
@@ -511,7 +511,7 @@ int main(){
     std::vector<TH1D*> stackHistoVec = {h_WJets[iF], h_ZJets[iF], h_TTJets[iF], h_QCD[iF], h_backgroundError[iF]};
     Plotter plot = Plotter(indiHistoVec, stackHistoVec);
 
-    plot.AddLegendHT(legendNames, 0.667, 0.81, 0.55, 0.80, 0.046, false);
+    plot.AddLegendHT(legendNames, 0.687, 0.82, 0.55, 0.80, 0.049, false);
     
     // plot.AddLatex(luminosity);
     // plot.AddLatex(luminosity, "#it{Preliminary}");    

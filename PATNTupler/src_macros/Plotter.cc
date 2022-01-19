@@ -689,8 +689,8 @@ void Plotter::AddLegendHT(const std::vector<std::string>& legendNames, const dou
 		return;
 	}
 
-	leg = new TLegend(x1 - 0.13, y1, x2 - 0.13, y2);
-    leg->SetX1NDC(x1 - 0.13);
+	leg = new TLegend(x1 - 0.15, y1, x2 - 0.13, y2);
+    leg->SetX1NDC(x1 - 0.15);
     leg->SetX2NDC(x2 - 0.13);
 	leg->SetY1NDC(y2);
     leg->SetY2NDC(y2);
@@ -720,8 +720,8 @@ void Plotter::AddLegendHT(const std::vector<std::string>& legendNames, const dou
 	}
 
 	if (threeCol) {
-		leg3Cols = new TLegend(x1 - 0.38, y1 + (y2 - y1)*0.75, x2 - 0.38, y2);
-		leg3Cols->SetX1NDC(x1 - 0.38);
+		leg3Cols = new TLegend(x1 - 0.40, y1 + (y2 - y1)*0.75, x2 - 0.38, y2);
+		leg3Cols->SetX1NDC(x1 - 0.40);
 		leg3Cols->SetX2NDC(x2 - 0.38);
 		leg3Cols->SetY1NDC(y1 + (y2 - y1)*0.75);
 		leg3Cols->SetY2NDC(y2);
@@ -1609,6 +1609,11 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 
 void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::string> htBins){
 
+	tdrStyle->SetPadRightMargin(0.02);
+	tdrStyle->SetPadLeftMargin(0.10);
+	tdrStyle->SetCanvasDefH(650);
+	// tdrStyle->SetTickLength(0.02, "Y");
+
 	if (th1Indi.size() < 1){
 		std::cout << "Plotter::SaveSpec02 @@@ Exiting without saving... need one indi input" << std::endl;
 		return;
@@ -1635,6 +1640,10 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 		padUp->Draw();
 		padUp->cd();
 		th1Indi[0]->SetLabelOffset(777.7);
+		th1Indi[0]->GetYaxis()->SetTitleOffset(0.9);
+		th1Indi[0]->GetYaxis()->SetTitleSize(0.058);
+		th1Indi[0]->GetYaxis()->SetLabelSize(0.050);
+		th1Indi[0]->GetYaxis()->SetTickLength(0.016);
 	}
 
 	if (useLogY) gPad->SetLogy();
@@ -1693,7 +1702,7 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 		th1Indi[iTh1I]->Draw("HIST, same");
 	}
 
-	if (addLatex) DrawLatexBrazil();
+	if (addLatex) DrawLatexBrazil(2);
 	if (leg != NULL) leg->Draw("same");
 	if (leg2Cols != NULL) leg2Cols->Draw("same");
 	gPad->RedrawAxis();
@@ -1725,9 +1734,9 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 			}
 			TLatex * latexHT = new TLatex();
 		    latexHT->SetTextFont(42);
-			latexHT->SetTextSize(0.047);
+			latexHT->SetTextSize(0.052);
 		    latexHT->SetTextAlign(11); // align from left
-			float offsets[] = {0.94, 0.68, 1.55};
+			float offsets[] = {0.65, 0.60, 1.55};
 		    latexHT->DrawLatex(c+offsets[c/binsPerDivision], lineMaxHT, htBins[c/binsPerDivision].c_str());
 		}
 	}
@@ -1776,18 +1785,19 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 		ratioPlotEntry->SetMarkerColor(kBlack);
 		ratioPlotEntry->SetLineWidth(1.5);
 
-		ratioPlotEntryBackground->GetXaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntryBackground->GetXaxis()->SetTitleSize(0.058 * 2.4);
 		ratioPlotEntryBackground->GetXaxis()->SetTitleOffset(1.00);
-		ratioPlotEntryBackground->GetXaxis()->SetLabelSize(0.045 * 2.5);
+		ratioPlotEntryBackground->GetXaxis()->SetLabelSize(0.050 * 2.4);
 		ratioPlotEntryBackground->GetXaxis()->SetLabelOffset(0.007);
-		ratioPlotEntryBackground->GetXaxis()->SetTickLength(0.03 * 2.5);
+		ratioPlotEntryBackground->GetXaxis()->SetTickLength(0.03 * 2.4);
+		ratioPlotEntryBackground->GetYaxis()->SetTickLength(0.02);
 
 		ratioPlotEntryBackground->GetYaxis()->SetTitle(ratioBoxYAxisTitle.c_str());
 		ratioPlotEntryBackground->GetYaxis()->CenterTitle(true);
 		ratioPlotEntryBackground->GetYaxis()->SetNdivisions(505);
-		ratioPlotEntryBackground->GetYaxis()->SetTitleSize(0.05 * 2.5);
-		ratioPlotEntryBackground->GetYaxis()->SetTitleOffset(0.4);
-		ratioPlotEntryBackground->GetYaxis()->SetLabelSize(0.045 * 2.5);
+		ratioPlotEntryBackground->GetYaxis()->SetTitleSize(0.058 * 2.4);
+		ratioPlotEntryBackground->GetYaxis()->SetTitleOffset(0.375);
+		ratioPlotEntryBackground->GetYaxis()->SetLabelSize(0.050 * 2.4);
 		ratioPlotEntryBackground->GetYaxis()->SetLabelOffset(0.007);
 		
 		ratioPlotEntryBackground->Draw();
@@ -2410,15 +2420,16 @@ void Plotter::DrawLatexBrazil(const unsigned int& dimensions)
 	TLatex * latex = new TLatex();
     latex->SetNDC();
     latex->SetTextFont(42);
-	latex->SetTextSize(0.057);
+	if (dimensions == 1) latex->SetTextSize(0.057);
+	else latex->SetTextSize(0.06);
 
     latex->SetTextAlign(11); // align from left
     if (dimensions == 1) latex->DrawLatex(0.15,0.918,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
-    else latex->DrawLatex(0.14,0.918,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
+    else latex->DrawLatex(0.11,0.918,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
 
     latex->SetTextAlign(31); // align from right
 	if (dimensions == 1) latex->DrawLatex(0.928,0.918,lumiLabel.c_str());
-	else latex->DrawLatex(0.88,0.918,lumiLabel.c_str());
+	else latex->DrawLatex(0.978,0.918,lumiLabel.c_str());
 
 	return;
 }
