@@ -505,7 +505,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     // const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
 
     // TWO: plot output directory
-    std::string outputDir = "brazilplots_reinterp3500";
+    std::string outputDir = "temp_brazilplots_reinterp3500";
     // const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/brazilplots/mSusy2400/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)
@@ -838,9 +838,24 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
         Av_yErrDown2Sig_vec[point] /= avd;
     }
     std::cout << "AccEffSigBR: ";
-    for (auto obs: Av_yObs_vec)
-        std::cout << obs << " ";
-    std::cout<<" (average)"<<std::endl;
+    for (auto av: Av_yObs_vec)
+        std::cout << av << " ";
+    std::cout<<" (Av_yObs_vec)"<<std::endl;
+    for (auto av: Av_y_vec)
+        std::cout << av << " ";
+    std::cout<<" (Av_y_vec)"<<std::endl;
+    for (auto av: Av_yErrUp1Sig_vec)
+        std::cout << av << " ";
+    std::cout<<" (Av_yErrUp1Sig_vec)"<<std::endl;
+    for (auto av: Av_yErrDown1Sig_vec)
+        std::cout << av << " ";
+    std::cout<<" (Av_yErrDown1Sig_vec)"<<std::endl;
+    for (auto av: Av_yErrUp2Sig_vec)
+        std::cout << av << " ";
+    std::cout<<" (Av_yErrUp2Sig_vec)"<<std::endl;
+    for (auto av: Av_yErrDown2Sig_vec)
+        std::cout << av << " ";
+    std::cout<<" (Av_yErrDown2Sig_vec)"<<std::endl;
 
     TGraphAsymmErrors * g_obs = new TGraphAsymmErrors(nEntries, &(Av_x_vec[0]), &(Av_yObs_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]));
     g_obs->GetXaxis()->SetTitle(xAxisTitle.c_str());
