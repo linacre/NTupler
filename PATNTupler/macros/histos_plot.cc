@@ -36,7 +36,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "./histos_plot_combined_paper_incprelim/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "./histos_plot_combined_paper_noWhiteBorders_incprelim/"; // where we are going to save the output plots (should include the samples name, and any important features)
     //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/oneDimensionRepresentation/DATA/control/predNew_calcForHighestTwoHtBins/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
     const int year = 0;
@@ -299,11 +299,11 @@ int main(){
     // plot.AddLegend(legendNames, 0.16, 0.38, 0.64, 0.83, 0.028);
     // plot.AddLegend(legendNames, 0.18, 0.38, 0.18, 0.30, 0.040);
     // plot.AddLegend(legendNames, 0.67, 0.88, 0.64, 0.83, 0.028);
-    // plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
+    // plot.AddLegend(legendNames, 0.70, 0.90, 0.61, 0.80, 0.040); // with ratio box
     // plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
 
     std::vector<std::string> legendNames = {"#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }70,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }1200", "#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }70,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }2000", "#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }70,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }2800", "W#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Z#kern[-0.7]{ }+#kern[-0.7]{ }jets", "t#bar{t}#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Multijet"};  // for pre-fit
-    plot.AddLegendHT(legendNames, 0.67, 0.81, 0.55, 0.80, 0.046, true);
+    plot.AddLegendHT(legendNames, 0.69, 0.82, 0.55, 0.80, 0.049, true);
     
     // plot.AddLatex();
     // plot.AddLatex(luminosity);

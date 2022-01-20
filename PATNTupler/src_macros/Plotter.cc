@@ -689,9 +689,9 @@ void Plotter::AddLegendHT(const std::vector<std::string>& legendNames, const dou
 		return;
 	}
 
-	leg = new TLegend(x1 - 0.15, y1, x2 - 0.13, y2);
-    leg->SetX1NDC(x1 - 0.15);
-    leg->SetX2NDC(x2 - 0.13);
+	leg = new TLegend(x1 - 0.145, y1, x2 - 0.125, y2);
+    leg->SetX1NDC(x1 - 0.145);
+    leg->SetX2NDC(x2 - 0.125);
 	leg->SetY1NDC(y2);
     leg->SetY2NDC(y2);
 	leg->SetTextSize(textSize);
@@ -720,9 +720,9 @@ void Plotter::AddLegendHT(const std::vector<std::string>& legendNames, const dou
 	}
 
 	if (threeCol) {
-		leg3Cols = new TLegend(x1 - 0.40, y1 + (y2 - y1)*0.75, x2 - 0.38, y2);
-		leg3Cols->SetX1NDC(x1 - 0.40);
-		leg3Cols->SetX2NDC(x2 - 0.38);
+		leg3Cols = new TLegend(x1 - 0.42, y1 + (y2 - y1)*0.75, x2 - 0.40, y2);
+		leg3Cols->SetX1NDC(x1 - 0.42);
+		leg3Cols->SetX2NDC(x2 - 0.40);
 		leg3Cols->SetY1NDC(y1 + (y2 - y1)*0.75);
 		leg3Cols->SetY2NDC(y2);
 		leg3Cols->SetTextSize(textSize);
@@ -1176,6 +1176,10 @@ void Plotter::Save(const std::string& saveName){
 
 void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::string> htBins){
 
+	tdrStyle->SetPadRightMargin(0.02);
+	tdrStyle->SetPadLeftMargin(0.10);
+	tdrStyle->SetCanvasDefH(650);
+
 	if (th1Indi.empty() && th1Stack.empty()){
 		std::cout << "Plotter::SaveSpec01 @@@ Exiting without saving... no histos @@@" << std::endl;
 		return;
@@ -1195,7 +1199,20 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		padUp->SetBottomMargin(0.016);
 		padUp->Draw();
 		padUp->cd();
-		if(!th1Indi.empty()) th1Indi[0]->SetLabelOffset(777.7);
+		if(!th1Indi.empty()) {
+			th1Indi[0]->SetLabelOffset(777.7);
+			th1Indi[0]->GetYaxis()->SetTitleOffset(0.9);
+			th1Indi[0]->GetYaxis()->SetTitleSize(0.058);
+			th1Indi[0]->GetYaxis()->SetLabelSize(0.050);
+			th1Indi[0]->GetYaxis()->SetTickLength(0.016);
+		}
+		else{
+			th1Stack[0]->SetLabelOffset(777.7);
+			th1Stack[0]->GetYaxis()->SetTitleOffset(0.9);
+			th1Stack[0]->GetYaxis()->SetTitleSize(0.058);
+			th1Stack[0]->GetYaxis()->SetLabelSize(0.050);
+			th1Stack[0]->GetYaxis()->SetTickLength(0.016);
+		}
 	}
 
 	if (useLogY) gPad->SetLogy();
@@ -1284,8 +1301,10 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	// max = 1.82; // HACK maxima
 	double graphMaxLin = 1.12 * max;
 	double graphMaxLog = log10(max/min) * max;
+	std::cout<<"graphMaxLog: "<<graphMaxLog<<std::endl;
 	double graphMinLin = 0.0;
 	double graphMinLog = min/log10(max/min);
+	std::cout<<"graphMinLog: "<<graphMinLog<<std::endl;
 
 	TH1D* hTotalBkg = nullptr;
 
@@ -1397,7 +1416,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 
 	}
 
-	if (addLatex) DrawLatexBrazil();
+	if (addLatex) DrawLatexBrazil(2);
 	if (leg != NULL) leg->Draw("same");
 	if (leg2Cols != NULL) leg2Cols->Draw("same");
 	if (leg3Cols != NULL) leg3Cols->Draw("same");
@@ -1430,9 +1449,9 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			}
 			TLatex * latexHT = new TLatex();
 		    latexHT->SetTextFont(42);
-			latexHT->SetTextSize(0.047);
+			latexHT->SetTextSize(0.052);
 		    latexHT->SetTextAlign(11); // align from left
-			float offsets[] = {0.94, 0.68, 1.55};
+			float offsets[] = {0.65, 0.60, 1.55};
 		    latexHT->DrawLatex(c+offsets[c/binsPerDivision], lineMaxHT, htBins[c/binsPerDivision].c_str());
 		}
 	}
@@ -1471,18 +1490,19 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			ratioPlotEntry->SetMinimum(ratioBoxYAxisMinMax[0]);
 			ratioPlotEntry->SetMaximum(ratioBoxYAxisMinMax[1]);
 		}
-		ratioPlotEntry->GetXaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntry->GetXaxis()->SetTitleSize(0.058 * 2.4);
 		ratioPlotEntry->GetXaxis()->SetTitleOffset(1.00);
-		ratioPlotEntry->GetXaxis()->SetLabelSize(0.045 * 2.5);
+		ratioPlotEntry->GetXaxis()->SetLabelSize(0.050 * 2.4);
 		ratioPlotEntry->GetXaxis()->SetLabelOffset(0.007);
-		ratioPlotEntry->GetXaxis()->SetTickLength(0.03 * 2.5);
+		ratioPlotEntry->GetXaxis()->SetTickLength(0.03 * 2.4);
+		ratioPlotEntry->GetYaxis()->SetTickLength(0.02);
 
 		ratioPlotEntry->GetYaxis()->SetTitle(ratioBoxYAxisTitle.c_str());
 		ratioPlotEntry->GetYaxis()->CenterTitle(true);
 		ratioPlotEntry->GetYaxis()->SetNdivisions(505);
-		ratioPlotEntry->GetYaxis()->SetTitleSize(0.05 * 2.5);
-		ratioPlotEntry->GetYaxis()->SetTitleOffset(0.4);
-		ratioPlotEntry->GetYaxis()->SetLabelSize(0.045 * 2.5);
+		ratioPlotEntry->GetYaxis()->SetTitleSize(0.058 * 2.4);
+		ratioPlotEntry->GetYaxis()->SetTitleOffset(0.375);
+		ratioPlotEntry->GetYaxis()->SetLabelSize(0.050 * 2.4);
 		ratioPlotEntry->GetYaxis()->SetLabelOffset(0.007);
 
 		ratioPlotEntry->Draw("E0");
@@ -1542,18 +1562,19 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		ratioPlotEntry->SetMarkerColor(kBlack);
 		ratioPlotEntry->SetLineWidth(1.5);
 
-		ratioPlotEntryBackground->GetXaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntryBackground->GetXaxis()->SetTitleSize(0.058 * 2.4);
 		ratioPlotEntryBackground->GetXaxis()->SetTitleOffset(1.00);
-		ratioPlotEntryBackground->GetXaxis()->SetLabelSize(0.045 * 2.5);
+		ratioPlotEntryBackground->GetXaxis()->SetLabelSize(0.050 * 2.4);
 		ratioPlotEntryBackground->GetXaxis()->SetLabelOffset(0.007);
-		ratioPlotEntryBackground->GetXaxis()->SetTickLength(0.03 * 2.5);
+		ratioPlotEntryBackground->GetXaxis()->SetTickLength(0.03 * 2.4);
+		ratioPlotEntryBackground->GetYaxis()->SetTickLength(0.02);
 
 		ratioPlotEntryBackground->GetYaxis()->SetTitle(ratioBoxYAxisTitle.c_str());
 		ratioPlotEntryBackground->GetYaxis()->CenterTitle(true);
 		ratioPlotEntryBackground->GetYaxis()->SetNdivisions(505);
-		ratioPlotEntryBackground->GetYaxis()->SetTitleSize(0.05 * 2.5);
-		ratioPlotEntryBackground->GetYaxis()->SetTitleOffset(0.4);
-		ratioPlotEntryBackground->GetYaxis()->SetLabelSize(0.045 * 2.5);
+		ratioPlotEntryBackground->GetYaxis()->SetTitleSize(0.058 * 2.4);
+		ratioPlotEntryBackground->GetYaxis()->SetTitleOffset(0.375);
+		ratioPlotEntryBackground->GetYaxis()->SetLabelSize(0.050 * 2.4);
 		ratioPlotEntryBackground->GetYaxis()->SetLabelOffset(0.007);
 		
 		ratioPlotEntryBackground->Draw();
@@ -1597,7 +1618,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	}
 
 	if (addRatioBox && !th1Indi.empty()) th1Indi[0]->SetLabelOffset(0.007);
-	if (addRatioBox && !th1Stack.empty()) th1Stack[0]->SetLabelOffset(0.01);
+	if (addRatioBox && !th1Stack.empty()) th1Stack[0]->SetLabelOffset(0.007);
 
 	delete ratioPlotEntryBackground;
 	delete hTotalBkg;
@@ -1612,7 +1633,6 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 	tdrStyle->SetPadRightMargin(0.02);
 	tdrStyle->SetPadLeftMargin(0.10);
 	tdrStyle->SetCanvasDefH(650);
-	// tdrStyle->SetTickLength(0.02, "Y");
 
 	if (th1Indi.size() < 1){
 		std::cout << "Plotter::SaveSpec02 @@@ Exiting without saving... need one indi input" << std::endl;
@@ -1668,8 +1688,11 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 	// max = 2.1; // HACK maxima
 	double graphMaxLin = 1.12 * max;
 	double graphMaxLog = log10(max/min) * max;
+	graphMaxLog = 8645.73; // HACK maximum to match prefit plot from histos_plot.cc
+	std::cout<<"graphMaxLog: "<<graphMaxLog<<std::endl;
 	double graphMinLin = 0.0;
 	double graphMinLog = min/log10(max/min);
+	graphMinLog = 0.0496226; // HACK minimum to match prefit plot from histos_plot.cc
 
 	initialMax = th1Indi[0]->GetMaximum();
 	initialMin = th1Indi[0]->GetMinimum();

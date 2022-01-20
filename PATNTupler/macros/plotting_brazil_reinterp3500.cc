@@ -505,7 +505,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     // const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
 
     // TWO: plot output directory
-    std::string outputDir = "temp_brazilplots_reinterp3500";
+    std::string outputDir = "brazilplots_reinterp3500_new";
     // const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/brazilplots/mSusy2400/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)
@@ -861,6 +861,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     g_obs->GetXaxis()->SetTitle(xAxisTitle.c_str());
     // g_obs->GetYaxis()->SetTitle("95% upper CL of r");
     // if (plotSigma) g_obs->GetYaxis()->SetTitle("95% CL upper limit of #sigma#timesBR [fb]");
+    // if (plotSigma) g_obs->GetYaxis()->SetTitle("A_{kin}#kern[-0.5]{ }#sigma#kern[-0.5]{ }#bf{#it{#Beta}}#kern[-0.7]{ }(H_{1}#rightarrow b#kern[-0.8]{ }#bar{b}) [fb]");
     if (plotSigma) g_obs->GetYaxis()->SetTitle("A_{kin} #times #sigma #times #bf{#it{#Beta}}#kern[-0.7]{ }(H_{1}#rightarrow b#kern[-0.8]{ }#bar{b}) [fb]");
     else g_obs->GetYaxis()->SetTitle("95% upper CL of #sigma / #sigma_{theory}");
     TGraphAsymmErrors * g_exp = new TGraphAsymmErrors(nEntries, &(Av_x_vec[0]), &(Av_y_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]));
