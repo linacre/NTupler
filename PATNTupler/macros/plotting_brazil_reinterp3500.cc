@@ -505,7 +505,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     // const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
 
     // TWO: plot output directory
-    std::string outputDir = "brazilplots_reinterp3500_new";
+    std::string outputDir = "brazilplots_reinterp3500_lumifix";
     // const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/brazilplots/mSusy2400/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)
@@ -518,7 +518,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     const std::vector<int> susyMasses = {1200, 1600, 2000, 2200, 2400, 2600, 2800};
 
     // FOUR: luminosity label
-    const double luminosity = 35.922+41.529+59.740565202;
+    const double luminosity = 36.33 + 41.529 + 59.740565202;
 
     // FIVE: plot observed line ?
     const bool plotObserved = true;
@@ -748,6 +748,17 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
         yThUp1Sig_vec.push_back( xBRNNLL + xBRNNLL * xsecUnc[varyHiggsMass ? fixedMass : massPoint] );
     }     
 
+    // hack to update 2016 lumi. Correction based on asymptotic limits (~0.3%, consistent with the % change in lumi).
+    double lumifactor = 1.003;
+    for (size_t point = 0; point < yErrDown2Sig_vec.size(); ++point) {
+        yObs_vec[point] /= lumifactor;
+        y_vec[point] /= lumifactor;
+        yErrDown1Sig_vec[point] /= lumifactor;
+        yErrUp1Sig_vec[point] /= lumifactor;
+        yErrDown2Sig_vec[point] /= lumifactor;
+        yErrUp2Sig_vec[point] /= lumifactor;
+    }
+
     for (size_t point = 0; point < yErrDown2Sig_vec.size(); ++point) {
     //for (auto point : yErrDown2Sig_vec){
         // if (yErrDown2Sig_vec[point]==0 || ( fixedMass==1200 && (point==8) ) || ( fixedMass==2400 && (point==4) ) ) {
@@ -862,7 +873,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     // g_obs->GetYaxis()->SetTitle("95% upper CL of r");
     // if (plotSigma) g_obs->GetYaxis()->SetTitle("95% CL upper limit of #sigma#timesBR [fb]");
     // if (plotSigma) g_obs->GetYaxis()->SetTitle("A_{kin}#kern[-0.5]{ }#sigma#kern[-0.5]{ }#bf{#it{#Beta}}#kern[-0.7]{ }(H_{1}#rightarrow b#kern[-0.8]{ }#bar{b}) [fb]");
-    if (plotSigma) g_obs->GetYaxis()->SetTitle("A_{kin} #times #sigma #times #bf{#it{#Beta}}#kern[-0.7]{ }(H_{1}#rightarrow b#kern[-0.8]{ }#bar{b}) [fb]");
+    if (plotSigma) g_obs->GetYaxis()->SetTitle("#sigma #bf{#it{#Beta}}#kern[-0.75]{ }^{2}#kern[-0.75]{ }(H_{1}#rightarrow b#kern[-0.8]{ }#bar{b}) A_{kin} [fb]");
     else g_obs->GetYaxis()->SetTitle("95% upper CL of #sigma / #sigma_{theory}");
     TGraphAsymmErrors * g_exp = new TGraphAsymmErrors(nEntries, &(Av_x_vec[0]), &(Av_y_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]));
     TGraphAsymmErrors * g_expErr1Sig = new TGraphAsymmErrors(nEntries, &(Av_x_vec[0]), &(Av_y_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_yErrDown1Sig_vec[0]), &(Av_yErrUp1Sig_vec[0]));
@@ -876,7 +887,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     Plotter brazilPlot = Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig}, plotObserved);
     // brazilPlot.AddLegend(0.20, 0.45, 0.63, 0.86);
     // brazilPlot.AddLegendBrazil(0.55, 0.85, 0.56, 0.87);
-    brazilPlot.AddLegendBrazil(0.83, 1.1, 0.725, 0.93);
+    brazilPlot.AddLegendBrazil(0.89, 1.15, 0.725, 0.93);
     brazilPlot.AddLatex(luminosity, "");
     brazilPlot.SaveBrazil(Form("%s/linear_%s_kinAccEff_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", plotSigma ? "xsec" : "mu"), 0.0, 0.1 * maxLimitValue, fixedMass);
     brazilPlot.SetLogY();

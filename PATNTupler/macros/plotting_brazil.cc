@@ -493,7 +493,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     // const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
 
     // TWO: plot output directory
-    std::string outputDir = "brazilplots_unblinded_NNLLth_interpolated9d_newhdecay_inc120_newBR_paper_temp";
+    std::string outputDir = "brazilplots_unblinded_NNLLth_interpolated9d_newhdecay_inc120_newBR_paper_lumifix";
     // const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/brazilplots/mSusy2400/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)
@@ -505,7 +505,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     const std::vector<int> susyMasses = {1200, 1600, 2000, 2200, 2400, 2600, 2800};
 
     // FOUR: luminosity label
-    const double luminosity = 35.922+41.529+59.740565202;
+    const double luminosity = 36.33 + 41.529 + 59.740565202;
 
     // FIVE: plot observed line ?
     const bool plotObserved = true;
@@ -715,7 +715,18 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
 
         yThDown1Sig_vec.push_back( xBRNNLL - xBRNNLL * xsecUnc[varyHiggsMass ? fixedMass : massPoint] );
         yThUp1Sig_vec.push_back( xBRNNLL + xBRNNLL * xsecUnc[varyHiggsMass ? fixedMass : massPoint] );
-    }     
+    }
+
+    // hack to update 2016 lumi. Correction based on asymptotic limits (~0.3%, consistent with the % change in lumi).
+    double lumifactor = 1.003;
+    for (size_t point = 0; point < yErrDown2Sig_vec.size(); ++point) {
+        yObs_vec[point] /= lumifactor;
+        y_vec[point] /= lumifactor;
+        yErrDown1Sig_vec[point] /= lumifactor;
+        yErrUp1Sig_vec[point] /= lumifactor;
+        yErrDown2Sig_vec[point] /= lumifactor;
+        yErrUp2Sig_vec[point] /= lumifactor;
+    }
 
     for (size_t point = 0; point < yErrDown2Sig_vec.size(); ++point) {
     //for (auto point : yErrDown2Sig_vec){
@@ -737,7 +748,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     g_obs->GetXaxis()->SetTitle(xAxisTitle.c_str());
     // g_obs->GetYaxis()->SetTitle("95% upper CL of r");
     // if (plotSigma) g_obs->GetYaxis()->SetTitle("95% CL upper limit of #sigma#timesBR [fb]");
-    if (plotSigma) g_obs->GetYaxis()->SetTitle("#sigma#kern[-0.8]{ }(p#kern[-0.8]{ }p#kern[-0.7]{ }#rightarrow#kern[-0.6]{ }#tilde{q}#kern[-0.8]{ }#tilde{q},#kern[-0.6]{ }#tilde{q}#kern[-0.8]{ }#tilde{g},#kern[-0.6]{ }#tilde{g}#kern[-0.8]{ }#tilde{g}#kern[-0.8]{ })#kern[-0.5]{ }#bf{#it{#Beta}}#kern[-0.7]{ }(H_{1}#rightarrow b#kern[-0.8]{ }#bar{b}) [fb]");
+    if (plotSigma) g_obs->GetYaxis()->SetTitle("#sigma#kern[-0.8]{ }(p#kern[-0.8]{ }p#kern[-0.7]{ }#rightarrow#kern[-0.6]{ }#tilde{q}#kern[-0.8]{ }#tilde{q},#kern[-0.6]{ }#tilde{q}#kern[-0.8]{ }#tilde{g},#kern[-0.6]{ }#tilde{g}#kern[-0.8]{ }#tilde{g}#kern[-0.8]{ })#kern[-0.5]{ }#bf{#it{#Beta}}#kern[-0.75]{ }^{2}#kern[-0.75]{ }(H_{1}#rightarrow b#kern[-0.8]{ }#bar{b}) [fb]");
     else g_obs->GetYaxis()->SetTitle("95% upper CL of #sigma / #sigma_{theory}");
     TGraphAsymmErrors * g_exp = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]));
     TGraphAsymmErrors * g_expErr1Sig = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(yErrDown1Sig_vec[0]), &(yErrUp1Sig_vec[0]));
@@ -751,14 +762,14 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
 
     if(fixedYRange) {
         maxLimitValue = 0.12*1000;
-        minLimitValue = 0.00006*1000;
+        minLimitValue = 0.00007*1000;
     }
 
     // the vector order goes: observed, expected, 1sigma, 2sigma, th, 1sigma
     Plotter brazilPlot = fixedMass > 1200 ? Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig, g_th, g_thDown1Sig, g_thUp1Sig}, plotObserved) : Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig}, plotObserved);;
     // brazilPlot.AddLegend(0.20, 0.45, 0.63, 0.86);
     // brazilPlot.AddLegendBrazil(0.55, 0.85, 0.56, 0.87);
-    fixedMass > 1200 ?  fixedMass > 1600 ? brazilPlot.AddLegendBrazil(0.61, 0.88, 0.665, 0.87, 0.042) : brazilPlot.AddLegendBrazil(0.61, 0.88, 0.19, 0.395, 0.042) : brazilPlot.AddLegendBrazil(0.75, 1.02, 0.19, 0.395, 0.042);
+    fixedMass > 1200 ?  fixedMass > 1600 ? brazilPlot.AddLegendBrazil(0.61, 0.88, 0.665, 0.87, 0.042) : brazilPlot.AddLegendBrazil(0.61, 0.88, 0.19, 0.395, 0.042) : brazilPlot.AddLegendBrazil(0.81, 1.07, 0.19, 0.395, 0.042);
     // brazilPlot.AddLegendBrazil(0.63, 0.9, 0.675, 0.88);
     brazilPlot.AddLatex(luminosity, "");
     brazilPlot.SaveBrazil(Form("%s/linear_%s_fixedMass%d_%s.pdf", outputDir.c_str(), plotSquark ? "squark" : "susy", fixedMass, plotSigma ? "xsec" : "mu"), 0.0, 1.05 * maxLimitValue, fixedMass);

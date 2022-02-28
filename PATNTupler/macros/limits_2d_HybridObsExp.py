@@ -57,6 +57,10 @@ NNLLXSUncVec = np.array([0.079022196, 0.093790377, 0.113829758, 0.127247992, 0.1
 NNLLXSVecDown = NNLLXSVec - NNLLXSVec * NNLLXSUncVec
 NNLLXSVecUp = NNLLXSVec + NNLLXSVec * NNLLXSUncVec
 
+# hack to update 2016 lumi. Correction based on asymptotic limits (~0.3%, consistent with the % change in lumi).
+lumifactor = 1.003
+origXSVec /= lumifactor
+
 origBR = np.array([0.868, 0.867, 0.865, 0.858, 0.850, 0.840, 0.829, 0.816, 0.795, 0.749, 0.652, 0.581])
 newBR = np.array([0.8640, 0.8639, 0.8620, 0.8559, 0.8481, 0.8386, 0.8276, 0.8145, 0.7938, 0.7478, 0.6508, 0.5793])
 origBR = origBR / newBR
@@ -76,16 +80,16 @@ inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDa
 # inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_topHTonly_batch"
 
 # inputDir = "."
-outputDir = "limits_2d_unblinded_NNLL_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_HybridNew_inc120_newBR_paper"
+outputDir = "limits_2d_unblinded_NNLL_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_HybridNew_inc120_newBR_paper_lumifix"
 # outputDir = inputDir + "/a_limitPlot_intp1_noObs/"
 # outputDir = inputDir + "/a_limitPlot_intp1_withObs/"
 
 plotObserved = True
-plotTitle = '137 fb$^{-1}$ (13 TeV)'
+plotTitle = '138 fb$^{-1}$ (13 TeV)'
 # plotTitle = '77.5 fb$^{-1}$ (13 TeV)'
 # plotTitle = '59.7 fb$^{-1}$ (13 TeV)'
 # plotTitle = '41.5 fb$^{-1}$ (13 TeV)'
-# plotTitle = '35.9 fb$^{-1}$ (13 TeV)'
+# plotTitle = '36.3 fb$^{-1}$ (13 TeV)'
 
 # maximally squeeze the z-axis
 minMu = -2.25
@@ -213,9 +217,6 @@ for iS,mSusy in enumerate(mSusyVec):
         else:
             print "Limit is missing Exp84: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
             continue
-
-
-
 
 
         T.GetEntry(0)
@@ -391,7 +392,7 @@ else:
 plt_exp = plt.contour(xj, yj, zj, [1.0], colors='k')
 plt_exp.collections[0].set_label('Expected')
 plt_exp16 = plt.contour(xj16, yj16, zj16, [1.0], colors='k', linestyles='--', label='qwert')
-plt_exp16.collections[0].set_label('$\pm1\,\sigma_{\mathrm{exp}}$')
+plt_exp16.collections[0].set_label('$\pm1\,\sigma_{\mathrm{experiment}}$')
 plt_exp84 = plt.contour(xj84, yj84, zj84, [1.0], colors='k', linestyles='--')
 dummy = plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=10**minMu, vmax=10**maxMu), cmap=bird)
 
@@ -409,7 +410,7 @@ plt.gca().yaxis.set_minor_locator(plt.MultipleLocator(5))
 cbar = plt.colorbar()
 cbar.set_ticks(ticks)
 # cbar.set_label('95% CL upper limit on $(\sigma {\\bf{\\it{B}}})/(\sigma {\\bf{\\it{B}}})_{\mathrm{theory}}$', rotation=90, fontsize=19, labelpad=14)
-cbar.set_label('95% CL upper limit on $\sigma \\mathcal{B}/(\sigma \\mathcal{B})_{\mathrm{theory}}$', rotation=90, fontsize=19, labelpad=14)
+cbar.set_label('95% CL upper limit on $\sigma \\mathcal{B}^{2}/(\sigma \\mathcal{B}^{2})_{\mathrm{theory}}$', rotation=90, fontsize=19, labelpad=14)
 plt.title('CMS', loc='left', fontsize=20, fontweight='bold')
 # plt.title('CMS $Preliminary$', loc='left', fontsize=20, fontweight='bold')
 plt.title(plotTitle, loc='right', fontsize=20)

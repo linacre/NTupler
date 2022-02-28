@@ -52,7 +52,7 @@ void WriteBlock(const std::string&, const unsigned int&, std::ofstream&, const b
     // ONE: save info (signal specific directories beneath this)
     //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
     // const std::string outputDirGeneral = "combinedDataCards_final_2018";
-    const std::string outputDirGeneral = "combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_inc120_batch";
+    const std::string outputDirGeneral = "combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_inc120_batch_lumifix";
     // const std::string outputDirGeneral = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
 
 
@@ -124,7 +124,7 @@ int main(){
     // *** 2016 ***
     // CommonSystematicVec[2016].push_back( CommonSystematic("signalPdfBOTH lnN", 1.1, {"SIGNAL"}) ); // correlated to 2017
     CommonSystematicVec[2016].push_back( CommonSystematic("isrReweightBOTH lnN", "isr", {"SIGNAL"}) ); // correlated to 2017
-    CommonSystematicVec[2016].push_back( CommonSystematic("luminosity2016 lnN", 1.025, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("luminosity2016 lnN", 1.012, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("XS_TTJetsBOTH lnN", 1.1, {"TTJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("XS_ZJetsBOTH lnN", 1.1, {"ZJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("XS_WJetsBOTH lnN", 1.1, {"WJets"}) );
@@ -735,6 +735,12 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
             h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("S_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
             h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("U_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
             h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Add((TH1D*)f->Get(Form("D_dbtDiagUpLoose_%s", nonTrivialSys.c_str())));
+
+            // hack to update 2016 lumi
+            if ( (yearOfRun == 2016) && (histoToUse != "data") ) {
+                h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Scale(36.33/35.922);
+                h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Scale(36.33/35.922);
+            }
 
             if(rebinMass) {
                 Double_t newBins[16] = {0.,1.,3.,5.,7.,10.,11.,13.,15.,17.,20.,21.,23.,25.,27.,30.};

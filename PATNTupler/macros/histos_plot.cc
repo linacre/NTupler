@@ -36,16 +36,16 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "./histos_plot_combined_paper_noWhiteBorders_incprelim/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "./histos_plot_combined_paper_noWhiteBorders_incprelim_lumifix/"; // where we are going to save the output plots (should include the samples name, and any important features)
     //const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/oneDimensionRepresentation/DATA/control/predNew_calcForHighestTwoHtBins/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
     const int year = 0;
     double luminosity = 0.;
 
-    if(year==2016) luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
+    if(year==2016) luminosity = 36.33; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
     else if(year==2017)  luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
     else if(year==2018) luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
-    else luminosity = 35.922 + 41.529 + 59.740565202;
+    else luminosity = 36.33 + 41.529 + 59.740565202;
 
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
     std::string dirExistCommand = "test -e " + outputDir;
@@ -302,7 +302,7 @@ int main(){
     // plot.AddLegend(legendNames, 0.70, 0.90, 0.61, 0.80, 0.040); // with ratio box
     // plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
 
-    std::vector<std::string> legendNames = {"#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }70,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }1200", "#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }70,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }2000", "#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }70,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }2800", "W#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Z#kern[-0.7]{ }+#kern[-0.7]{ }jets", "t#bar{t}#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Multijet"};  // for pre-fit
+    std::vector<std::string> legendNames = {"#it{m}_{H_{1}}#kern[-0.6]{ }=#kern[-0.5]{ }70,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }1200", "#it{m}_{H_{1}}#kern[-0.6]{ }=#kern[-0.5]{ }70,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }2000", "#it{m}_{H_{1}}#kern[-0.6]{ }=#kern[-0.5]{ }70,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }2800", "W#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Z#kern[-0.7]{ }+#kern[-0.7]{ }jets", "t#bar{t}#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Multijet"};  // for pre-fit
     plot.AddLegendHT(legendNames, 0.69, 0.82, 0.55, 0.80, 0.049, true);
     
     // plot.AddLatex();
@@ -511,6 +511,22 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
         h_[Form("S_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("S_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
         h_[Form("U_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("U_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
         h_[Form("D_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("D_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
+
+        // hack to update 2016 lumi
+        if ( (year == 2016) && (histoToUse != "data") ) {
+            h_[Form("S_tag_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+            h_[Form("U_tag_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+            h_[Form("D_tag_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+
+            h_[Form("S_anti_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+            h_[Form("U_anti_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+            h_[Form("D_anti_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+
+            h_[Form("S_control_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+            h_[Form("U_control_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+            h_[Form("D_control_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+        }
+
 
         h_[Form("UnD_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_tag_%s", histoToUse.c_str())]->Clone();
         h_[Form("UnD_tag_%s", histoToUse.c_str())]->Add(h_[Form("D_tag_%s", histoToUse.c_str())]);

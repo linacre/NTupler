@@ -245,11 +245,11 @@ int main(){
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_nogmN_epsQCDsyst/mH70_mSusy2000/fitDiagnostics.root";
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/mH70_mSusy2000/fitDiagnostics.root";
 
-    const std::string outputDir = "MoneyPlot_unblindedAll_paper_noWhiteBorders_incPrelim";
-    // const double luminosity = 35.922; // 2016 Plots::: NB this is just a label for the plot.
+    const std::string outputDir = "MoneyPlot_unblindedAll_paper_noWhiteBorders_incPrelim_lumifix";
+    // const double luminosity = 36.33; // 2016 Plots::: NB this is just a label for the plot.
     // const double luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot.
     // const double luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
-    const double luminosity = 35.922 + 41.529 + 59.740565202; // WARNING: an approximate combination is performed, adding the fitted errors in quadrature. This is reasonable because the bkg nuisance parameters are not strongly correlated between years.
+    const double luminosity = 36.33 + 41.529 + 59.740565202; // WARNING: an approximate combination is performed, adding the fitted errors in quadrature. This is reasonable because the bkg nuisance parameters are not strongly correlated between years.
 
     // TWO: the main settings
     std::string massType = "S"; // S type mass regions
@@ -502,8 +502,8 @@ int main(){
         legendNames = {"Data", "W#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Z#kern[-0.7]{ }+#kern[-0.7]{ }jets", "t#bar{t}#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Multijet", "unc."};
     }
     else {
-        indiHistoVec = {h_data[iF], h16_[(massTypeOrig+"_tag_mH125_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH90_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH50_mSusy2200").c_str()]};
-        legendNames = {"Data", "#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }125,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }2200", "#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }90,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }2200", "#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.8]{ }50,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }2200", "W#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Z#kern[-0.7]{ }+#kern[-0.7]{ }jets", "t#bar{t}#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Multijet", "unc."};
+        indiHistoVec = {h_data[iF], h16_[(massTypeOrig+"_tag_mH50_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH90_mSusy2200").c_str()], h16_[(massTypeOrig+"_tag_mH125_mSusy2200").c_str()]};
+        legendNames = {"Data", "#it{m}_{H_{1}}#kern[-0.6]{ }=#kern[-0.5]{ }50,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }2200", "#it{m}_{H_{1}}#kern[-0.6]{ }=#kern[-0.5]{ }90,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }2200", "#it{m}_{H_{1}}#kern[-0.6]{ }=#kern[-0.5]{ }125,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.5]{ }=#kern[-0.5]{ }2200", "W#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Z#kern[-0.7]{ }+#kern[-0.7]{ }jets", "t#bar{t}#kern[-0.7]{ }+#kern[-0.7]{ }jets", "Multijet", "unc."};
         // indiHistoVec = {h_data[iF], h16_[(massTypeOrig+"_tag_mH70_mSusy2000").c_str()]};
         // legendNames = {"data", "2000,70", "WJets", "ZJets", "TTJets", "QCD", "unc."};
     }
@@ -511,7 +511,8 @@ int main(){
     std::vector<TH1D*> stackHistoVec = {h_WJets[iF], h_ZJets[iF], h_TTJets[iF], h_QCD[iF], h_backgroundError[iF]};
     Plotter plot = Plotter(indiHistoVec, stackHistoVec);
 
-    plot.AddLegendHT(legendNames, 0.687, 0.82, 0.55, 0.80, 0.049, false);
+    // plot.AddLegendHT(legendNames, 0.687, 0.82, 0.55, 0.80, 0.049, false);
+    plot.AddLegendHT(legendNames, 0.69, 0.82, 0.55, 0.80, 0.049, true);
     
     // plot.AddLatex(luminosity);
     // plot.AddLatex(luminosity, "#it{Preliminary}");    
@@ -747,6 +748,22 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
         h_[Form("U_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("U_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
         h_[Form("D_control_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("D_dbtOffIDBTCv23AndLooseMed2_NOSYS"));
 
+        // hack to update 2016 lumi
+        if ( (year == 2016) && (histoToUse != "data") ) {
+            h_[Form("S_tag_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+            h_[Form("U_tag_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+            h_[Form("D_tag_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+
+            h_[Form("S_anti_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+            h_[Form("U_anti_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+            h_[Form("D_anti_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+
+            h_[Form("S_control_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+            h_[Form("U_control_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+            h_[Form("D_control_%s", histoToUse.c_str())]->Scale(36.33/35.922);
+        }
+
+
         h_[Form("UnD_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_tag_%s", histoToUse.c_str())]->Clone();
         h_[Form("UnD_tag_%s", histoToUse.c_str())]->Add(h_[Form("D_tag_%s", histoToUse.c_str())]);
 
@@ -788,13 +805,13 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
         if(histoToUse == "data") h_[Form("predNew_tag_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
         for (int iBin = 1; iBin < h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
             double corrValue = QcdSidebandCorr::GetCorr(iBin, year);
-            double corrError = QcdSidebandCorr::GetCorrErr(iBin, year);
+            double corrError = exp(QcdSidebandCorr::GetCorrErr(iBin, year)) - 1.;
             double UnDValue = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinContent(iBin);
             double UnDError = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinError(iBin);
 
             double predValue = corrValue * UnDValue;
             double predError = 0.0;
-            if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+            if (UnDValue != 0) predError = predValue * sqrt( (corrError)*(corrError) + (UnDError/UnDValue)*(UnDError/UnDValue) );
             h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
             h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
 
@@ -810,7 +827,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
 
                 predValue = corrValue * UnDValue;
                 predError = 0.0;
-                if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+                if (UnDValue != 0) predError = predValue * sqrt( (corrError)*(corrError) + (UnDError/UnDValue)*(UnDError/UnDValue) );
                 h_[Form("predNew_tag_%sbkgsub", histoToUse.c_str())]->SetBinContent(iBin, predValue);
                 h_[Form("predNew_tag_%sbkgsub", histoToUse.c_str())]->SetBinError(iBin, predError);
 
@@ -822,13 +839,13 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
         if(histoToUse == "data") h_[Form("predNew_control_%sbkgsub", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
         for (int iBin = 1; iBin < h_[Form("predNew_control_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
             double corrValue = QcdSidebandCorr::GetCorr(iBin, year);
-            double corrError = QcdSidebandCorr::GetCorrErr(iBin, year);
+            double corrError = exp(QcdSidebandCorr::GetCorrErr(iBin, year)) - 1.;
             double UnDValue = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinContent(iBin);
             double UnDError = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinError(iBin);
 
             double predValue = corrValue * UnDValue;
             double predError = 0.0;
-            if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+            if (UnDValue != 0) predError = predValue * sqrt( (corrError)*(corrError) + (UnDError/UnDValue)*(UnDError/UnDValue) );
             h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
             h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
 
@@ -844,7 +861,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, int year)
 
                 predValue = corrValue * UnDValue;
                 predError = 0.0;
-                if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+                if (UnDValue != 0) predError = predValue * sqrt( (corrError)*(corrError) + (UnDError/UnDValue)*(UnDError/UnDValue) );
                 h_[Form("predNew_control_%sbkgsub", histoToUse.c_str())]->SetBinContent(iBin, predValue);
                 h_[Form("predNew_control_%sbkgsub", histoToUse.c_str())]->SetBinError(iBin, predError);
 
