@@ -707,9 +707,9 @@ void Plotter::AddLegendHT(const std::vector<std::string>& legendNames, const dou
 	if (threeCol) {
 		bool mH70 = TString(legendNames[1]).Contains("70");
 		bool mS2200 = TString(legendNames[1]).Contains("2200");
-		double SF = mH70 ? (0.19) : (mS2200 ? 0. : 0.25);
-		double shifty = mH70 ? 0.014 : 0.;
-		double shiftx = mH70 ? 0.02 : (mS2200 ? 0.045 : 0.);
+		double SF = mH70 ? (0.) : (mS2200 ? 0. : 0.25);
+		double shifty = mH70 ? 0. : 0.;
+		double shiftx = mH70 ? 0.13 : (mS2200 ? 0.045 : 0.);
 		// double shiftx = mH70 or mS2200 ? 0.02 : 0.;
 		leg2Cols = new TLegend(x1 + shiftx, y1 + (y2 - y1)*SF + shifty, x2 + shiftx, y2 + shifty);
 		leg2Cols->SetX1NDC(x1 + shiftx);
@@ -717,19 +717,20 @@ void Plotter::AddLegendHT(const std::vector<std::string>& legendNames, const dou
 		leg2Cols->SetY1NDC(y1 + (y2 - y1)*SF + shifty);
 		leg2Cols->SetY2NDC(y2 + shifty);
 		leg2Cols->SetTextSize(textSize);
-		if(mH70) leg2Cols->SetTextSize(textSize*0.9);
+		// if(mH70) leg2Cols->SetTextSize(textSize*0.9);
 		leg2Cols->SetBorderSize(0);
 		leg2Cols->SetFillStyle(0);
-		if ( mH70 ) leg2Cols->SetHeader("#kern[-0.6]{ }Signal,#kern[-0.4]{ }#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.7]{ }70#kern[-0.3]{ }GeV:", "");
-		if ( mS2200 ) leg2Cols->SetHeader("#kern[-4.9]{ }Signal,#kern[-0.4]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.7]{ }2200#kern[-0.3]{ }GeV:", "");
+		if ( mH70 ) leg2Cols->SetHeader("#kern[-10.7]{ }#lower[0.38]{#splitline{Signal,#kern[-0.4]{ }#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.7]{ }70#kern[-0.3]{ }GeV}{#kern[0.0]{ }#it{m}_{SUSY}:}}", "");
+		// if ( mH70 ) leg2Cols->SetHeader("#kern[-15.1]{ }Signal,#kern[-0.4]{ }#it{m}_{H_{1}}#kern[-0.9]{ }=#kern[-0.7]{ }70#kern[-0.3]{ }GeV,#kern[-0.4]{ }#it{m}_{SUSY}:", "");
+		if ( mS2200 ) leg2Cols->SetHeader("#kern[-4.9]{ }Signal,#kern[-0.5]{ }#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.6]{ }2200#kern[-0.6]{ }GeV", "");
 
 		if ( mH70 || mS2200 ) {
 			// leg2Cols->Draw();
 			TLegendEntry *header = (TLegendEntry*)leg2Cols->GetListOfPrimitives()->First();
-			// header->SetTextAlign(22);
+			// header->SetTextAlign(11);
 			header->SetTextFont(62);
 			header->SetTextColor(kRed+3);
-			header->SetTextSize(.043);
+			if (mS2200) header->SetTextSize(.047);
 		}
 
 		// std::string blank="";
@@ -739,7 +740,7 @@ void Plotter::AddLegendHT(const std::vector<std::string>& legendNames, const dou
 		// if ( mS2200 ) std::replace(tempNames.begin(), tempNames.end(), std::string("#it{m}_{SUSY}#kern[-0.8]{ }=#kern[-0.8]{ }2200,#kern[-0.4]{ }"), std::string(""));
 		for (size_t i = 0; i < legendNames.size(); ++i){
 		 		if (i < th1Indi.size() && TString(legendNames[i]).Contains("70") ) {
-					 tempNames.at(i).replace(0, 60, "");
+					 tempNames.at(i).replace(0, 102, "");
 					 tempNames.at(i) += "#kern[-0.3]{ }GeV";
 				 }
 				if (i < th1Indi.size() && TString(legendNames[i]).Contains("2200") ) {
@@ -1496,7 +1497,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		    latexHT->SetTextFont(42);
 			latexHT->SetTextSize(0.052);
 		    latexHT->SetTextAlign(11); // align from left
-			float offsets[] = {0.65, 0.60, 1.55};
+			float offsets[] = {0.65, 0.60, 1.75};
 		    latexHT->DrawLatex(c+offsets[c/binsPerDivision], lineMaxHT*1.1, htBins[c/binsPerDivision].c_str());
 		}
 	}
@@ -1806,7 +1807,7 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 		    latexHT->SetTextFont(42);
 			latexHT->SetTextSize(0.052);
 		    latexHT->SetTextAlign(11); // align from left
-			float offsets[] = {0.65, 0.60, 1.55};
+			float offsets[] = {0.65, 0.60, 1.75};
 		    latexHT->DrawLatex(c+offsets[c/binsPerDivision], lineMaxHT*1.1, htBins[c/binsPerDivision].c_str());
 		}
 	}
@@ -2529,7 +2530,7 @@ int Plotter::SetColor_mellow(int position, int maxColors)
 
 int Plotter::SetColor_stark(const int& index)
 {
-	if (index==0) return kRed;
+	if (index==0) return kRed+1;
 	
 	if (index==1) return kBlue;
 	// if (index==1) return kBlue+3;
