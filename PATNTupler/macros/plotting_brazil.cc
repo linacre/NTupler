@@ -744,6 +744,46 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
         }
     }
 
+
+    int avc;
+    FILE *yamlfile = fopen(Form("%s/limits_mSUSY%d.yaml", outputDir.c_str(), fixedMass), "w");
+
+    fprintf(yamlfile, "dependent_variables:\n");
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: Observed upper limit [fb]\n");
+    fprintf(yamlfile, "  values:\n");
+    for (auto av: yObs_vec) fprintf(yamlfile, "  - value: %2.6f\n", av);
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: Median expected upper limit [fb]\n");
+    fprintf(yamlfile, "  values:\n");
+    for (auto av: y_vec) fprintf(yamlfile, "  - value: %2.6f\n", av);
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: 0.025 quantile of the expected upper limit [fb]\n");
+    fprintf(yamlfile, "  values:\n");
+    avc=0;
+    for (auto av: yErrDown2Sig_vec) {fprintf(yamlfile, "  - value: %2.6f\n", y_vec[avc] - yErrDown2Sig_vec[avc]); ++avc;}
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: 0.16 quantile of the expected upper limit [fb]\n");
+    fprintf(yamlfile, "  values:\n");
+    avc=0;
+    for (auto av: yErrDown1Sig_vec) {fprintf(yamlfile, "  - value: %2.6f\n", y_vec[avc] - yErrDown1Sig_vec[avc]); ++avc;}
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: 0.84 quantile of the expected upper limit [fb]\n");
+    fprintf(yamlfile, "  values:\n");
+    avc=0;
+    for (auto av: yErrUp1Sig_vec) {fprintf(yamlfile, "  - value: %2.6f\n", y_vec[avc] + yErrUp1Sig_vec[avc]); ++avc;}
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: 0.975 quantile of the expected upper limit [fb]\n");
+    fprintf(yamlfile, "  values:\n");
+    avc=0;
+    for (auto av: yErrUp2Sig_vec) {fprintf(yamlfile, "  - value: %2.6f\n", y_vec[avc] + yErrUp2Sig_vec[avc]); ++avc;}
+    fprintf(yamlfile, "independent_variables:\n");
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: $m_{\\mathrm{H_1}}$\n");
+    fprintf(yamlfile, "    units: GeV\n");
+    fprintf(yamlfile, "  values:\n");
+    for (auto av: x_vec) fprintf(yamlfile, "  - value: %2.1f\n", av);
+
     TGraphAsymmErrors * g_obs = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(yObs_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]));
     g_obs->GetXaxis()->SetTitle(xAxisTitle.c_str());
     // g_obs->GetYaxis()->SetTitle("95% upper CL of r");
