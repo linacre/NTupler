@@ -505,7 +505,7 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     // const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
 
     // TWO: plot output directory
-    std::string outputDir = "brazilplots_reinterp3500_lumifix";
+    std::string outputDir = "brazilplots_reinterp3500_lumifix_yaml";
     // const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2019_01_01/brazilplots/mSusy2400/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)
@@ -867,6 +867,48 @@ const std::string inputDir = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNms
     for (auto av: Av_yErrDown2Sig_vec)
         std::cout << av << " ";
     std::cout<<" (Av_yErrDown2Sig_vec)"<<std::endl;
+
+
+
+    int avc;
+    FILE *yamlfile = fopen(Form("%s/additional_figure.yaml", outputDir.c_str()), "w");
+
+    fprintf(yamlfile, "dependent_variables:\n");
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: Observed upper limit [fb]\n");
+    fprintf(yamlfile, "  values:\n");
+    for (auto av: Av_yObs_vec) fprintf(yamlfile, "  - value: %2.6f\n", av);
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: Median expected upper limit [fb]\n");
+    fprintf(yamlfile, "  values:\n");
+    for (auto av: Av_y_vec) fprintf(yamlfile, "  - value: %2.6f\n", av);
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: 0.025 quantile of the expected upper limit [fb]\n");
+    fprintf(yamlfile, "  values:\n");
+    avc=0;
+    for (auto av: Av_yErrDown2Sig_vec) {fprintf(yamlfile, "  - value: %2.6f\n", Av_y_vec[avc] - Av_yErrDown2Sig_vec[avc]); ++avc;}
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: 0.16 quantile of the expected upper limit [fb]\n");
+    fprintf(yamlfile, "  values:\n");
+    avc=0;
+    for (auto av: Av_yErrDown1Sig_vec) {fprintf(yamlfile, "  - value: %2.6f\n", Av_y_vec[avc] - Av_yErrDown1Sig_vec[avc]); ++avc;}
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: 0.84 quantile of the expected upper limit [fb]\n");
+    fprintf(yamlfile, "  values:\n");
+    avc=0;
+    for (auto av: Av_yErrUp1Sig_vec) {fprintf(yamlfile, "  - value: %2.6f\n", Av_y_vec[avc] + Av_yErrUp1Sig_vec[avc]); ++avc;}
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: 0.975 quantile of the expected upper limit [fb]\n");
+    fprintf(yamlfile, "  values:\n");
+    avc=0;
+    for (auto av: Av_yErrUp2Sig_vec) {fprintf(yamlfile, "  - value: %2.6f\n", Av_y_vec[avc] + Av_yErrUp2Sig_vec[avc]); ++avc;}
+    fprintf(yamlfile, "independent_variables:\n");
+    fprintf(yamlfile, "- header:\n");
+    fprintf(yamlfile, "    name: $m_{\\mathrm{H_1}}$\n");
+    fprintf(yamlfile, "    units: GeV\n");
+    fprintf(yamlfile, "  values:\n");
+    for (auto av: Av_x_vec) fprintf(yamlfile, "  - value: %2.1f\n", av);
+
 
     TGraphAsymmErrors * g_obs = new TGraphAsymmErrors(nEntries, &(Av_x_vec[0]), &(Av_yObs_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]), &(Av_null_vec[0]));
     g_obs->GetXaxis()->SetTitle(xAxisTitle.c_str());
