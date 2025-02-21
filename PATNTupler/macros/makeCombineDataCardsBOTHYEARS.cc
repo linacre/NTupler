@@ -52,7 +52,7 @@ void WriteBlock(const std::string&, const unsigned int&, std::ofstream&, const b
     // ONE: save info (signal specific directories beneath this)
     //const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_04_23/withGluino/allSys/";
     // const std::string outputDirGeneral = "combinedDataCards_final_2018";
-    const std::string outputDirGeneral = "combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_inc120_batch_lumifix";
+    const std::string outputDirGeneral = "combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_inc120_batch_lumifix_RSTtest_noGmN_p99";
     // const std::string outputDirGeneral = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210225/combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01";
 
 
@@ -298,20 +298,24 @@ int main(){
                     rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);
                     rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);
                 }
-                const std::string data_obs_S_str = std::to_string(data_obs_S);
+                const std::string data_obs_S_str = std::to_string(data_obs_S/2);
+                const std::string data_obs_RnT_str = std::to_string(data_obs_S-data_obs_S/2);
                 const std::string data_obs_UnD_str = std::to_string(data_obs_UnD);
-                const std::string rate_signal_S_str = std::to_string(rate_signal_S);
+                const std::string rate_signal_S_str = std::to_string(rate_signal_S*0.99);
+                const std::string rate_signal_RnT_str = std::to_string(rate_signal_S*0.01);
                 const std::string rate_signal_UnD_str = std::to_string(rate_signal_UnD);
                 std::vector<double> rate_mcbkVec_S;
                 std::vector<double> rate_mcbkVec_UnD;
                 std::vector<std::string> rate_mcbkVec_S_str;
+                std::vector<std::string> rate_mcbkVec_RnT_str;
                 std::vector<std::string> rate_mcbkVec_UnD_str;
                 for (auto mcbk : mcbkVec[yearOfRun]){
                     double rate_S = hOriginal_[Form("S_tag_%s_NOSYS", mcbk.c_str())]->GetBinContent(iBin);               
                     double rate_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", mcbk.c_str())]->GetBinContent(iBin);
                     rate_mcbkVec_S.push_back(rate_S);
                     rate_mcbkVec_UnD.push_back(rate_UnD);
-                    rate_mcbkVec_S_str.push_back( std::to_string(rate_S) );
+                    rate_mcbkVec_S_str.push_back( std::to_string(rate_S/2.) );
+                    rate_mcbkVec_RnT_str.push_back( std::to_string(rate_S/2.) );
                     rate_mcbkVec_UnD_str.push_back( std::to_string(rate_UnD) );
                 }
 
@@ -320,7 +324,7 @@ int main(){
                 unsigned int binLabel = iBin;
                 binLabel += numYearsCount*numberOfBins;
                 dataCard.open( Form("%sbin%02d_%d.txt", outputDir.c_str(),binLabel,yearOfRun) );
-                dataCard << "imax 2\n";
+                dataCard << "imax 3\n";
                 int jmax = mcbkVec[yearOfRun].size() + 1;
                 for (unsigned int c = 0; c < mcbkVec[yearOfRun].size(); ++c) if (rate_mcbkVec_S[c] == 0. && rate_mcbkVec_UnD[c] == 0.) --jmax;
 
@@ -329,16 +333,22 @@ int main(){
                 dataCard << "------------------------------\n";
                 WriteBlock("bin", firstColSize, dataCard);
                 WriteBlock("mass_S", otherColSize, dataCard);
+                WriteBlock("mass_RnT", otherColSize, dataCard);
                 WriteBlock("mass_UnD", otherColSize, dataCard, true);
                 WriteBlock("observation", firstColSize, dataCard);
                 WriteBlock(data_obs_S_str, otherColSize, dataCard);
+                WriteBlock(data_obs_RnT_str, otherColSize, dataCard);
                 WriteBlock(data_obs_UnD_str, otherColSize, dataCard, true);
                 dataCard << "------------------------------\n";
                 WriteBlock("bin", firstColSize, dataCard);
                 for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) if (c==0 or c>mcbkVec[yearOfRun].size() or (c>0 and rate_mcbkVec_S[c-1] > 0) ) WriteBlock("mass_S", otherColSize, dataCard);
+                for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) if (c==0 or c>mcbkVec[yearOfRun].size() or (c>0 and rate_mcbkVec_S[c-1] > 0) ) WriteBlock("mass_RnT", otherColSize, dataCard);
                 for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) if (c==0 or c>mcbkVec[yearOfRun].size() or (c>0 and rate_mcbkVec_UnD[c-1] > 0) ) WriteBlock("mass_UnD", otherColSize, dataCard);
                 dataCard << "\n";
                 WriteBlock("process", firstColSize, dataCard);
+                WriteBlock(signal, otherColSize, dataCard);
+                for (unsigned int c = 0; c < mcbkVec[yearOfRun].size(); ++c) if (rate_mcbkVec_S[c] > 0) WriteBlock(mcbkVec[yearOfRun][c], otherColSize, dataCard);
+                WriteBlock(qcdName, otherColSize, dataCard);
                 WriteBlock(signal, otherColSize, dataCard);
                 for (unsigned int c = 0; c < mcbkVec[yearOfRun].size(); ++c) if (rate_mcbkVec_S[c] > 0) WriteBlock(mcbkVec[yearOfRun][c], otherColSize, dataCard);
                 WriteBlock(qcdName, otherColSize, dataCard);
@@ -347,11 +357,15 @@ int main(){
                 WriteBlock(qcdName, otherColSize, dataCard, true);
                 WriteBlock("process", firstColSize, dataCard);
                 for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) if (c==0 or c>mcbkVec[yearOfRun].size() or (c>0 and rate_mcbkVec_S[c-1] > 0) ) WriteBlock(std::to_string(c), otherColSize, dataCard); 
+                for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) if (c==0 or c>mcbkVec[yearOfRun].size() or (c>0 and rate_mcbkVec_S[c-1] > 0) ) WriteBlock(std::to_string(c), otherColSize, dataCard); 
                 for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) if (c==0 or c>mcbkVec[yearOfRun].size() or (c>0 and rate_mcbkVec_UnD[c-1] > 0) ) WriteBlock(std::to_string(c), otherColSize, dataCard);
                 dataCard << "\n";
                 WriteBlock("rate", firstColSize, dataCard);
                 WriteBlock(rate_signal_S_str, otherColSize, dataCard);
                 for (auto rate_mcbk_S_str : rate_mcbkVec_S_str) if(rate_mcbk_S_str != "0.000000") WriteBlock(rate_mcbk_S_str, otherColSize, dataCard);
+                WriteBlock("1", otherColSize, dataCard);
+                WriteBlock(rate_signal_RnT_str, otherColSize, dataCard);
+                for (auto rate_mcbk_RnT_str : rate_mcbkVec_RnT_str) if(rate_mcbk_RnT_str != "0.000000") WriteBlock(rate_mcbk_RnT_str, otherColSize, dataCard);
                 WriteBlock("1", otherColSize, dataCard);
                 WriteBlock(rate_signal_UnD_str, otherColSize, dataCard);
                 for (auto rate_mcbk_UnD_str : rate_mcbkVec_UnD_str) if(rate_mcbk_UnD_str != "0.000000") WriteBlock(rate_mcbk_UnD_str, otherColSize, dataCard);
@@ -362,10 +376,10 @@ int main(){
                 for (auto CommonSystematic : CommonSystematicVec[yearOfRun]){
                     WriteBlock(CommonSystematic.GetSystematicName(), firstColSize, dataCard);
 
-                    for (int c = 0; c < 2; c++){
+                    for (int c = 0; c < 3; c++){
 
                         std::string histoPreamble = "";
-                        if (c == 0) histoPreamble = "S_tag_";
+                        if (c != 2) histoPreamble = "S_tag_";
                         else histoPreamble = "UnD_tag_";
                         const std::vector<std::string> systematicProcesses = CommonSystematic.GetSystematicProcesses();
 
@@ -381,7 +395,7 @@ int main(){
                         // monte carlo background
                         size_t iMC_temp = 0;
                         for (auto mcbk : mcbkVec[yearOfRun]){
-                            double ratecheck = c == 0 ? rate_mcbkVec_S[iMC_temp] : rate_mcbkVec_UnD[iMC_temp];
+                            double ratecheck = c != 2 ? rate_mcbkVec_S[iMC_temp] : rate_mcbkVec_UnD[iMC_temp];
                             ++iMC_temp;
                             if (ratecheck > 0){
                             if (std::find(systematicProcesses.begin(), systematicProcesses.end(), mcbk) != systematicProcesses.end()) {
@@ -405,7 +419,7 @@ int main(){
                     } // closes the two counts
                     dataCard << "\n";
                 }
-
+/*
                 dataCard << "\n# unique systematics\n";
                 // if (rate_signal_S > 0){
                 //     const unsigned int iVec = iBin - 1;
@@ -428,7 +442,7 @@ int main(){
                         
                         const int rawCount = round(rate_mcbkVec_S[iMC] / mcbkWeight_S);
                         const std::string statSysName = Form("ch%02d_", binLabel) + mcbkVec[yearOfRun][iMC] + "_S_stats gmN " + std::to_string(rawCount);
-                        const std::string mcbkWeightStr = std::to_string(mcbkWeight_S);
+                        const std::string mcbkWeightStr = std::to_string(mcbkWeight_S / 2.);
                         WriteBlock(statSysName, firstColSize, dataCard);
                         WriteBlock("-", otherColSize, dataCard);
 
@@ -436,7 +450,9 @@ int main(){
                             if (iMC == c) WriteBlock(mcbkWeightStr, otherColSize, dataCard);
                             else if (rate_mcbkVec_S[c] > 0) WriteBlock("-", otherColSize, dataCard);
                         }
-                        for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 3; ++c) if (c >= mcbkVec[yearOfRun].size() or rate_mcbkVec_UnD[c] > 0) WriteBlock("-", otherColSize, dataCard);
+                        for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) if (c >= mcbkVec[yearOfRun].size() or rate_mcbkVec_S[c] > 0) WriteBlock("-", otherColSize, dataCard);
+                        for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) if (c >= mcbkVec[yearOfRun].size() or rate_mcbkVec_UnD[c] > 0) WriteBlock("-", otherColSize, dataCard);
+                        WriteBlock("-", otherColSize, dataCard);
                         dataCard << "\n";
                     }
                 }
@@ -456,6 +472,31 @@ int main(){
 
                 for (size_t iMC = 0; iMC < mcbkVec[yearOfRun].size(); ++iMC){
                     
+                    if (rate_mcbkVec_S[iMC] > 0){
+
+                        const unsigned int iVec = iBin - 1;
+                        const double mcbkWeight_S = mcbkWeightVec_S[iMC][iVec];
+                        
+                        const int rawCount = round(rate_mcbkVec_S[iMC] / mcbkWeight_S);
+                        const std::string statSysName = Form("ch%02d_", binLabel) + mcbkVec[yearOfRun][iMC] + "_RnT_stats gmN " + std::to_string(rawCount);
+                        const std::string mcbkWeightStr = std::to_string(mcbkWeight_S / 2.);
+                        WriteBlock(statSysName, firstColSize, dataCard);
+                        WriteBlock("-", otherColSize, dataCard);
+
+                        for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) if (c >= mcbkVec[yearOfRun].size() or rate_mcbkVec_S[c] > 0) WriteBlock("-", otherColSize, dataCard);
+                        for (unsigned int c = 0; c < mcbkVec[yearOfRun].size(); ++c){
+                            if (iMC == c) WriteBlock(mcbkWeightStr, otherColSize, dataCard);
+                            else if (rate_mcbkVec_S[c] > 0) WriteBlock("-", otherColSize, dataCard);
+                        }
+                        WriteBlock("-", otherColSize, dataCard);
+                        for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) if (c >= mcbkVec[yearOfRun].size() or rate_mcbkVec_UnD[c] > 0) WriteBlock("-", otherColSize, dataCard);
+                        dataCard << "\n";
+                    }
+                }
+
+
+                for (size_t iMC = 0; iMC < mcbkVec[yearOfRun].size(); ++iMC){
+                    
                     if (rate_mcbkVec_UnD[iMC] > 0){
 
                         const unsigned int iVec = iBin - 1;                 
@@ -467,7 +508,10 @@ int main(){
                         WriteBlock(statSysName, firstColSize, dataCard);
                         WriteBlock("-", otherColSize, dataCard);
 
-                        for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) if (c >= mcbkVec[yearOfRun].size() or rate_mcbkVec_S[c] > 0) WriteBlock("-", otherColSize, dataCard);
+                        for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) if (c >= mcbkVec[yearOfRun].size() or rate_mcbkVec_S[c] > 0) {
+                            WriteBlock("-", otherColSize, dataCard);
+                            WriteBlock("-", otherColSize, dataCard);
+                        }
                         for (unsigned int c = 0; c < mcbkVec[yearOfRun].size(); ++c){
                             if (iMC == c) WriteBlock(mcbkWeightStr, otherColSize, dataCard);
                             else if (rate_mcbkVec_UnD[c] > 0) WriteBlock("-", otherColSize, dataCard);
@@ -476,7 +520,7 @@ int main(){
                         dataCard << "\n";
                     }
                 }
-                
+*/                
                 // unsigned int iHtIndex = floor( (iBin - 1) / (numberOfBins / numberOfHtDivisions) ); 
                 // double qcdUnDLowerBound = qcdUnDLowerBoundInHtDivison[iHtIndex]; // COMPLICATED LOWER BOUND
                 double qcdUnDLowerBound = 0.001; // SIMPLE LOWER BOUND
@@ -500,8 +544,11 @@ int main(){
                 double qcdUpperLimit = data_obs_UnD + std::max(5.0 * sqrt(data_obs_UnD), 12.0);
                 dataCard << std::to_string(qcdInitialEstimate) << " " << "[" << std::to_string(qcdLowerLimit) << "," << std::to_string(qcdUpperLimit) << "]\n";            
                 WriteBlock(Form("ch%02d_beta", binLabel), otherColSize, dataCard);
-                // dataCard << "rateParam mass_S " << qcdName << " (@0*@1*@2) ch" << Form("%02d", binLabel) << "_F,ch" << Form("%02d", binLabel) << "_abcdErr,ch" << Form("%02d", binLabel) << "_alpha\n";
-                dataCard << "rateParam mass_S " << qcdName << " (exp(@0)*@1) ch" << Form("%02d", binLabel) << "_F,ch" << Form("%02d", binLabel) << "_alpha\n";
+                // dataCard << "rateParam mass_S " << qcdName << " (@0*@1*@2*0.5) ch" << Form("%02d", binLabel) << "_F,ch" << Form("%02d", binLabel) << "_abcdErr,ch" << Form("%02d", binLabel) << "_alpha\n";
+                dataCard << "rateParam mass_S " << qcdName << " (exp(@0)*@1*0.5) ch" << Form("%02d", binLabel) << "_F,ch" << Form("%02d", binLabel) << "_alpha\n";
+                WriteBlock(Form("ch%02d_gamma", binLabel), otherColSize, dataCard);
+                // dataCard << "rateParam mass_RnT " << qcdName << " (@0*@1*@2*0.5) ch" << Form("%02d", binLabel) << "_F,ch" << Form("%02d", binLabel) << "_abcdErr,ch" << Form("%02d", binLabel) << "_alpha\n";
+                dataCard << "rateParam mass_RnT " << qcdName << " (exp(@0)*@1*0.5) ch" << Form("%02d", binLabel) << "_F,ch" << Form("%02d", binLabel) << "_alpha\n";
 
                 dataCard.close();
 

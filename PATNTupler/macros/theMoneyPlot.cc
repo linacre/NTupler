@@ -240,12 +240,15 @@ int main(){
     
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_/mH70_mSusy2000/FitDiagnostics_noSig/fitDiagnostics.root";
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_2017as2018sqfix_0.98_allSig_ecalfilter_QCDlb0.0tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/mH70_mSusy2000/d/fitDiagnostics.root";
-    const std::string inputFile = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_batch/mH70_mSusy2000/d/fitDiagnosticsTest.root";
+    // const std::string inputFile = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20210622/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_batch/mH70_mSusy2000/d/fitDiagnosticsTest.root";
+
+    // const std::string inputFile = "/opt/ppd/scratch-2021/xxt18833/Analysis_boostedNmssmHiggs/combinedDataCards_20220224/combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_inc120_batch_lumifix/mH70_mSusy2000/d/fitDiagnosticsTest.root";
+    const std::string inputFile = "combinedDataCards_10bins_lnNforQCD_interpolated9d_jmsrdbt1718corr_inc120_batch_lumifix_3Us/mH70_mSusy2000/d/fitDiagnosticsTest.root";
 
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01_nogmN_epsQCDsyst/mH70_mSusy2000/fitDiagnostics.root";
     // const std::string inputFile = "combinedDataCards_ht_XSjmsryear_newZJ_0.98_allSig_ecalfilter_QCDlb0.1tunedubtuned5_bkg10pc_unccorrelated_maxunc2_jmrsymuncor_symall1.00.01/mH70_mSusy2000/fitDiagnostics.root";
 
-    const std::string outputDir = "MoneyPlot_unblindedAll_paper_noWhiteBorders_incPrelim_lumifix";
+    const std::string outputDir = "MoneyPlot_unblindedAll_paper_noWhiteBorders_incPrelim_lumifix_test";
     // const double luminosity = 36.33; // 2016 Plots::: NB this is just a label for the plot.
     // const double luminosity = 41.529; // 2017 Plots::: NB this is just a label for the plot.
     // const double luminosity = 59.740565202; // 2018 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!

@@ -76,7 +76,7 @@ for signalDir in signalDirs:
             break
 
     for i in range(c1, len(signalDir)):
-        if (signalDir[i:i+6] == "_mSusy"):
+        if (signalDir[i:i+6] == "_mSusy" or signalDir[i:i+6] == "_mSUSY"):
             c2 = i + 6
             keyword = "mSusy"
             break
@@ -128,18 +128,20 @@ for signalDir in signalDirs:
     g.write("cd %s\n" % inputDir)
     g.write("text2workspace.py %s\n" % fileToUseTXT)
     if (len(nuisancesToFreeze) == 0):
-        g.write("combine -M AsymptoticLimits --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword, susyMass, fileToUseROOT) )
+        g.write("combine -M AsymptoticLimits --noFitAsimov --rAbsAcc 0.0001 --rRelAcc 0.001 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword+"AccNFA", susyMass, fileToUseROOT) )
+        g.write("combine -M AsymptoticLimits --rAbsAcc 0.0001 --rRelAcc 0.001 --mass %s --keyword-value %s=%s %s\n" % (higgsMass, keyword+"Acc", susyMass, fileToUseROOT) )
     else:
         g.write("combine -M AsymptoticLimits --freezeParameter %s --mass %s --keyword-value %s=%s %s\n" % (nuisancesToFreeze, higgsMass, keyword, susyMass, fileToUseROOT) )
-    g.write("cd %s\n" % (signalDir))
-    g.write("mkdir d s b\n")
-    g.write("combine -M FitDiagnostics --saveShapes --saveWithUncertainties --saveOverallShapes --preFitValue 0 --robustFit 1 --toysFrequentist -t -1 --expectSignal 0 --trackParameters rgx{ch[0-9]+_alpha} --trackErrors rgx{ch[0-9]+_alpha} --mass %s --keyword-value %sB=%s --out b %s > b/FitDiagnostics.log\n" % (higgsMass, keyword, susyMass, fileToUseTXT) )
-    g.write("combine -M FitDiagnostics --saveShapes --saveWithUncertainties --saveOverallShapes --preFitValue 0 --robustFit 1 --toysFrequentist -t -1 --expectSignal 1 --trackParameters rgx{ch[0-9]+_alpha} --trackErrors rgx{ch[0-9]+_alpha} --mass %s --keyword-value %sS=%s --out s %s > s/FitDiagnostics.log\n" % (higgsMass, keyword, susyMass, fileToUseTXT) )
-    g.write("combine -M FitDiagnostics --saveShapes --saveWithUncertainties --saveOverallShapes --preFitValue 0 --robustFit 1 --trackParameters rgx{ch[0-9]+_alpha} --trackErrors rgx{ch[0-9]+_alpha} --mass %s --keyword-value %sD=%s --out d %s > d/FitDiagnostics.log\n" % (higgsMass, keyword, susyMass, fileToUseTXT) )
-    g.write("python /opt/ppd/scratch-2021/xxt18833/CMSSW_10_2_12/src/HiggsAnalysis/CombinedLimit/test/diffNuisances.py -a b/fitDiagnosticsTest.root -g b/plots.root > b/diffNuisances.log\n")
-    g.write("python /opt/ppd/scratch-2021/xxt18833/CMSSW_10_2_12/src/HiggsAnalysis/CombinedLimit/test/diffNuisances.py -a d/fitDiagnosticsTest.root -g d/plots.root > d/diffNuisances.log\n")
-    g.write("python /opt/ppd/scratch-2021/xxt18833/CMSSW_10_2_12/src/HiggsAnalysis/CombinedLimit/test/diffNuisances.py -a s/fitDiagnosticsTest.root -g s/plots.root > s/diffNuisances.log\n")
-    g.write("cd ..\n")
+    # g.write("cd %s\n" % (signalDir))
+    # g.write("mkdir d s b\n")
+    # g.write("combine -M FitDiagnostics --saveShapes --saveWithUncertainties --saveOverallShapes --preFitValue 0 --robustFit 1 --toysFrequentist -t -1 --expectSignal 0 --trackParameters rgx{ch[0-9]+_[a-z]+} --trackErrors rgx{ch[0-9]+_[a-z]+} --mass %s --keyword-value %sB=%s --out b %s > b/FitDiagnostics.log\n" % (higgsMass, keyword, susyMass, fileToUseTXT) )
+    # g.write("combine -M FitDiagnostics --saveShapes --saveWithUncertainties --saveOverallShapes --preFitValue 0 --robustFit 1 --toysFrequentist -t -1 --expectSignal 1 --trackParameters rgx{ch[0-9]+_[a-z]+} --trackErrors rgx{ch[0-9]+_[a-z]+} --mass %s --keyword-value %sS=%s --out s %s > s/FitDiagnostics.log\n" % (higgsMass, keyword, susyMass, fileToUseTXT) )
+    # g.write("combine -M FitDiagnostics --saveShapes --saveWithUncertainties --saveOverallShapes --preFitValue 0 --robustFit 1 --trackParameters rgx{ch[0-9]+_[a-z]+} --trackErrors rgx{ch[0-9]+_[a-z]+} --mass %s --keyword-value %sD=%s --out d %s > d/FitDiagnostics.log\n" % (higgsMass, keyword, susyMass, fileToUseTXT) )
+    # g.write("python /opt/ppd/scratch-2021/xxt18833/CMSSW_10_2_12/src/HiggsAnalysis/CombinedLimit/test/diffNuisances.py -a b/fitDiagnosticsTest.root -g b/plots.root > b/diffNuisances.log\n")
+    # g.write("python /opt/ppd/scratch-2021/xxt18833/CMSSW_10_2_12/src/HiggsAnalysis/CombinedLimit/test/diffNuisances.py -a d/fitDiagnosticsTest.root -g d/plots.root > d/diffNuisances.log\n")
+    # g.write("python /opt/ppd/scratch-2021/xxt18833/CMSSW_10_2_12/src/HiggsAnalysis/CombinedLimit/test/diffNuisances.py -a s/fitDiagnosticsTest.root -g s/plots.root > s/diffNuisances.log\n")
+    # g.write("combineTool.py -M Impacts -d %s -m %s --doInitialFit --robustFit 1 --setParameterRanges r=-2,2\n" % (fileToUseROOT, higgsMass) )
+    # g.write("cd ..\n")
     g.close()
     os.chmod("%s/%s" % (batchDir,jobFileName), 0755)
 
